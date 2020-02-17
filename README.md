@@ -1,4 +1,4 @@
-# Wolcen-Socket-Roller v1.3
+# Wolcen-Socket-Roller v1.4
 
 ![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_1.4.png)
 
