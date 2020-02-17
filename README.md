@@ -19,3 +19,5 @@ How to use:
 4. Click the Start button, your game will automatically come to foreground and it starts rolling.
 
 To stop it while its looping, ALT-TAB out of the game to a different program, this will stop the loop.
+
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_ingame.jpg)
