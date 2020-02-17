@@ -2,9 +2,13 @@
 
 ![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_1.4.png)
 
+
+
 Download here: https://github.com/Crypto90/Wolcen-Socket-Roller/releases
 
 Reddit discussion: https://www.reddit.com/r/Wolcen/comments/f5aphp/wolcen_socket_roller/
+<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#29abe0', 'K3K314GUP');kofiwidget2.draw();</script> 
+
 
 Hello guys, if you love Wolcen as much as I do, I have a little tool for you all.
 
