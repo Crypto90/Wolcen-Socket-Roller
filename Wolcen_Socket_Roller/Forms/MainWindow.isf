@@ -1,0 +1,335 @@
+; -- Created with ISN Form Studio 2 for ISN AutoIt Studio -- ;
+#include <StaticConstants.au3>
+#include <GUIConstantsEx.au3>
+#include <WindowsConstants.au3>
+#Include <GuiButton.au3>
+#include <ComboConstants.au3>
+
+$MainWindow = GUICreate("Wolcen Socket Roller by Crypto90",263,356,-1,-1,-1,-1)
+GUICtrlCreateLabel("Wolcen Socket Roller",15,10,233,32,-1,-1)
+GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
+GUICtrlSetBkColor(-1,"-2")
+GUICtrlCreateLabel("by Crypto90",192,42,56,18,-1,-1)
+GUICtrlSetBkColor(-1,"-2")
+$sock1 = GUICtrlCreateCombo("",15,108,233,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlSetData(-1,"unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
+GUICtrlCreateLabel("Socket 1:",15,82,87,21,-1,-1)
+GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
+GUICtrlSetBkColor(-1,"-2")
+$sock2 = GUICtrlCreateCombo("",15,167,233,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlSetData(-1,"unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
+GUICtrlCreateLabel("Socket 2:",15,143,87,21,-1,-1)
+GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
+GUICtrlSetBkColor(-1,"-2")
+$sock3 = GUICtrlCreateCombo("",15,233,233,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlSetData(-1,"unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
+GUICtrlCreateLabel("Socket 3:",15,206,87,21,-1,-1)
+GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
+GUICtrlSetBkColor(-1,"-2")
+GUICtrlCreateLabel("v1.0",15,42,22,12,-1,-1)
+GUICtrlSetBkColor(-1,"-2")
+
+
+
+#cs
+[gui]
+Handle_deklaration=default
+Handle_deklaration_const=false
+title=Wolcen Socket Roller by Crypto90
+breite=263
+hoehe=356
+style=-1
+exstyle=-1
+bgcolour=0xF0F0F0
+bgimage=none
+handle=$MainWindow
+parent=
+code=
+codebeforegui=
+xpos=-1
+ypos=-1
+center_gui=true
+title_textmode=normal
+isf_include_once=false
+only_controls_in_isf=false
+const_modus=default
+gui_code_in_function=false
+gui_code_in_function_name=
+gui_event_close=
+gui_event_minimize=
+gui_event_restore=
+gui_event_maximize=
+gui_event_mousemove=
+gui_event_primarydown=
+gui_event_primaryup=
+gui_event_secoundarydown=
+gui_event_secoundaryup=
+gui_event_resized=
+gui_event_dropped=
+defaultfont=MS Sans Serif
+defaultfontsize=8
+[0x002E221E]
+type=label
+handle=418
+locked=0
+resize=
+x=15
+y=10
+width=233
+height=32
+func=
+font=MS Sans Serif
+fontsize=20
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=
+text=Wolcen Socket Roller
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+order=0
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+[0x000A026C]
+type=label
+handle=419
+locked=0
+resize=
+x=192
+y=42
+width=56
+height=18
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=
+text=by Crypto90
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+order=2
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+[0x000B0666]
+type=combo
+handle=420
+locked=0
+resize=
+x=15
+y=108
+width=233
+height=21
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$sock1
+text=unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+state=$GUI_SHOW+$GUI_ENABLE
+style=$CBS_DROPDOWNLIST
+exstyle=
+bgcolour=
+code=
+order=4
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+[0x00120658]
+type=label
+handle=421
+locked=0
+resize=
+x=15
+y=82
+width=87
+height=21
+func=
+font=MS Sans Serif
+fontsize=12
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=
+text=Socket 1:
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+order=5
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+[0x000B0652]
+type=combo
+handle=422
+locked=0
+resize=
+x=15
+y=167
+width=233
+height=21
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$sock2
+text=unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+state=$GUI_SHOW+$GUI_ENABLE
+style=$CBS_DROPDOWNLIST
+exstyle=
+bgcolour=
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=6
+[0x000C05F8]
+type=label
+handle=423
+locked=0
+resize=
+x=15
+y=143
+width=87
+height=21
+func=
+font=MS Sans Serif
+fontsize=12
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=
+text=Socket 2:
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=7
+[0x000A0616]
+type=combo
+handle=424
+locked=0
+resize=
+x=15
+y=233
+width=233
+height=21
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$sock3
+text=unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+state=$GUI_SHOW+$GUI_ENABLE
+style=$CBS_DROPDOWNLIST
+exstyle=
+bgcolour=
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=8
+[0x000D0654]
+type=label
+handle=425
+locked=0
+resize=
+x=15
+y=206
+width=87
+height=21
+func=
+font=MS Sans Serif
+fontsize=12
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=
+text=Socket 3:
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=9
+[0x008D20D6]
+type=label
+handle=427
+locked=0
+resize=
+x=15
+y=42
+width=22
+height=12
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=
+text=v1.0
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+order=11
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+#ce
