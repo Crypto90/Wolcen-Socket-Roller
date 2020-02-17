@@ -5,7 +5,7 @@
 #Include <GuiButton.au3>
 #include <ComboConstants.au3>
 
-$MainWindow = GUICreate("Wolcen Socket Roller by Crypto90",263,356,-1,-1,-1,-1)
+$MainWindow = GUICreate("Wolcen Socket Roller by Crypto90",735,356,-1,-1,-1,-1)
 GUICtrlCreateLabel("Wolcen Socket Roller",15,10,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetBkColor(-1,"-2")
@@ -29,7 +29,10 @@ GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
 GUICtrlCreateLabel("Socket 3:",15,206,87,21,-1,-1)
 GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
 GUICtrlSetBkColor(-1,"-2")
-GUICtrlCreateLabel("v1.0",15,42,22,12,-1,-1)
+GUICtrlCreateLabel("Socket log:",293,10,233,32,-1,-1)
+GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
+GUICtrlSetBkColor(-1,"-2")
+GUICtrlCreateLabel("v1.1",15,42,22,12,-1,-1)
 GUICtrlSetBkColor(-1,"-2")
 
 
@@ -39,7 +42,7 @@ GUICtrlSetBkColor(-1,"-2")
 Handle_deklaration=default
 Handle_deklaration_const=false
 title=Wolcen Socket Roller by Crypto90
-breite=263
+breite=735
 hoehe=356
 style=-1
 exstyle=-1
@@ -71,7 +74,7 @@ gui_event_resized=
 gui_event_dropped=
 defaultfont=MS Sans Serif
 defaultfontsize=8
-[0x002E221E]
+[0x00310690]
 type=label
 handle=418
 locked=0
@@ -100,7 +103,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000A026C]
+[0x002F2232]
 type=label
 handle=419
 locked=0
@@ -129,7 +132,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000B0666]
+[0x0049221C]
 type=combo
 handle=420
 locked=0
@@ -158,7 +161,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00120658]
+[0x00182296]
 type=label
 handle=421
 locked=0
@@ -187,7 +190,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000B0652]
+[0x002E21E0]
 type=combo
 handle=422
 locked=0
@@ -216,7 +219,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=6
-[0x000C05F8]
+[0x0020227A]
 type=label
 handle=423
 locked=0
@@ -245,7 +248,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=7
-[0x000A0616]
+[0x002902F2]
 type=combo
 handle=424
 locked=0
@@ -274,7 +277,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=8
-[0x000D0654]
+[0x002A2230]
 type=label
 handle=425
 locked=0
@@ -303,9 +306,9 @@ iconindex=
 iconlarge=0
 textmode=text
 order=9
-[0x008D20D6]
+[0x003221B4]
 type=label
-handle=427
+handle=426
 locked=0
 resize=
 x=15
@@ -321,7 +324,7 @@ tooltip=
 bgimage=
 textcolour=0x000000
 id=
-text=v1.0
+text=v1.1
 state=$GUI_SHOW+$GUI_ENABLE
 style=
 exstyle=
@@ -332,4 +335,33 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
+[0x004B21C0]
+type=label
+handle=427
+locked=0
+resize=
+x=293
+y=10
+width=233
+height=32
+func=
+font=MS Sans Serif
+fontsize=20
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=
+text=Socket log:
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=11
 #ce

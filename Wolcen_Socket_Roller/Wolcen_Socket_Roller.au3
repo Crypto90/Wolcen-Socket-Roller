@@ -12,6 +12,8 @@
 #include <ComboConstants.au3>
 #include "Forms\MainWindow.isf"
 
+#include <EditConstants.au3>
+
 
 Func _GetURLImage($sURL, $sDirectory = @ScriptDir)
     Local $hDownload, $sFile
@@ -39,12 +41,16 @@ Func _GetURLImage($sURL, $sDirectory = @ScriptDir)
 EndFunc   ;==>_GetURLImage
 
 
+$finished = False
+
 GUISetState(@SW_SHOW,  $MainWindow)
 
 
 _GUICtrlComboBox_SetCurSel($sock1, 0)
 _GUICtrlComboBox_SetCurSel($sock2, 0)
 _GUICtrlComboBox_SetCurSel($sock3, 0)
+
+$socketLog = GUICtrlCreateEdit("",293,42,433,306,BitOR($WS_VSCROLL, $ES_AUTOVSCROLL, $ES_READONLY),-1)
 
 $startButtonHdn2 = GUICtrlCreateButton("Start",15,271,231,30,-1,-1)
 
@@ -117,9 +123,9 @@ Func runMain()
 	; if the socket is not needed set it to "unset"
 	;unset
 
-	Local $wantedSocket1 = $sock1
-	Local $wantedSocket2 = $sock2
-	Local $wantedSocket3 = $sock3
+	Local $wantedSocket1 = GUICtrlRead($sock1)
+	Local $wantedSocket2 = GUICtrlRead($sock2)
+	Local $wantedSocket3 = GUICtrlRead($sock3)
 
 
 
@@ -174,23 +180,37 @@ Func runMain()
 	;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: " & getSocket(1))
 	;MsgBox($MB_SYSTEMMODAL, "", "Socket 2: " & getSocket(2))
 	;MsgBox($MB_SYSTEMMODAL, "", "Socket 3: " & getSocket(3))
-
-	$finished = False
+	ConsoleWrite("------------------------------------------------------------------------------------------------------------------" & @CRLF)
+	GUICtrlSetData($socketLog, "------------------------------------------------------------------------------------------------------------------" & @CRLF, 1)
+	$sString = "Start -- Socket 1 wanted: " & $wantedSocket1 & " -- Socket 2 wanted: " & $wantedSocket2 & " -- Socket 3 wanted: " & $wantedSocket3
+	ConsoleWrite($sString & @CRLF)
+	;append to log edit box
+	GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+	ConsoleWrite("------------------------------------------------------------------------------------------------------------------" & @CRLF & @CRLF)
+	GUICtrlSetData($socketLog, "------------------------------------------------------------------------------------------------------------------" & @CRLF & @CRLF, 1)
+	
+	
+	$rollCounter =  1
 	While $finished == False
-
-	   $sString = "Socket 1: " & getSocket(1) & " -- Socket 2: " & getSocket(2) & " -- Socket 3: " & getSocket(3)
+	   $timestamp = @HOUR & ":" & @MIN & ":" & @SEC
+	   $sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & getSocket(1) & " -- Socket 2: " & getSocket(2) & " -- Socket 3: " & getSocket(3)
 	   ConsoleWrite($sString & @CRLF)
+	   ;append to log edit box
+	   GUICtrlSetData($socketLog, $sString & @CRLF, 1)
 
 	   IF getSocket(1) <> $wantedSocket1 Or getSocket(2) <> $wantedSocket2 Or getSocket(3) <> $wantedSocket3 Then
+		  $rollCounter =  $rollCounter +  1
 		  MouseClick($MOUSE_CLICK_LEFT, $rerollClickX, $rerollClickY, 1)
 		  Sleep(300)
 
 		  If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
-			 Exit
+			$finished =  True
+			Return
 		  EndIf
 
 	   Else
 		  $finished = True
+		  GUICtrlSetData($socketLog, "Finished after " & ($rollCounter - 1) & " rolls!" & @CRLF, 1)
 	   EndIf
 	WEnd
 
@@ -214,7 +234,7 @@ EndFunc
 Func getSocket($socketNumberToCheck)
 	
 	
-	;update all coordinates based on current game resolution - does not work currently
+	;update all coordinates based on current game resolution
 	$size = WinGetPos("[active]")
 	$gameWidth = $size[2]
 	$gameHeight = $size[3]
