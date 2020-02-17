@@ -1,6 +1,6 @@
 # Wolcen-Socket-Roller
 
-![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot.png)
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/Screenshot_1.1.png)
 
 Download here: https://github.com/Crypto90/Wolcen-Socket-Roller/releases
 
