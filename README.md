@@ -10,4 +10,3 @@ I created a little tool, which rerolls item sockets at the npc as long as the co
 
 If you like my work, you can donate me a coffe. Happy looting :)
 
-Download here: https://github.com/Crypto90/Wolcen-Socket-Roller/releases
