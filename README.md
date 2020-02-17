@@ -1,6 +1,6 @@
 # Wolcen-Socket-Roller v1.3
 
-![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/Screenshot_1.1.png)
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_1.4.png)
 
 Download here: https://github.com/Crypto90/Wolcen-Socket-Roller/releases
 
@@ -21,4 +21,4 @@ How to use:
 
 To stop it while its looping, ALT-TAB out of the game to a different program, this will stop the loop.
 
-![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_ingame.jpg)
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_1.4_ingame.jpg)
