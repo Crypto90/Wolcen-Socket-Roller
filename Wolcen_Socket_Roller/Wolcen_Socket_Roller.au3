@@ -54,8 +54,17 @@ $socketLog = GUICtrlCreateEdit("",293,42,433,306,BitOR($WS_VSCROLL, $ES_AUTOVSCR
 
 $startButtonHdn2 = GUICtrlCreateButton("Start",15,271,231,30,-1,-1)
 
-;https://uploads-ssl.webflow.com/5c14e387dab576fe667689cf/5cbed8a4ae2b88347c06c923_BuyMeACoffee_blue-p-500.png
-;$coffee = GUICtrlCreatePic(@scriptdir&"\"&"Images\BuyMeACoffee_blue@2x.jpg",15,312,231,35,-1,-1)
+
+;set hotkeys if pressed we stop the loop if running
+HotKeySet("{ESC}", "stopLoop")
+HotKeySet("{TAB}", "stopLoop")
+HotKeySet("{ALT}", "stopLoop")
+
+Func stopLoop()
+    $finished =  True
+EndFunc   ;==>stops the loop if running
+
+
 $sFile = _GetURLImage("http://download1.ts3musicbot.net/BuyMeACoffee_blue.jpg", @TempDir)
 $coffee = GUICtrlCreatePic($sFile,15,312,231,35,-1,-1)
 
@@ -68,6 +77,7 @@ While 1
 			$sUrl='https://ko-fi.com/crypto90'
 			ShellExecute($sUrl)
 		Case $startButtonHdn2
+			$finished = False
 			runMain()
 	EndSwitch
 Wend
@@ -190,18 +200,53 @@ Func runMain()
 	GUICtrlSetData($socketLog, "------------------------------------------------------------------------------------------------------------------" & @CRLF & @CRLF, 1)
 	
 	
+	
+	$previousSocket1 =  ''
+	$previousSocket2 =  ''
+	$previousSocket3 =  ''
+	
+	$unchangedSocketsCounter =  0
 	$rollCounter =  1
 	While $finished == False
-	   $timestamp = @HOUR & ":" & @MIN & ":" & @SEC
-	   $sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & getSocket(1) & " -- Socket 2: " & getSocket(2) & " -- Socket 3: " & getSocket(3)
-	   ConsoleWrite($sString & @CRLF)
-	   ;append to log edit box
-	   GUICtrlSetData($socketLog, $sString & @CRLF, 1)
-
+	   
+		
+		
+		
+		
 	   IF getSocket(1) <> $wantedSocket1 Or getSocket(2) <> $wantedSocket2 Or getSocket(3) <> $wantedSocket3 Then
-		  $rollCounter =  $rollCounter +  1
-		  MouseClick($MOUSE_CLICK_LEFT, $rerollClickX, $rerollClickY, 1)
-		  Sleep(300)
+		  ;speed up checks, do no sleep if one of the sockets changed from previous roll
+		  If $previousSocket1 <> getSocket(1) Or $previousSocket2 <> getSocket(2) Or $previousSocket3 <> getSocket(3) Then
+			;sockets changed for sure, so we can reroll instantly, update previous socket variables
+			
+			
+			$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
+		    $sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & getSocket(1) & " -- Socket 2: " & getSocket(2) & " -- Socket 3: " & getSocket(3)
+		    ConsoleWrite($sString & @CRLF)
+		    ;append to log edit box
+		    GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+			
+			$previousSocket1 =  getSocket(1)
+			$previousSocket2 =  getSocket(2)
+			$previousSocket3 =  getSocket(3)
+			$rollCounter =  $rollCounter +  1
+			MouseClick($MOUSE_CLICK_LEFT, $rerollClickX, $rerollClickY, 1)
+			;Sleep(100)
+		  Else
+			;sockets unchanged, in this case the server/game was slower to redisplay the new sockets or we get two times in a row the same roll results
+			Sleep(100)
+			$unchangedSocketsCounter =  $unchangedSocketsCounter +  1
+			; 3 times unchanged, which means in 300ms nothing changed, we force reroll
+			If $unchangedSocketsCounter >= 3 Then 
+				$previousSocket1 =  ''
+				$previousSocket2 =  ''
+				$previousSocket3 =  ''
+				$unchangedSocketsCounter =  0
+			EndIf
+			
+		  EndIf
+		  
+		  
+		  
 
 		  If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
 			$finished =  True
@@ -212,6 +257,8 @@ Func runMain()
 		  $finished = True
 		  GUICtrlSetData($socketLog, "Finished after " & ($rollCounter - 1) & " rolls!" & @CRLF, 1)
 	   EndIf
+	   
+	   
 	WEnd
 
 EndFunc
