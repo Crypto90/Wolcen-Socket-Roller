@@ -62,6 +62,7 @@ HotKeySet("{ALT}", "stopLoop")
 
 Func stopLoop()
     $finished =  True
+	GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
 EndFunc   ;==>stops the loop if running
 
 
@@ -78,6 +79,7 @@ While 1
 			ShellExecute($sUrl)
 		Case $startButtonHdn2
 			$finished = False
+			GUICtrlSetData($socketLog, '')
 			runMain()
 	EndSwitch
 Wend
@@ -254,7 +256,7 @@ Func runMain()
 
 		  If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
 			$finished =  True
-			Return
+			GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
 		  EndIf
 
 	   Else
