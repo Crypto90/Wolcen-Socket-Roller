@@ -211,26 +211,30 @@ Func runMain()
 	   
 		
 		
+		$gotSocket1 =  getSocket(1)
+		$gotSocket2 =  getSocket(2)
+		$gotSocket3 =  getSocket(3)
 		
-		
-	   IF getSocket(1) <> $wantedSocket1 Or getSocket(2) <> $wantedSocket2 Or getSocket(3) <> $wantedSocket3 Then
+	   IF $gotSocket1 <> $wantedSocket1 Or $gotSocket2 <> $wantedSocket2 Or $gotSocket3 <> $wantedSocket3 Then
 		  ;speed up checks, do no sleep if one of the sockets changed from previous roll
-		  If $previousSocket1 <> getSocket(1) Or $previousSocket2 <> getSocket(2) Or $previousSocket3 <> getSocket(3) Then
+		  If $previousSocket1 <> $gotSocket1 Or $previousSocket2 <> $gotSocket2 Or $previousSocket3 <> $gotSocket3 Then
 			;sockets changed for sure, so we can reroll instantly, update previous socket variables
 			
 			
 			$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
-		    $sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & getSocket(1) & " -- Socket 2: " & getSocket(2) & " -- Socket 3: " & getSocket(3)
+		    $sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
 		    ConsoleWrite($sString & @CRLF)
 		    ;append to log edit box
 		    GUICtrlSetData($socketLog, $sString & @CRLF, 1)
 			
-			$previousSocket1 =  getSocket(1)
-			$previousSocket2 =  getSocket(2)
-			$previousSocket3 =  getSocket(3)
+			$previousSocket1 =  $gotSocket1
+			$previousSocket2 =  $gotSocket2
+			$previousSocket3 =  $gotSocket3
+			
 			$rollCounter =  $rollCounter +  1
 			MouseClick($MOUSE_CLICK_LEFT, $rerollClickX, $rerollClickY, 1)
-			;Sleep(100)
+			
+			Sleep(100)
 		  Else
 			;sockets unchanged, in this case the server/game was slower to redisplay the new sockets or we get two times in a row the same roll results
 			Sleep(100)
