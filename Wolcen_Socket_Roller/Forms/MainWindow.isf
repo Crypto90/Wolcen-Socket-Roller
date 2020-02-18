@@ -32,7 +32,7 @@ GUICtrlSetBkColor(-1,"-2")
 GUICtrlCreateLabel("Socket log:",293,10,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetBkColor(-1,"-2")
-GUICtrlCreateLabel("v1.4",15,42,22,12,-1,-1)
+GUICtrlCreateLabel("v1.5",15,42,22,12,-1,-1)
 GUICtrlSetBkColor(-1,"-2")
 
 
@@ -74,7 +74,7 @@ gui_event_resized=
 gui_event_dropped=
 defaultfont=MS Sans Serif
 defaultfontsize=8
-[0x00310690]
+[0x00081F4C]
 type=label
 handle=418
 locked=0
@@ -103,7 +103,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x002F2232]
+[0x00011F4E]
 type=label
 handle=419
 locked=0
@@ -132,7 +132,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x0049221C]
+[0x00011F50]
 type=combo
 handle=420
 locked=0
@@ -161,7 +161,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00182296]
+[0x00011F54]
 type=label
 handle=421
 locked=0
@@ -190,7 +190,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x002E21E0]
+[0x00011F56]
 type=combo
 handle=422
 locked=0
@@ -219,7 +219,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=6
-[0x0020227A]
+[0x00011F5A]
 type=label
 handle=423
 locked=0
@@ -248,7 +248,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=7
-[0x002902F2]
+[0x00011F5C]
 type=combo
 handle=424
 locked=0
@@ -277,7 +277,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=8
-[0x002A2230]
+[0x00011F60]
 type=label
 handle=425
 locked=0
@@ -306,7 +306,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=9
-[0x003221B4]
+[0x00011F62]
 type=label
 handle=426
 locked=0
@@ -324,7 +324,7 @@ tooltip=
 bgimage=
 textcolour=0x000000
 id=
-text=v1.4
+text=v1.5
 state=$GUI_SHOW+$GUI_ENABLE
 style=
 exstyle=
@@ -335,7 +335,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x004B21C0]
+[0x00011F64]
 type=label
 handle=427
 locked=0
