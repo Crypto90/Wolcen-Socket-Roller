@@ -470,17 +470,17 @@ Func getSocket($socketNumberToCheck)
 
 
    ;offensive socket checks
-   $checkSocket1Offensive1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xc43b62, 10)
+   $checkSocket1Offensive1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xc43b62, 5)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Offensive 1")
 	   Return 'offensive1'
    EndIf
-   $checkSocket1Offensive2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xe35c5c, 10)
+   $checkSocket1Offensive2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xe35c5c, 5)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Offensive 2")
 	   Return 'offensive2'
 	EndIf
-	$checkSocket1Offensive3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xd38871, 10)
+	$checkSocket1Offensive3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xd38871, 5)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Offensive 3")
 	   Return 'offensive3'
@@ -488,17 +488,17 @@ Func getSocket($socketNumberToCheck)
 
 
    ; defensive socket check
-   $checkSocket1Defensive1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x3fae60, 10)
+   $checkSocket1Defensive1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x3fae60, 5)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Defensive 1")
 	   Return 'defensive1'
    EndIf
-   $checkSocket1Defensive2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x7dd389, 10)
+   $checkSocket1Defensive2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x7dd389, 5)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Defensive 2")
 	   Return 'defensive2'
    EndIf
-	$checkSocket1Defensive3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x90ac69, 10)
+	$checkSocket1Defensive3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x90ac69, 5)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Defensive 3")
 	   Return 'defensive3'
@@ -506,17 +506,17 @@ Func getSocket($socketNumberToCheck)
 
 
    ; support socket check
-   $checkSocket1Support1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x3d6ada, 10)
+   $checkSocket1Support1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x3d6ada, 5)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 1")
 	   Return 'support1'
    EndIf
-   $checkSocket1Support2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x229abf, 10)
+   $checkSocket1Support2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x229abf, 5)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 2")
 	   Return 'support2'
    EndIf
-	$checkSocket1Support3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x9cdcf6, 10)
+	$checkSocket1Support3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x9cdcf6, 5)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 3")
 	   Return 'support3'

@@ -32,7 +32,7 @@ GUICtrlSetBkColor(-1,"-2")
 GUICtrlCreateLabel("Socket log:",293,10,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetBkColor(-1,"-2")
-GUICtrlCreateLabel("v1.6",15,42,22,12,-1,-1)
+GUICtrlCreateLabel("v1.7",15,42,22,12,-1,-1)
 GUICtrlSetBkColor(-1,"-2")
 
 
@@ -324,7 +324,7 @@ tooltip=
 bgimage=
 textcolour=0x000000
 id=
-text=v1.6
+text=v1.7
 state=$GUI_SHOW+$GUI_ENABLE
 style=
 exstyle=
