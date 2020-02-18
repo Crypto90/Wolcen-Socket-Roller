@@ -1,4 +1,4 @@
-# Wolcen-Socket-Roller v1.4 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K314GUP)
+# Wolcen-Socket-Roller v1.5 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K314GUP)
 
 ![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_1.4.png)
 
@@ -14,7 +14,9 @@ Reddit discussion: https://www.reddit.com/r/Wolcen/comments/f5aphp/wolcen_socket
 
 Hello guys, if you love Wolcen as much as I do, I have a little tool for you all.
 
-I created a little tool, which rerolls item sockets at the npc as long as the configured combination not matches. I made this, to be able to do something else while the item is rerolling and I do not click reroll once more accidentally. It clicks reroll the sockets every 300 ms. The tool is made in Autoit, fully pixel based by matching colors of the sockets. It works with all resolutions I have tested. To stop a running rolling process, simply tab out of the game.
+I created a little tool, which rerolls item sockets at the npc as long as the configured combination not matches. I made this, to be able to do something else while the item is rerolling and I do not click reroll once more accidentally. It clicks reroll until the wanted socket combination gets found. On finish the tool plays a 2 second beep sound. To stop a running reroll process, press ALT+TAB and ALT some times. Hotkeys are set to stop for: ALT, TAB, ESCAPE.
+
+The tool is made in Autoit, fully pixel based by matching colors of the sockets. It works with all resolutions I have tested. To stop a running rolling process, simply tab out of the game.
 
 If you like my work, you can donate me a coffe. Happy looting :)
 
