@@ -59,11 +59,10 @@ _GUICtrlComboBox_SetCurSel($sock2, 0)
 _GUICtrlComboBox_SetCurSel($sock3, 0)
 
 $socketLog = GUICtrlCreateEdit("",293,42,433,306,BitOR($WS_VSCROLL, $ES_AUTOVSCROLL, $ES_READONLY),-1)
+;increase limit of textbox
+GUICtrlSetLimit(-1,0x7FFFFFFF)
 
 $startButtonHdn2 = GUICtrlCreateButton("Start",15,271,231,30,-1,-1)
-
-
-
 
 
 
@@ -71,6 +70,9 @@ $startButtonHdn2 = GUICtrlCreateButton("Start",15,271,231,30,-1,-1)
 HotKeySet("{ESC}", "stopLoop")
 HotKeySet("{TAB}", "stopLoop")
 HotKeySet("{ALT}", "stopLoop")
+
+
+
 
 Func stopLoop()
     $finished =  True
@@ -258,15 +260,80 @@ Func runMain()
 	$rollCounter =  0
 	While $finished == False
 	   
-		
-		
 		$gotSocket1 =  getSocket(1)
-		$gotSocket2 =  getSocket(2)
-		$gotSocket3 =  getSocket(3)
+		$gotSocket2 =  'unset'
+		$gotSocket3 =  'unset'
+		
+		If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
+			$finished =  True
+			GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+		EndIf
+		
+		;prevent unneeded area checks start
+		;if found socket is not in wanted, reroll directly
+		If $gotSocket1 <> $wantedSocket1 And $gotSocket1 <> $wantedSocket2 And $gotSocket1 <> $wantedSocket3 Then
+			$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
+		    $sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+		    ;append to log edit box
+		    GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+			
+			$previousSocket1 =  $gotSocket1
+			$previousSocket2 =  $gotSocket2
+			$previousSocket3 =  $gotSocket3
+			
+			$rollCounter =  $rollCounter +  1
+			MouseClick($MOUSE_CLICK_LEFT, $rerollClickX, $rerollClickY, 1)
+			Sleep(100)
+			ContinueLoop
+		EndIf
+		
+		;prevent unneeded area checks
+		If $gotSocket1 <> 'unset' Then 
+			$gotSocket2 =  getSocket(2)
+			
+			;if found socket is not in wanted, reroll directly
+			If $gotSocket2 <> $wantedSocket1 And $gotSocket2 <> $wantedSocket2 And $gotSocket2 <> $wantedSocket3 Then
+				$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
+				$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+				;append to log edit box
+				GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+				
+				$previousSocket1 =  $gotSocket1
+				$previousSocket2 =  $gotSocket2
+				$previousSocket3 =  $gotSocket3
+				
+				$rollCounter =  $rollCounter +  1
+				MouseClick($MOUSE_CLICK_LEFT, $rerollClickX, $rerollClickY, 1)
+				Sleep(100)
+				ContinueLoop
+			EndIf
+			
+		EndIf
+		If $gotSocket2 <> 'unset' Then 
+			$gotSocket3 =  getSocket(3)
+			
+			;if found socket is not in wanted, reroll directly
+			If $gotSocket3 <> $wantedSocket1 And $gotSocket3 <> $wantedSocket2 And $gotSocket3 <> $wantedSocket3 Then
+				$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
+				$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+				;append to log edit box
+				GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+				
+				$previousSocket1 =  $gotSocket1
+				$previousSocket2 =  $gotSocket2
+				$previousSocket3 =  $gotSocket3
+				
+				$rollCounter =  $rollCounter +  1
+				MouseClick($MOUSE_CLICK_LEFT, $rerollClickX, $rerollClickY, 1)
+				Sleep(100)
+				ContinueLoop
+			EndIf
+			
+		EndIf
+		;prevent unneeded area checks finished
 		
 		
 		
-	   ;IF $gotSocket1 <> $wantedSocket1 Or $gotSocket2 <> $wantedSocket2 Or $gotSocket3 <> $wantedSocket3 Then
 	   	If ($gotSocket1 == $wantedSocket1 And $gotSocket2 == $wantedSocket2 And $gotSocket3 == $wantedSocket3) Or ($gotSocket1 == $wantedSocket1 And $gotSocket2 == $wantedSocket3 And $gotSocket3 == $wantedSocket2) Or ($gotSocket1 == $wantedSocket2 And $gotSocket2 == $wantedSocket1 And $gotSocket3 == $wantedSocket3) Or ($gotSocket1 == $wantedSocket2 And $gotSocket2 == $wantedSocket3 And $gotSocket3 == $wantedSocket1) Or ($gotSocket1 == $wantedSocket3 And $gotSocket2 == $wantedSocket1 And $gotSocket3 == $wantedSocket2) Or ($gotSocket1 == $wantedSocket3 And $gotSocket2 == $wantedSocket2 And $gotSocket3 == $wantedSocket1) Then
 			;found a searched combination
 			$finished = True
@@ -295,7 +362,6 @@ Func runMain()
 			
 			$rollCounter =  $rollCounter +  1
 			MouseClick($MOUSE_CLICK_LEFT, $rerollClickX, $rerollClickY, 1)
-			
 			Sleep(100)
 		  Else
 			;sockets unchanged, in this case the server/game was slower to redisplay the new sockets or we get two times in a row the same roll results
