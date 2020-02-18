@@ -1,5 +1,5 @@
 # Wolcen-Socket-Roller v1.7 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K314GUP)
-
+Download here: https://github.com/Crypto90/Wolcen-Socket-Roller/releases
 ![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_1.5.png)
 <br/>
 <br/>
