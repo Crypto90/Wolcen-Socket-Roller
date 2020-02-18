@@ -29,4 +29,11 @@ How to use:
 
 To stop it while its looping, ALT-TAB out of the game to a different program, this will stop the loop.
 
+
+Tested and working resolutions by me:
+1920x1080 (16:9)
+3440x1440 (21:9)
+Others should work too, because the coordinates get calculated. If your resolution does not work, please create in issue here on github and upload a screenshot of your game so it can get fixed.
+
+
 ![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_ingame_1.5.jpg)
