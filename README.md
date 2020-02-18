@@ -42,7 +42,9 @@ Others should work too, because the coordinates get calculated. If your resoluti
 
 ![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_ingame_1.5.jpg)
 
-
+<br/>
 FAQ:
+<br/>
 Q: Mouse does not move after it switches to the game.
+<br/>
 A: Its a permission issue on your pc, run the tool as administrator.
