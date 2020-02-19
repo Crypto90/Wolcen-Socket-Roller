@@ -28,13 +28,16 @@ How to use:
 To stop it while its looping, ALT-TAB out of the game to a different program, this will stop the loop.
 <br/>
 <br/>
-Tested and working resolutions by me:
+With version 1.8.2 support for all common aspect rations got added to support more resolutions dynamically:
 <br/>
-1920x1080 (16:9)
-<br/>
-2560x1440 (16:9)
-<br/>
-3440x1440 (21:9)
+21:9 (ultrawide 3440x1440)<br/>
+21:9 (wide 2560x1080)  <br/>
+16:10 and 8:5<br/>
+16:9<br/>
+5:3<br/>
+5:4<br/>
+4:3<br/>
+All others fallback to default 16:9 aspect ratio.
 <br/>
 <br/>
 
