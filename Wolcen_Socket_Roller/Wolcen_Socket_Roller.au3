@@ -65,6 +65,8 @@ EndFunc   ;==>_GetURLImage
 
 $finished = False
 
+$slowModeStatus =  0
+
 ;support for multiple different aspect ratios
 $baseResolutionWidth =  0
 $baseResolutionHeight =  0
@@ -120,6 +122,12 @@ While 1
 		
 		Case $GUI_EVENT_CLOSE,  $idOK
 			ExitLoop 
+		Case $slowmode
+			If $slowModeStatus == 0 Then
+				$slowModeStatus =  1
+			Else 
+				$slowModeStatus =  0
+			EndIf
 		Case $coffee
 			$sUrl='https://ko-fi.com/crypto90'
 			ShellExecute($sUrl)
@@ -533,18 +541,33 @@ Func runMain()
 	
 	$unchangedSocketsCounter =  0
 	$rollCounter =  0
+	$maxRollsValue =  Int(GUICtrlRead($maxRolls))
 	While $finished == False
 		
-	    
+		If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
+			$finished =  True
+			GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+			Return
+		EndIf
+		
+		
+	    If  $maxRollsValue > 0 And $rollCounter >= $maxRolls Then 
+			$finished =  True
+			GUICtrlSetData($socketLog, "Max rolls of " & $maxRollsValue & " reached. Aborting." & @CRLF, 1)
+			Return
+		EndIf
+		
+		
+		If $slowModeStatus ==  1 Then
+			Sleep(5000)
+		EndIf
+		
 		
 		$gotSocket1 =  getSocket(1)
 		$gotSocket2 =  'unset'
 		$gotSocket3 =  'unset'
 		
-		If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
-			$finished =  True
-			GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
-		EndIf
+		
 		
 		;prevent unneeded area checks start
 		;if found socket is not in wanted, reroll directly
@@ -626,8 +649,8 @@ Func runMain()
 			$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
 			GUICtrlSetData($socketLog, $sString & @CRLF, 1)
 			GUICtrlSetData($socketLog, "------------------------------------------------------------------------------------------------------------------" & @CRLF & @CRLF, 1)
-			
 			GUICtrlSetData($socketLog, "Finished after " & $rollCounter & " rolls!" & @CRLF, 1)
+			Return
 		Else 
 			;no wanted combination found, reroll
 			;speed up checks, do no sleep if one of the sockets changed from previous roll
@@ -670,6 +693,7 @@ Func runMain()
 		  If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
 			$finished =  True
 			GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+			Return
 		  EndIf
 		EndIf
 		

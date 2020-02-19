@@ -11,8 +11,8 @@ FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_
 FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)
 FileInstall('Images\background.jpg', @TempDir & '\Wolcen_Socket_Roller\background.jpg', 1)
 
-$MainWindow = GUICreate("Wolcen Socket Roller by Crypto90",735,356,-1,-1,-1,-1)
-$MainWindow_BGimage = GUICtrlCreatePic(@scriptdir&"\"&"Images\background.jpg",0,0,735,356,$WS_CLIPSIBLINGS)
+$MainWindow = GUICreate("Wolcen Socket Roller by Crypto90",735,430,-1,-1,-1,-1)
+$MainWindow_BGimage = GUICtrlCreatePic(@scriptdir&"\"&"Images\background.jpg",0,0,735,430,$WS_CLIPSIBLINGS)
 GUICtrlSetState(-1,$GUI_DISABLE)
 GUICtrlSetResizing(-1,102)
 ;background image
@@ -47,20 +47,28 @@ GUICtrlCreateLabel("Socket 3:",37,196,87,21,-1,-1)
 GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$startButtonHdn2 = GUICtrlCreatePic("",35,256,211,35,-1,-1)
+$startButtonHdn2 = GUICtrlCreatePic("",36,321,211,35,-1,-1)
 GUICtrlCreateLabel("Socket log:",293,20,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-GUICtrlCreateLabel("v1.8.3",35,52,34,12,-1,-1)
+GUICtrlCreateLabel("v1.8.4",35,52,34,12,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$coffee = GUICtrlCreatePic("",35,299,211,35,-1,-1)
-$socketLog = GUICtrlCreateEdit("",293,52,419,285,BitOr($ES_READONLY,$WS_VSCROLL),$WS_EX_TRANSPARENT)
+$coffee = GUICtrlCreatePic("",36,365,211,35,-1,-1)
+$socketLog = GUICtrlCreateEdit("",293,52,419,355,BitOr($ES_READONLY,$WS_VSCROLL),$WS_EX_TRANSPARENT)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"0x000000")
 GUICtrlSetLimit(-1,0x7FFFFFFF)
 GUICtrlSetLimit($socketLog,0x7FFFFFFF)
+GUICtrlCreateLabel("Max rolls (0 = no limit):",40,255,160,16,-1,-1)
+GUICtrlSetFont(-1,10,700,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xF2EEDC")
+GUICtrlSetBkColor(-1,"-2")
+$maxRolls = GUICtrlCreateInput("0",209,255,39,17,$ES_NUMBER,$WS_EX_CLIENTEDGE)
+$slowmode = GUICtrlCreateCheckbox("Slow mode (for debugging)",36,279,211,25,-1,-1)
+GUICtrlSetColor(-1,"0xF2EEDC")
+GUICtrlSetBkColor(-1,"-2")
 
 
 
@@ -71,7 +79,7 @@ Handle_deklaration=default
 Handle_deklaration_const=false
 title=Wolcen Socket Roller by Crypto90
 breite=735
-hoehe=356
+hoehe=430
 style=-1
 exstyle=-1
 bgcolour=0xF0F0F0
@@ -351,7 +359,7 @@ tooltip=
 bgimage=
 textcolour=0xF2EEDC
 id=
-text=v1.8.3
+text=v1.8.4
 state=$GUI_SHOW+$GUI_ENABLE
 style=
 exstyle=
@@ -396,8 +404,8 @@ type=image
 handle=429
 locked=0
 resize=
-x=35
-y=256
+x=36
+y=321
 width=211
 height=35
 func=
@@ -425,8 +433,8 @@ type=image
 handle=430
 locked=0
 resize=
-x=35
-y=299
+x=36
+y=365
 width=211
 height=35
 func=
@@ -457,7 +465,7 @@ resize=
 x=293
 y=52
 width=419
-height=285
+height=355
 func=
 font=MS Sans Serif
 fontsize=8
@@ -474,6 +482,93 @@ exstyle=$WS_EX_TRANSPARENT
 bgcolour=0x000000
 code=GUICtrlSetLimit(-1,0x7FFFFFFF)[BREAK]GUICtrlSetLimit($socketLog,0x7FFFFFFF)
 order=13
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+[0x005A053E]
+type=label
+handle=440
+locked=0
+resize=
+x=40
+y=255
+width=160
+height=16
+func=
+font=MS Sans Serif
+fontsize=10
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xF2EEDC
+id=
+text=Max rolls (0 = no limit):
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=14
+[0x00911D3C]
+type=input
+handle=441
+locked=0
+resize=
+x=209
+y=255
+width=39
+height=17
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$maxRolls
+text=0
+state=$GUI_SHOW+$GUI_ENABLE
+style=$ES_NUMBER
+exstyle=$WS_EX_CLIENTEDGE
+bgcolour=
+code=
+order=15
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+[0x002406C6]
+type=checkbox
+handle=442
+locked=0
+resize=
+x=36
+y=279
+width=211
+height=25
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xF2EEDC
+id=$slowmode
+text=Slow mode (for debugging)
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+order=16
 tabpage=-1
 iconindex=
 iconlarge=0
