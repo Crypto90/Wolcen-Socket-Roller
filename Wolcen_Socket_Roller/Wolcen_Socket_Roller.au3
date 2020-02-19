@@ -248,7 +248,7 @@ Func runMain()
 	;winWaitActive("Wolcen: Lords of Mayhem")
 	
 	winWaitActive("Wolcen")
-	$size = WinGetPos("[active]")
+	$size = WinGetPos("Wolcen: Lords of Mayhem")
 	$gameWidth = $size[2]
 	$gameHeight = $size[3]
 	;MsgBox(0, "Active window stats (x,y,width,height):", $size[0] & " " & $size[1] & " " & $size[2] & " " & $size[3])
@@ -283,6 +283,30 @@ Func runMain()
 		$baseSocket3TopLeftY =  804
 		$baseSocket3BottomRightX = 268
 		$baseSocket3BottomRightY = 854
+	EndIf
+	
+	;21 : 9 ultra ultra wide
+	If $gameAspectRatio ==  (5120 / 1440) Then 
+		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 ultrawide" & @CRLF, 1)
+		$baseResolutionWidth =  5120
+		$baseResolutionHeight =  1440
+		$baseRerollClickX =  462
+		$baseRerollClickY =  1380
+		;base socket1
+		$baseSocket1TopLeftX = 140
+		$baseSocket1TopLeftY =  684
+		$baseSocket1BottomRightX = 186
+		$baseSocket1BottomRightY = 730
+		;base socket2
+		$baseSocket2TopLeftX = 140
+		$baseSocket2TopLeftY =  730
+		$baseSocket2BottomRightX = 186
+		$baseSocket2BottomRightY = 798
+		;base socket3
+		$baseSocket3TopLeftX = 140
+		$baseSocket3TopLeftY =  798
+		$baseSocket3BottomRightX = 186
+		$baseSocket3BottomRightY = 862
 	EndIf
 	
 	;21 : 9 wide -- done
@@ -412,7 +436,7 @@ Func runMain()
 		$baseResolutionWidth =  800
 		$baseResolutionHeight =  600
 		$baseRerollClickX =  140
-		$baseRerollClickY =  283
+		$baseRerollClickY =  383
 		;base socket1
 		$baseSocket1TopLeftX = 41
 		$baseSocket1TopLeftY =  209
@@ -459,6 +483,12 @@ Func runMain()
 		$baseSocket3BottomRightX = 98
 		$baseSocket3BottomRightY = 427
 	EndIf
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -666,7 +696,7 @@ EndFunc
 Func getSocket($socketNumberToCheck)
 	
    ;recalculate coordinates based on current resolution
-	 $size = WinGetPos("[active]")
+	 $size = WinGetPos("Wolcen: Lords of Mayhem")
 	 $gameWidth = $size[2]
 	 $gameHeight = $size[3]
 
@@ -684,6 +714,7 @@ Func getSocket($socketNumberToCheck)
 		$socket1TopLeftY =  Round( ($baseSocket1TopLeftY / $baseResolutionHeight) * $gameHeight )
 		$socket1BottomRightX = Round( ($baseSocket1BottomRightX / $baseResolutionWidth) * $gameWidth )
 		$socket1BottomRightY = Round( ($baseSocket1BottomRightY / $baseResolutionHeight) * $gameHeight )
+		
 		;draw rect
 		_UIA_DrawRect($socket1TopLeftX, $socket1BottomRightX, $socket1TopLeftY, $socket1BottomRightY, 0x0000FF, 2)
 	  
