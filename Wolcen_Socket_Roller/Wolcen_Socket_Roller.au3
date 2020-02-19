@@ -23,6 +23,24 @@
 #include <WinAPISysWin.au3>
 
 
+;EMBED IMAGES INTO EXE
+;start button image
+If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')
+FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)
+GUICtrlSetImage($startButtonHdn2, @TempDir & '\Wolcen_Socket_Roller\button_start.jpg')
+
+;donate button image
+If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')
+FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)
+GUICtrlSetImage($coffee, @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg')
+
+;background image
+FileInstall('Images\background.jpg', @TempDir & '\Wolcen_Socket_Roller\background.jpg', 1)
+$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background.jpg',0,0,735,356,$WS_CLIPSIBLINGS)
+
+
+
+
 Func _GetURLImage($sURL, $sDirectory = @ScriptDir)
     Local $hDownload, $sFile
     $sFile = StringRegExpReplace($sURL, "^.*/", "")
@@ -58,11 +76,11 @@ _GUICtrlComboBox_SetCurSel($sock1, 0)
 _GUICtrlComboBox_SetCurSel($sock2, 0)
 _GUICtrlComboBox_SetCurSel($sock3, 0)
 
-$socketLog = GUICtrlCreateEdit("",293,42,433,306,BitOR($WS_VSCROLL, $ES_AUTOVSCROLL, $ES_READONLY),-1)
+;$socketLogOld = GUICtrlCreateEdit("",293,42,433,306,BitOR($WS_VSCROLL, $ES_AUTOVSCROLL, $ES_READONLY),-1)
 ;increase limit of textbox
-GUICtrlSetLimit(-1,0x7FFFFFFF)
 
-$startButtonHdn2 = GUICtrlCreateButton("Start",15,271,231,30,-1,-1)
+
+;$startButtonHdn2 = GUICtrlCreateButton("Start",15,271,231,30,-1,-1)
 
 
 
@@ -80,8 +98,8 @@ Func stopLoop()
 EndFunc   ;==>stops the loop if running
 
 
-$sFile = _GetURLImage("http://download1.ts3musicbot.net/BuyMeACoffee_blue.jpg", @TempDir)
-$coffee = GUICtrlCreatePic($sFile,15,312,231,35,-1,-1)
+;$sFile = _GetURLImage("http://download1.ts3musicbot.net/BuyMeACoffee_blue.jpg", @TempDir)
+;$coffee = GUICtrlCreatePic($sFile,15,312,231,35,-1,-1)
 
 While 1
 	Switch GUIGetMsg()
@@ -227,8 +245,12 @@ Func runMain()
 
 
 	
-
-
+	$checkActiveWindowTitle = WinGetTitle("[ACTIVE]")
+	If $checkActiveWindowTitle <> "Wolcen: Lords of Mayhem" Then
+		GUICtrlSetData($socketLog, "Wolcen: Lords of Mayhem is not running... Aborting." & @CRLF, 1)
+		stopLoop()
+		Return
+	EndIf
 
 
 	
@@ -513,7 +535,7 @@ Func getSocket($socketNumberToCheck)
    EndIf
    $checkSocket1Support2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x229abf, 5)
    If Not @error Then
-	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 2")
+	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 2")0xF2EEDC0xF2EEDC0xF2EEDC
 	   Return 'support2'
    EndIf
 	$checkSocket1Support3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x9cdcf6, 5)

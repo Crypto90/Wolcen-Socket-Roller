@@ -3,42 +3,65 @@
 #include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
 #Include <GuiButton.au3>
+#include <EditConstants.au3>
 #include <ComboConstants.au3>
 
 $MainWindow = GUICreate("Wolcen Socket Roller by Crypto90",735,356,-1,-1,-1,-1)
-GUICtrlCreateLabel("Wolcen Socket Roller",15,10,233,32,-1,-1)
+$MainWindow_BGimage = GUICtrlCreatePic(@scriptdir&"\"&"Images\background.jpg",0,0,735,356,$WS_CLIPSIBLINGS)
+GUICtrlSetState(-1,$GUI_DISABLE)
+GUICtrlSetResizing(-1,102)
+;background image
+FileInstall('Images\background.jpg', @TempDir & '\Wolcen_Socket_Roller\background.jpg', 1)
+$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background.jpg',0,0,735,356,$WS_CLIPSIBLINGS)
+GUICtrlCreateLabel("Wolcen Socket Roller",35,20,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-GUICtrlCreateLabel("by Crypto90",192,42,56,18,-1,-1)
+GUICtrlCreateLabel("by Crypto90",212,52,56,18,-1,-1)
+GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$sock1 = GUICtrlCreateCombo("",15,108,233,21,$CBS_DROPDOWNLIST,-1)
+$sock1 = GUICtrlCreateCombo("",37,108,211,21,$CBS_DROPDOWNLIST,-1)
 GUICtrlSetData(-1,"unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
 GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
-GUICtrlCreateLabel("Socket 1:",15,82,87,21,-1,-1)
-GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
 GUICtrlSetBkColor(-1,"-2")
-$sock2 = GUICtrlCreateCombo("",15,167,233,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlCreateLabel("Socket 1:",37,80,87,21,-1,-1)
+GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xF2EEDC")
+GUICtrlSetBkColor(-1,"-2")
+$sock2 = GUICtrlCreateCombo("",37,167,211,21,$CBS_DROPDOWNLIST,-1)
 GUICtrlSetData(-1,"unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
 GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
-GUICtrlCreateLabel("Socket 2:",15,143,87,21,-1,-1)
+GUICtrlCreateLabel("Socket 2:",37,140,87,21,-1,-1)
 GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$sock3 = GUICtrlCreateCombo("",15,233,233,21,$CBS_DROPDOWNLIST,-1)
+$sock3 = GUICtrlCreateCombo("",37,224,211,21,$CBS_DROPDOWNLIST,-1)
 GUICtrlSetData(-1,"unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
 GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
-GUICtrlCreateLabel("Socket 3:",15,206,87,21,-1,-1)
+GUICtrlCreateLabel("Socket 3:",37,196,87,21,-1,-1)
 GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-GUICtrlCreateLabel("Socket log:",293,10,233,32,-1,-1)
+$startButtonHdn2 = GUICtrlCreatePic("",35,256,211,35,-1,-1)
+GUICtrlCreateLabel("Socket log:",293,20,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-GUICtrlCreateLabel("v1.7",15,42,22,12,-1,-1)
+GUICtrlCreateLabel("v1.8",35,52,22,12,-1,-1)
+GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
+$coffee = GUICtrlCreatePic("",35,299,211,35,-1,-1)
+$socketLog = GUICtrlCreateEdit("",293,52,419,285,$ES_READONLY,$WS_EX_TRANSPARENT)
+GUICtrlSetColor(-1,"0xF2EEDC")
+GUICtrlSetBkColor(-1,"0x000000")
+GUICtrlSetLimit(-1,0x7FFFFFFF)
+GUICtrlSetLimit($socketLog,0x7FFFFFFF)
 
 
 
 #cs
 [gui]
+bgimage=Images\background.jpg
 Handle_deklaration=default
 Handle_deklaration_const=false
 title=Wolcen Socket Roller by Crypto90
@@ -47,10 +70,9 @@ hoehe=356
 style=-1
 exstyle=-1
 bgcolour=0xF0F0F0
-bgimage=none
 handle=$MainWindow
 parent=
-code=
+code=;background image[BREAK]FileInstall('Images\background.jpg', @TempDir & '\Wolcen_Socket_Roller\background.jpg', 1)[BREAK]$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background.jpg',0,0,735,356,$WS_CLIPSIBLINGS)
 codebeforegui=
 xpos=-1
 ypos=-1
@@ -74,13 +96,13 @@ gui_event_resized=
 gui_event_dropped=
 defaultfont=MS Sans Serif
 defaultfontsize=8
-[0x00081F4C]
+[0x001C1C12]
 type=label
-handle=418
+handle=419
 locked=0
 resize=
-x=15
-y=10
+x=35
+y=20
 width=233
 height=32
 func=
@@ -90,7 +112,7 @@ fontstyle=400
 fontattribute=0
 tooltip=
 bgimage=
-textcolour=0x000000
+textcolour=0xF2EEDC
 id=
 text=Wolcen Socket Roller
 state=$GUI_SHOW+$GUI_ENABLE
@@ -103,13 +125,13 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00011F4E]
+[0x00161B0A]
 type=label
-handle=419
+handle=420
 locked=0
 resize=
-x=192
-y=42
+x=212
+y=52
 width=56
 height=18
 func=
@@ -119,7 +141,7 @@ fontstyle=400
 fontattribute=0
 tooltip=
 bgimage=
-textcolour=0x000000
+textcolour=0xF2EEDC
 id=
 text=by Crypto90
 state=$GUI_SHOW+$GUI_ENABLE
@@ -132,14 +154,14 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00011F50]
+[0x001F23C6]
 type=combo
-handle=420
+handle=421
 locked=0
 resize=
-x=15
+x=37
 y=108
-width=233
+width=211
 height=21
 func=
 font=MS Sans Serif
@@ -154,20 +176,20 @@ text=unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|sup
 state=$GUI_SHOW+$GUI_ENABLE
 style=$CBS_DROPDOWNLIST
 exstyle=
-bgcolour=
+bgcolour=-2
 code=
 order=4
 tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00011F54]
+[0x006122BE]
 type=label
-handle=421
+handle=422
 locked=0
 resize=
-x=15
-y=82
+x=37
+y=80
 width=87
 height=21
 func=
@@ -177,7 +199,7 @@ fontstyle=700
 fontattribute=0
 tooltip=
 bgimage=
-textcolour=0x000000
+textcolour=0xF2EEDC
 id=
 text=Socket 1:
 state=$GUI_SHOW+$GUI_ENABLE
@@ -190,14 +212,14 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00011F56]
+[0x0065226C]
 type=combo
-handle=422
+handle=423
 locked=0
 resize=
-x=15
+x=37
 y=167
-width=233
+width=211
 height=21
 func=
 font=MS Sans Serif
@@ -219,13 +241,13 @@ iconindex=
 iconlarge=0
 textmode=text
 order=6
-[0x00011F5A]
+[0x0040230C]
 type=label
-handle=423
+handle=424
 locked=0
 resize=
-x=15
-y=143
+x=37
+y=140
 width=87
 height=21
 func=
@@ -235,7 +257,7 @@ fontstyle=700
 fontattribute=0
 tooltip=
 bgimage=
-textcolour=0x000000
+textcolour=0xF2EEDC
 id=
 text=Socket 2:
 state=$GUI_SHOW+$GUI_ENABLE
@@ -248,14 +270,14 @@ iconindex=
 iconlarge=0
 textmode=text
 order=7
-[0x00011F5C]
+[0x003123A4]
 type=combo
-handle=424
+handle=425
 locked=0
 resize=
-x=15
-y=233
-width=233
+x=37
+y=224
+width=211
 height=21
 func=
 font=MS Sans Serif
@@ -277,13 +299,13 @@ iconindex=
 iconlarge=0
 textmode=text
 order=8
-[0x00011F60]
+[0x001923DA]
 type=label
-handle=425
+handle=426
 locked=0
 resize=
-x=15
-y=206
+x=37
+y=196
 width=87
 height=21
 func=
@@ -293,7 +315,7 @@ fontstyle=700
 fontattribute=0
 tooltip=
 bgimage=
-textcolour=0x000000
+textcolour=0xF2EEDC
 id=
 text=Socket 3:
 state=$GUI_SHOW+$GUI_ENABLE
@@ -306,13 +328,13 @@ iconindex=
 iconlarge=0
 textmode=text
 order=9
-[0x00011F62]
+[0x00122400]
 type=label
-handle=426
+handle=427
 locked=0
 resize=
-x=15
-y=42
+x=35
+y=52
 width=22
 height=12
 func=
@@ -322,9 +344,9 @@ fontstyle=400
 fontattribute=0
 tooltip=
 bgimage=
-textcolour=0x000000
+textcolour=0xF2EEDC
 id=
-text=v1.7
+text=v1.8
 state=$GUI_SHOW+$GUI_ENABLE
 style=
 exstyle=
@@ -335,13 +357,13 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00011F64]
+[0x0016244A]
 type=label
-handle=427
+handle=428
 locked=0
 resize=
 x=293
-y=10
+y=20
 width=233
 height=32
 func=
@@ -351,7 +373,7 @@ fontstyle=400
 fontattribute=0
 tooltip=
 bgimage=
-textcolour=0x000000
+textcolour=0xF2EEDC
 id=
 text=Socket log:
 state=$GUI_SHOW+$GUI_ENABLE
@@ -364,4 +386,91 @@ iconindex=
 iconlarge=0
 textmode=text
 order=11
+[0x001C1A88]
+type=image
+handle=429
+locked=0
+resize=
+x=35
+y=256
+width=211
+height=35
+func=
+font=MS Sans Serif
+fontsize=12
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xffffff
+id=$startButtonHdn2
+text=Start
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=
+code=
+order=11
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+[0x003923D4]
+type=image
+handle=430
+locked=0
+resize=
+x=35
+y=299
+width=211
+height=35
+func=
+font=MS Sans Serif
+fontsize=12
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xffffff
+id=$coffee
+text=Buy me a coffee
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=12
+[0x00222998]
+type=edit
+handle=431
+locked=0
+resize=
+x=293
+y=52
+width=419
+height=285
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xF2EEDC
+id=$socketLog
+text=
+state=$GUI_SHOW+$GUI_ENABLE
+style=$ES_READONLY
+exstyle=$WS_EX_TRANSPARENT
+bgcolour=0x000000
+code=GUICtrlSetLimit(-1,0x7FFFFFFF)[BREAK]GUICtrlSetLimit($socketLog,0x7FFFFFFF)
+order=13
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
 #ce
