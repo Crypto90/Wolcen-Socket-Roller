@@ -65,6 +65,24 @@ EndFunc   ;==>_GetURLImage
 
 $finished = False
 
+;support for multiple different aspect ratios
+$baseResolutionWidth =  0
+$baseResolutionHeight =  0
+$baseRerollClickX =  0
+$baseRerollClickY =  0
+$baseSocket1TopLeftX = 0
+$baseSocket1TopLeftY =  0
+$baseSocket1BottomRightX = 0
+$baseSocket1BottomRightY = 0
+$baseSocket2TopLeftX = 0
+$baseSocket2TopLeftY =  0
+$baseSocket2BottomRightX = 0
+$baseSocket2BottomRightY = 0
+$baseSocket3TopLeftX = 0
+$baseSocket3TopLeftY =  0
+$baseSocket3BottomRightX = 0
+$baseSocket3BottomRightY = 0
+
 GUISetState(@SW_SHOW,  $MainWindow)
 
 
@@ -234,13 +252,221 @@ Func runMain()
 	$gameWidth = $size[2]
 	$gameHeight = $size[3]
 	;MsgBox(0, "Active window stats (x,y,width,height):", $size[0] & " " & $size[1] & " " & $size[2] & " " & $size[3])
+	$gameAspectRatio = $gameWidth /  $gameHeight
+	
+	
+	
+	;support for multiple different aspect ratios
+	
+	
+	
+	
+	;21 : 9 ultrawide
+	If $gameAspectRatio ==  (3440 / 1440) Then 
+		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 ultrawide" & @CRLF, 1)
+		$baseResolutionWidth =  3440
+		$baseResolutionHeight =  1440
+		$baseRerollClickX =  390
+		$baseRerollClickY =  1222
+		;base socket1
+		$baseSocket1TopLeftX = 210
+		$baseSocket1TopLeftY =  677
+		$baseSocket1BottomRightX = 268
+		$baseSocket1BottomRightY = 723
+		;base socket2
+		$baseSocket2TopLeftX = 210
+		$baseSocket2TopLeftY =  742
+		$baseSocket2BottomRightX = 268
+		$baseSocket2BottomRightY = 788
+		;base socket3
+		$baseSocket3TopLeftX = 210
+		$baseSocket3TopLeftY =  804
+		$baseSocket3BottomRightX = 268
+		$baseSocket3BottomRightY = 854
+	EndIf
+	
+	;21 : 9 wide -- done
+	If $gameAspectRatio ==  (2560 / 1080) Then 
+		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 wide" & @CRLF, 1)
+		$baseResolutionWidth =  2560
+		$baseResolutionHeight =  1080
+		$baseRerollClickX =  330
+		$baseRerollClickY =  921
+		;base socket1
+		$baseSocket1TopLeftX = 100
+		$baseSocket1TopLeftY =  508
+		$baseSocket1BottomRightX = 135
+		$baseSocket1BottomRightY = 550
+		;base socket2
+		$baseSocket2TopLeftX = 100
+		$baseSocket2TopLeftY =  550
+		$baseSocket2BottomRightX = 135
+		$baseSocket2BottomRightY = 595
+		;base socket3
+		$baseSocket3TopLeftX = 100
+		$baseSocket3TopLeftY =  595
+		$baseSocket3BottomRightX = 135
+		$baseSocket3BottomRightY = 645
+	EndIf
+		
+	
+	;16 : 10 / 8 : 5 -- done
+	If $gameAspectRatio ==  (16 / 10) Then
+		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 16:10 / 8:5" & @CRLF, 1)
+		$baseResolutionWidth =  1280
+		$baseResolutionHeight =  800
+		$baseRerollClickX =  227
+		$baseRerollClickY =  613
+		;base socket1
+		$baseSocket1TopLeftX = 72
+		$baseSocket1TopLeftY =  336
+		$baseSocket1BottomRightX = 98
+		$baseSocket1BottomRightY = 365
+		;base socket2
+		$baseSocket2TopLeftX = 72
+		$baseSocket2TopLeftY =  367
+		$baseSocket2BottomRightX = 98
+		$baseSocket2BottomRightY = 395
+		;base socket3
+		$baseSocket3TopLeftX = 72
+		$baseSocket3TopLeftY =  400
+		$baseSocket3BottomRightX = 98
+		$baseSocket3BottomRightY = 427
+	EndIf
+	
+	;16 : 9 -- done
+	If $gameAspectRatio ==  (16 / 9) Then
+		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 16:9" & @CRLF, 1)
+		$baseResolutionWidth =  1280
+		$baseResolutionHeight =  720
+		$baseRerollClickX =  227
+		$baseRerollClickY =  613
+		;base socket1
+		$baseSocket1TopLeftX = 72
+		$baseSocket1TopLeftY =  336
+		$baseSocket1BottomRightX = 98
+		$baseSocket1BottomRightY = 365
+		;base socket2
+		$baseSocket2TopLeftX = 72
+		$baseSocket2TopLeftY =  367
+		$baseSocket2BottomRightX = 98
+		$baseSocket2BottomRightY = 395
+		;base socket3
+		$baseSocket3TopLeftX = 72
+		$baseSocket3TopLeftY =  400
+		$baseSocket3BottomRightX = 98
+		$baseSocket3BottomRightY = 427
+	EndIf
+	
+	;5 : 3
+	If $gameAspectRatio ==  (5 / 3) Then 
+		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 5:3" & @CRLF, 1)
+		$baseResolutionWidth =  1280
+		$baseResolutionHeight =  768
+		$baseRerollClickX =  227
+		$baseRerollClickY =  613
+		;base socket1
+		$baseSocket1TopLeftX = 72
+		$baseSocket1TopLeftY =  336
+		$baseSocket1BottomRightX = 98
+		$baseSocket1BottomRightY = 365
+		;base socket2
+		$baseSocket2TopLeftX = 72
+		$baseSocket2TopLeftY =  365
+		$baseSocket2BottomRightX = 98
+		$baseSocket2BottomRightY = 395
+		;base socket3
+		$baseSocket3TopLeftX = 72
+		$baseSocket3TopLeftY =  395
+		$baseSocket3BottomRightX = 98
+		$baseSocket3BottomRightY = 427
+	EndIf
+	
+	;5 : 4
+	If $gameAspectRatio ==  (5 / 4) Then 
+		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 5:4" & @CRLF, 1)
+		$baseResolutionWidth =  1280
+		$baseResolutionHeight =  1024
+		$baseRerollClickX =  227
+		$baseRerollClickY =  613
+		;base socket1
+		$baseSocket1TopLeftX = 72
+		$baseSocket1TopLeftY =  336
+		$baseSocket1BottomRightX = 98
+		$baseSocket1BottomRightY = 365
+		;base socket2
+		$baseSocket2TopLeftX = 72
+		$baseSocket2TopLeftY =  365
+		$baseSocket2BottomRightX = 98
+		$baseSocket2BottomRightY = 395
+		;base socket3
+		$baseSocket3TopLeftX = 72
+		$baseSocket3TopLeftY =  395
+		$baseSocket3BottomRightX = 98
+		$baseSocket3BottomRightY = 427
+	EndIf
+	
+	;4 : 3
+	If $gameAspectRatio ==  (4 / 3) Then 
+		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 4:3" & @CRLF, 1)
+		$baseResolutionWidth =  800
+		$baseResolutionHeight =  600
+		$baseRerollClickX =  140
+		$baseRerollClickY =  283
+		;base socket1
+		$baseSocket1TopLeftX = 41
+		$baseSocket1TopLeftY =  209
+		$baseSocket1BottomRightX = 58
+		$baseSocket1BottomRightY = 228
+		;base socket2
+		$baseSocket2TopLeftX = 41
+		$baseSocket2TopLeftY =  228
+		$baseSocket2BottomRightX = 58
+		$baseSocket2BottomRightY = 248
+		;base socket3
+		$baseSocket3TopLeftX = 41
+		$baseSocket3TopLeftY =  248
+		$baseSocket3BottomRightX = 58
+		$baseSocket3BottomRightY = 270
+	EndIf
+	
+	;1 : 1 -- unsupported
+	;24 : 9 -- currently unsupported
+	;3 : 2 -- currently unsupported
+	;17 : 9 -- currently unsupported
+	
+	
+	;if we have no match on above checks, we mostly run with a minimal different 16:9 ratio with some special resolution, we run default 16:9 logic here
+	If $baseResolutionWidth == 0 Then 
+		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio could not get autodetected, fallback to default: 16:9" & @CRLF, 1)
+		$baseResolutionWidth =  1280
+		$baseResolutionHeight =  720
+		$baseRerollClickX =  227
+		$baseRerollClickY =  613
+		;base socket1
+		$baseSocket1TopLeftX = 72
+		$baseSocket1TopLeftY =  336
+		$baseSocket1BottomRightX = 98
+		$baseSocket1BottomRightY = 365
+		;base socket2
+		$baseSocket2TopLeftX = 72
+		$baseSocket2TopLeftY =  367
+		$baseSocket2BottomRightX = 98
+		$baseSocket2BottomRightY = 395
+		;base socket3
+		$baseSocket3TopLeftX = 72
+		$baseSocket3TopLeftY =  400
+		$baseSocket3BottomRightX = 98
+		$baseSocket3BottomRightY = 427
+	EndIf
+	
+	
+	
 
 	;reroll button cooridnates
-	$rerollClickX = Round( (390 / 3440) * $gameWidth )
-	$rerollClickY = Round( (1222 / 1440) * $gameHeight )
-
-
-
+	$rerollClickX = Round( ($baseRerollClickX / $baseResolutionWidth) * $gameWidth )
+	$rerollClickY = Round( ($baseRerollClickY / $baseResolutionHeight) * $gameHeight )
+	
 	
 	$checkActiveWindowTitle = WinGetTitle("[ACTIVE]")
 	If $checkActiveWindowTitle <> "Wolcen: Lords of Mayhem" Then
@@ -278,7 +504,9 @@ Func runMain()
 	$unchangedSocketsCounter =  0
 	$rollCounter =  0
 	While $finished == False
-	   
+		
+	    
+		
 		$gotSocket1 =  getSocket(1)
 		$gotSocket2 =  'unset'
 		$gotSocket3 =  'unset'
@@ -301,7 +529,10 @@ Func runMain()
 			$previousSocket3 =  $gotSocket3
 			
 			$rollCounter =  $rollCounter +  1
-			MouseClick($MOUSE_CLICK_LEFT, $rerollClickX, $rerollClickY, 1)
+			
+			;sleep a random value between 1 and 50 milliseconds to produce some human behavior just for future cases if click ratio get measured.
+			Sleep(Random(1, 50, 1))
+			MouseClick($MOUSE_CLICK_LEFT, ($rerollClickX +  Random(1, 10, 1)), $rerollClickY, 1)
 			Sleep(100)
 			ContinueLoop
 		EndIf
@@ -322,7 +553,9 @@ Func runMain()
 				$previousSocket3 =  $gotSocket3
 				
 				$rollCounter =  $rollCounter +  1
-				MouseClick($MOUSE_CLICK_LEFT, $rerollClickX, $rerollClickY, 1)
+				;sleep a random value between 1 and 50 milliseconds to produce some human behavior just for future cases if click ratio get measured.
+				Sleep(Random(1, 50, 1))
+				MouseClick($MOUSE_CLICK_LEFT, ($rerollClickX +  Random(1, 10, 1)), $rerollClickY, 1)
 				Sleep(100)
 				ContinueLoop
 			EndIf
@@ -343,7 +576,9 @@ Func runMain()
 				$previousSocket3 =  $gotSocket3
 				
 				$rollCounter =  $rollCounter +  1
-				MouseClick($MOUSE_CLICK_LEFT, $rerollClickX, $rerollClickY, 1)
+				;sleep a random value between 1 and 50 milliseconds to produce some human behavior just for future cases if click ratio get measured.
+				Sleep(Random(1, 50, 1))
+				MouseClick($MOUSE_CLICK_LEFT, ($rerollClickX +  Random(1, 10, 1)), $rerollClickY, 1)
 				Sleep(100)
 				ContinueLoop
 			EndIf
@@ -380,7 +615,10 @@ Func runMain()
 			$previousSocket3 =  $gotSocket3
 			
 			$rollCounter =  $rollCounter +  1
-			MouseClick($MOUSE_CLICK_LEFT, $rerollClickX, $rerollClickY, 1)
+			
+			;sleep a random value between 1 and 50 milliseconds to produce some human behavior just for future cases if click ratio get measured.
+			Sleep(Random(1, 50, 1))
+			MouseClick($MOUSE_CLICK_LEFT, ($rerollClickX +  Random(1, 10, 1)), $rerollClickY, 1)
 			Sleep(100)
 		  Else
 			;sockets unchanged, in this case the server/game was slower to redisplay the new sockets or we get two times in a row the same roll results
@@ -442,10 +680,10 @@ Func getSocket($socketNumberToCheck)
 
    If $socketNumberToCheck == 1 Then
 		;Socket 1 area coordinates
-		$socket1TopLeftX = Round( (210 / 3440) * $gameWidth )
-		$socket1TopLeftY =  Round( (677 / 1440) * $gameHeight )
-		$socket1BottomRightX = Round( (268 / 3440) * $gameWidth )
-		$socket1BottomRightY = Round( (723 / 1440) * $gameHeight )
+		$socket1TopLeftX = Round( ($baseSocket1TopLeftX / $baseResolutionWidth) * $gameWidth )
+		$socket1TopLeftY =  Round( ($baseSocket1TopLeftY / $baseResolutionHeight) * $gameHeight )
+		$socket1BottomRightX = Round( ($baseSocket1BottomRightX / $baseResolutionWidth) * $gameWidth )
+		$socket1BottomRightY = Round( ($baseSocket1BottomRightY / $baseResolutionHeight) * $gameHeight )
 		;draw rect
 		_UIA_DrawRect($socket1TopLeftX, $socket1BottomRightX, $socket1TopLeftY, $socket1BottomRightY, 0x0000FF, 2)
 	  
@@ -455,10 +693,10 @@ Func getSocket($socketNumberToCheck)
 	  $socketBottomRightYSearch = $socket1BottomRightY
    ElseIf $socketNumberToCheck == 2 Then
 		;Socket 2 area coordinates
-		$socket2TopLeftX = Round( (210 / 3440) * $gameWidth )
-		$socket2TopLeftY = Round( (742 / 1440) * $gameHeight )
-		$socket2BottomRightX = Round( (268 / 3440) * $gameWidth )
-		$socket2BottomRightY = Round( (788 / 1440) * $gameHeight )
+		$socket2TopLeftX = Round( ($baseSocket2TopLeftX / $baseResolutionWidth) * $gameWidth )
+		$socket2TopLeftY = Round( ($baseSocket2TopLeftY / $baseResolutionHeight) * $gameHeight )
+		$socket2BottomRightX = Round( ($baseSocket2BottomRightX / $baseResolutionWidth) * $gameWidth )
+		$socket2BottomRightY = Round( ($baseSocket2BottomRightY / $baseResolutionHeight) * $gameHeight )
 		;draw rect
 		_UIA_DrawRect($socket2TopLeftX, $socket2BottomRightX, $socket2TopLeftY, $socket2BottomRightY, 0x0000FF, 2)
 
@@ -469,10 +707,10 @@ Func getSocket($socketNumberToCheck)
 	  $socketBottomRightYSearch = $socket2BottomRightY
    ElseIf $socketNumberToCheck == 3 Then
 		;Socket 3 area coordinates
-		$socket3TopLeftX = Round( (210 / 3440) * $gameWidth )
-		$socket3TopLeftY = Round( (804 / 1440) * $gameHeight )
-		$socket3BottomRightX = Round( (268 / 3440) * $gameWidth )
-		$socket3BottomRightY = Round( (854 / 1440) * $gameHeight )
+		$socket3TopLeftX = Round( ($baseSocket3TopLeftX / $baseResolutionWidth) * $gameWidth )
+		$socket3TopLeftY = Round( ($baseSocket3TopLeftY / $baseResolutionHeight) * $gameHeight )
+		$socket3BottomRightX = Round( ($baseSocket3BottomRightX / $baseResolutionWidth) * $gameWidth )
+		$socket3BottomRightY = Round( ($baseSocket3BottomRightY / $baseResolutionHeight) * $gameHeight )
 		;draw rect
 		_UIA_DrawRect($socket3TopLeftX, $socket3BottomRightX, $socket3TopLeftY, $socket3BottomRightY, 0x0000FF, 2)
 
@@ -484,8 +722,8 @@ Func getSocket($socketNumberToCheck)
    EndIf
 
 	;reroll button cooridnates
-	 $rerollClickX = Round( (410 / 3440) * $gameWidth )		
-	 $rerollClickY = Round( (1222 / 1440) * $gameHeight )
+	 $rerollClickX = Round( ($baseRerollClickX / $baseResolutionWidth) * $gameWidth )		
+	 $rerollClickY = Round( ($baseRerollClickY / $baseResolutionHeight) * $gameHeight )
 
 
    ;offensive socket checks
