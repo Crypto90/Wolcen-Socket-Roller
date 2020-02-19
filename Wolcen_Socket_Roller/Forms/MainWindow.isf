@@ -52,11 +52,11 @@ GUICtrlCreateLabel("Socket log:",293,20,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-GUICtrlCreateLabel("v1.8.4",35,52,34,12,-1,-1)
+GUICtrlCreateLabel("v1.8.5",35,52,34,12,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
 $coffee = GUICtrlCreatePic("",36,365,211,35,-1,-1)
-$socketLog = GUICtrlCreateEdit("",293,52,419,355,BitOr($ES_READONLY,$WS_VSCROLL),$WS_EX_TRANSPARENT)
+$socketLog = GUICtrlCreateEdit("",293,52,419,363,BitOr($ES_READONLY,$WS_VSCROLL),$WS_EX_TRANSPARENT)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"0x000000")
 GUICtrlSetLimit(-1,0x7FFFFFFF)
@@ -359,7 +359,7 @@ tooltip=
 bgimage=
 textcolour=0xF2EEDC
 id=
-text=v1.8.4
+text=v1.8.5
 state=$GUI_SHOW+$GUI_ENABLE
 style=
 exstyle=
@@ -465,7 +465,7 @@ resize=
 x=293
 y=52
 width=419
-height=355
+height=363
 func=
 font=MS Sans Serif
 fontsize=8
