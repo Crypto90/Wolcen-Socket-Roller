@@ -56,7 +56,7 @@ GUICtrlCreateLabel("v1.8",35,52,22,12,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
 $coffee = GUICtrlCreatePic("",35,299,211,35,-1,-1)
-$socketLog = GUICtrlCreateEdit("",293,52,419,285,$ES_READONLY,$WS_EX_TRANSPARENT)
+$socketLog = GUICtrlCreateEdit("",293,52,419,285,BitOr($ES_READONLY,$WS_VSCROLL),$WS_EX_TRANSPARENT)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"0x000000")
 GUICtrlSetLimit(-1,0x7FFFFFFF)
@@ -101,7 +101,7 @@ gui_event_resized=
 gui_event_dropped=
 defaultfont=MS Sans Serif
 defaultfontsize=8
-[0x001C1C12]
+[0x000120AC]
 type=label
 handle=419
 locked=0
@@ -130,7 +130,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00161B0A]
+[0x000120AE]
 type=label
 handle=420
 locked=0
@@ -159,7 +159,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x001F23C6]
+[0x000120B0]
 type=combo
 handle=421
 locked=0
@@ -188,7 +188,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x006122BE]
+[0x000120B4]
 type=label
 handle=422
 locked=0
@@ -217,7 +217,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x0065226C]
+[0x000120B6]
 type=combo
 handle=423
 locked=0
@@ -246,7 +246,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=6
-[0x0040230C]
+[0x000120BA]
 type=label
 handle=424
 locked=0
@@ -275,7 +275,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=7
-[0x003123A4]
+[0x000120BC]
 type=combo
 handle=425
 locked=0
@@ -304,7 +304,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=8
-[0x001923DA]
+[0x000120C0]
 type=label
 handle=426
 locked=0
@@ -333,7 +333,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=9
-[0x00122400]
+[0x000120C2]
 type=label
 handle=427
 locked=0
@@ -362,7 +362,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x0016244A]
+[0x000120C4]
 type=label
 handle=428
 locked=0
@@ -391,7 +391,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=11
-[0x001C1A88]
+[0x000120C6]
 type=image
 handle=429
 locked=0
@@ -420,7 +420,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x003923D4]
+[0x000120C8]
 type=image
 handle=430
 locked=0
@@ -449,7 +449,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=12
-[0x00222998]
+[0x000120CA]
 type=edit
 handle=431
 locked=0
@@ -469,7 +469,7 @@ textcolour=0xF2EEDC
 id=$socketLog
 text=
 state=$GUI_SHOW+$GUI_ENABLE
-style=$ES_READONLY
+style=$ES_READONLY+$WS_VSCROLL
 exstyle=$WS_EX_TRANSPARENT
 bgcolour=0x000000
 code=GUICtrlSetLimit(-1,0x7FFFFFFF)[BREAK]GUICtrlSetLimit($socketLog,0x7FFFFFFF)
