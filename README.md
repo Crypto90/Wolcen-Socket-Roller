@@ -1,11 +1,11 @@
-# Wolcen-Socket-Roller v1.7 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K314GUP)
+# Wolcen-Socket-Roller v1.8 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K314GUP)
 Download here: https://github.com/Crypto90/Wolcen-Socket-Roller/releases
 <br/>
 Reddit discussion: https://www.reddit.com/r/Wolcen/comments/f5aphp/wolcen_socket_roller/
 <br/>
 <br/>
 
-![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_1.5.png)
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_1.8.png)
 <br/>
 <br/>
 <br/>
@@ -40,7 +40,7 @@ Others should work too, because the coordinates get calculated. If your resoluti
 <br/>
 <br/>
 
-![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_ingame_1.5.jpg)
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_ingame_1.8.jpg)
 
 <br/>
 FAQ:
