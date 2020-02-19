@@ -45,7 +45,7 @@ Others should work too, because the coordinates get calculated. If your resoluti
 <br/>
 <br/>
 
-![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_ingame_1.8.jpg)
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_ingame_1.8_scan_area.jpg)
 
 <br/>
 FAQ:
