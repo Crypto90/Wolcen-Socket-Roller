@@ -6,6 +6,11 @@
 #include <EditConstants.au3>
 #include <ComboConstants.au3>
 
+If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')
+FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)
+FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)
+FileInstall('Images\background.jpg', @TempDir & '\Wolcen_Socket_Roller\background.jpg', 1)
+
 $MainWindow = GUICreate("Wolcen Socket Roller by Crypto90",735,356,-1,-1,-1,-1)
 $MainWindow_BGimage = GUICtrlCreatePic(@scriptdir&"\"&"Images\background.jpg",0,0,735,356,$WS_CLIPSIBLINGS)
 GUICtrlSetState(-1,$GUI_DISABLE)
@@ -73,7 +78,7 @@ bgcolour=0xF0F0F0
 handle=$MainWindow
 parent=
 code=;background image[BREAK]FileInstall('Images\background.jpg', @TempDir & '\Wolcen_Socket_Roller\background.jpg', 1)[BREAK]$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background.jpg',0,0,735,356,$WS_CLIPSIBLINGS)
-codebeforegui=
+codebeforegui=If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')[BREAK]FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)[BREAK]FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)[BREAK]FileInstall('Images\background.jpg', @TempDir & '\Wolcen_Socket_Roller\background.jpg', 1)
 xpos=-1
 ypos=-1
 center_gui=true

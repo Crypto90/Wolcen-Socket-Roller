@@ -23,19 +23,15 @@
 #include <WinAPISysWin.au3>
 
 
+
 ;EMBED IMAGES INTO EXE
 ;start button image
-If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')
-FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)
 GUICtrlSetImage($startButtonHdn2, @TempDir & '\Wolcen_Socket_Roller\button_start.jpg')
 
 ;donate button image
-If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')
-FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)
 GUICtrlSetImage($coffee, @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg')
 
 ;background image
-FileInstall('Images\background.jpg', @TempDir & '\Wolcen_Socket_Roller\background.jpg', 1)
 $MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background.jpg',0,0,735,356,$WS_CLIPSIBLINGS)
 
 
