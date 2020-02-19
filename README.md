@@ -32,6 +32,8 @@ Tested and working resolutions by me:
 <br/>
 1920x1080 (16:9)
 <br/>
+2560x1440 (16:9)
+<br/>
 3440x1440 (21:9)
 <br/>
 <br/>
