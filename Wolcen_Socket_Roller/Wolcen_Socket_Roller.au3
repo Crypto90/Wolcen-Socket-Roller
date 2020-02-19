@@ -108,6 +108,7 @@ While 1
 		Case $startButtonHdn2
 			$finished = False
 			GUICtrlSetData($socketLog, '')
+			Sleep(1000)
 			runMain()
 	EndSwitch
 Wend
