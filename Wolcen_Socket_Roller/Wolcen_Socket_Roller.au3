@@ -21,7 +21,11 @@
 #include <WinAPIGdiDC.au3>
 #include <WinAPIHObj.au3>
 #include <WinAPISysWin.au3>
+;fix windows coordinate line drawing mess
+;#include <WinAPIConv.au3>
 
+;mouse position relative to window and not 
+AutoItSetOption("MouseCoordMode",0)
 
 
 ;EMBED IMAGES INTO EXE
@@ -65,7 +69,12 @@ EndFunc   ;==>_GetURLImage
 
 $finished = False
 
-$slowModeStatus =  0
+;sleep interval in milliseconds how long to wait after reroll got clicked
+$sleepAfterClickRollValue =  100
+
+;game position to support window mode and relative coordinates based on window position
+$gameX =  0
+$gameY =  0
 
 ;support for multiple different aspect ratios
 $baseResolutionWidth =  0
@@ -125,13 +134,9 @@ While 1
 	Switch GUIGetMsg()
 		
 		Case $GUI_EVENT_CLOSE,  $idOK
-			ExitLoop 
-		Case $slowmode
-			If $slowModeStatus == 0 Then
-				$slowModeStatus =  1
-			Else 
-				$slowModeStatus =  0
-			EndIf
+			ExitLoop
+		Case $sleepAfterClickRoll
+			$sleepAfterClickRollValue = Int(GUICtrlRead($sleepAfterClickRoll0xF2EEDC))
 		Case $coffee
 			$sUrl='https://ko-fi.com/crypto90'
 			ShellExecute($sUrl)
@@ -187,7 +192,11 @@ Func _UIA_DrawRect($tLeft, $tRight, $tTop, $tBottom, $color = 0xFF, $PenWidth = 
     $x2 = $tRight
     $y1 = $tTop
     $y2 = $tBottom
-    $hDC = _WinAPI_GetWindowDC(0) ; DC of entire screen (desktop)
+	
+	
+    ;$hDC = _WinAPI_GetWindowDC(0) ; DC of entire screen (desktop)
+	
+	$hDC = _WinAPI_GetWindowDC(WinGetHandle ( "Wolcen: Lords of Mayhem" ))
     $hPen = _WinAPI_CreatePen($PS_SOLID, $PenWidth, $color)
     $obj_orig = _WinAPI_SelectObject($hDC, $hPen)
 
@@ -265,7 +274,8 @@ Func runMain()
 	$gameHeight = $size[3]
 	;MsgBox(0, "Active window stats (x,y,width,height):", $size[0] & " " & $size[1] & " " & $size[2] & " " & $size[3])
 	$gameAspectRatio = $gameWidth /  $gameHeight
-	
+	$gameX =  $size[0]
+	$gameY =  $size[1]
 	
 	
 	;support for multiple different aspect ratios
@@ -586,11 +596,6 @@ Func runMain()
 		EndIf
 		
 		
-		If $slowModeStatus ==  1 Then
-			Sleep(5000)
-		EndIf
-		
-		
 		$gotSocket1 =  getSocket(1)
 		$gotSocket2 =  'unset'
 		$gotSocket3 =  'unset'
@@ -599,7 +604,7 @@ Func runMain()
 		
 		;prevent unneeded area checks start
 		;if found socket is not in wanted, reroll directly
-		If $gotSocket1 <> $wantedSocket1 And $gotSocket1 <> $wantedSocket2 And $gotSocket1 <> $wantedSocket3 Then
+		If $gotSocket1 <> $wantedSocket1 And $gotSocket1 <> $wantedSocket2 And $gotSocket1 <> $wantedSocket3 And $wantedSocket2 <> "any" And $wantedSocket3 <> "any" Then
 			$gotSocket2 =  'ignored'
 			$gotSocket3 =  'ignored'
 			$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
@@ -616,7 +621,7 @@ Func runMain()
 			;sleep a random value between 1 and 50 milliseconds to produce some human behavior just for future cases if click ratio get measured.
 			Sleep(Random(1, 50, 1))
 			MouseClick($MOUSE_CLICK_LEFT, ($rerollClickX +  Random(1, 10, 1)), $rerollClickY, 1)
-			Sleep(100)
+			Sleep($sleepAfterClickRollValue)
 			ContinueLoop
 		EndIf
 		
@@ -625,7 +630,7 @@ Func runMain()
 			$gotSocket2 =  getSocket(2)
 			
 			;if found socket is not in wanted, reroll directly
-			If $gotSocket2 <> $wantedSocket1 And $gotSocket2 <> $wantedSocket2 And $gotSocket2 <> $wantedSocket3 Then
+			If $gotSocket2 <> $wantedSocket1 And $gotSocket2 <> $wantedSocket2 And $gotSocket2 <> $wantedSocket3 And $wantedSocket2 <> "any" And $wantedSocket3 <> "any" Then
 				$gotSocket3 =  'ignored'
 				$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
 				$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
@@ -640,7 +645,7 @@ Func runMain()
 				;sleep a random value between 1 and 50 milliseconds to produce some human behavior just for future cases if click ratio get measured.
 				Sleep(Random(1, 50, 1))
 				MouseClick($MOUSE_CLICK_LEFT, ($rerollClickX +  Random(1, 10, 1)), $rerollClickY, 1)
-				Sleep(100)
+				Sleep($sleepAfterClickRollValue)
 				ContinueLoop
 			EndIf
 			
@@ -649,7 +654,7 @@ Func runMain()
 			$gotSocket3 =  getSocket(3)
 			
 			;if found socket is not in wanted, reroll directly
-			If $gotSocket3 <> $wantedSocket1 And $gotSocket3 <> $wantedSocket2 And $gotSocket3 <> $wantedSocket3 Then
+			If $gotSocket3 <> $wantedSocket1 And $gotSocket3 <> $wantedSocket2 And $gotSocket3 <> $wantedSocket3 And $wantedSocket2 <> "any" And $wantedSocket3 <> "any"  Then
 				$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
 				$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
 				;append to log edit box
@@ -663,7 +668,7 @@ Func runMain()
 				;sleep a random value between 1 and 50 milliseconds to produce some human behavior just for future cases if click ratio get measured.
 				Sleep(Random(1, 50, 1))
 				MouseClick($MOUSE_CLICK_LEFT, ($rerollClickX +  Random(1, 10, 1)), $rerollClickY, 1)
-				Sleep(100)
+				Sleep($sleepAfterClickRollValue)
 				ContinueLoop
 			EndIf
 			
@@ -672,7 +677,7 @@ Func runMain()
 		
 		
 		
-	   	If ($gotSocket1 == $wantedSocket1 And $gotSocket2 == $wantedSocket2 And $gotSocket3 == $wantedSocket3) Or ($gotSocket1 == $wantedSocket1 And $gotSocket2 == $wantedSocket3 And $gotSocket3 == $wantedSocket2) Or ($gotSocket1 == $wantedSocket2 And $gotSocket2 == $wantedSocket1 And $gotSocket3 == $wantedSocket3) Or ($gotSocket1 == $wantedSocket2 And $gotSocket2 == $wantedSocket3 And $gotSocket3 == $wantedSocket1) Or ($gotSocket1 == $wantedSocket3 And $gotSocket2 == $wantedSocket1 And $gotSocket3 == $wantedSocket2) Or ($gotSocket1 == $wantedSocket3 And $gotSocket2 == $wantedSocket2 And $gotSocket3 == $wantedSocket1) Then
+	   	If ($gotSocket1 == $wantedSocket1 And ($gotSocket2 == $wantedSocket2 Or $wantedSocket2 ==  "any") And ($gotSocket3 == $wantedSocket3 Or $wantedSocket3 ==  "any")) Or ($gotSocket1 == $wantedSocket1 And ($gotSocket2 == $wantedSocket3 Or $wantedSocket3 ==  "any") And ($gotSocket3 == $wantedSocket2 Or $wantedSocket2 ==  "any"))  Or (($gotSocket1 == $wantedSocket2 Or $wantedSocket2 ==  "any") And $gotSocket2 == $wantedSocket1 And ($gotSocket3 == $wantedSocket3 Or $wantedSocket3 ==  "any"))  Or (($gotSocket1 == $wantedSocket2 Or $wantedSocket2 ==  "any") And ($gotSocket2 == $wantedSocket3 Or $wantedSocket3 ==  "any") And $gotSocket3 == $wantedSocket1)  Or (($gotSocket1 == $wantedSocket3 Or $wantedSocket3 ==  "any") And $gotSocket2 == $wantedSocket1 And ($gotSocket3 == $wantedSocket2 Or $wantedSocket2 ==  "any"))  Or (($gotSocket1 == $wantedSocket3 Or $wantedSocket3 ==  "any") And ($gotSocket2 == $wantedSocket2 Or $wantedSocket2 ==  "any") And $gotSocket3 == $wantedSocket1) Then
 			;found a searched combination
 			$finished = True
 			Beep(500, 2000)
@@ -703,13 +708,15 @@ Func runMain()
 			;sleep a random value between 1 and 50 milliseconds to produce some human behavior just for future cases if click ratio get measured.
 			Sleep(Random(1, 50, 1))
 			MouseClick($MOUSE_CLICK_LEFT, ($rerollClickX +  Random(1, 10, 1)), $rerollClickY, 1)
-			Sleep(100)
+			Sleep($sleepAfterClickRollValue)
+			ContinueLoop 
 		  Else
 			;sockets unchanged, in this case the server/game was slower to redisplay the new sockets or we get two times in a row the same roll results
 			Sleep(100)
+			GUICtrlSetData($socketLog, "Socket check unchanged..." & @CRLF, 1)
 			$unchangedSocketsCounter =  $unchangedSocketsCounter +  1
-			; 3 times unchanged, which means in 300ms nothing changed, we force reroll
-			If $unchangedSocketsCounter >= 3 Then 
+			; 3 times unchanged, which means in 500ms nothing changed, we force reroll
+			If $unchangedSocketsCounter >= 5 Then 
 				$previousSocket1 =  ''
 				$previousSocket2 =  ''
 				$previousSocket3 =  ''
@@ -751,12 +758,12 @@ EndFunc
 Func getSocket($socketNumberToCheck)
 	
    ;recalculate coordinates based on current resolution
-	 $size = WinGetPos("Wolcen: Lords of Mayhem")
-	 $gameWidth = $size[2]
-	 $gameHeight = $size[3]
+	$size = WinGetPos("Wolcen: Lords of Mayhem")
+	$gameWidth = $size[2]
+	$gameHeight = $size[3]
+	$gameX =  $size[0]
+	$gameY =  $size[1]
 
-
-	
 	
    $socketTopLeftXSearch = 0
    $socketTopLeftYSearch = 0
@@ -808,22 +815,22 @@ Func getSocket($socketNumberToCheck)
    EndIf
 
 	;reroll button cooridnates
-	 $rerollClickX = Round( ($baseRerollClickX / $baseResolutionWidth) * $gameWidth )		
-	 $rerollClickY = Round( ($baseRerollClickY / $baseResolutionHeight) * $gameHeight )
+	$rerollClickX = Round( ($baseRerollClickX / $baseResolutionWidth) * $gameWidth )		
+	$rerollClickY = Round( ($baseRerollClickY / $baseResolutionHeight) * $gameHeight )
 
 
    ;offensive socket checks
-   $checkSocket1Offensive1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xc43b62, $shadesTolerance)
+   $checkSocket1Offensive1 = PixelSearch($gameX +  $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0xc43b62, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Offensive 1")
 	   Return 'offensive1'
    EndIf
-   $checkSocket1Offensive2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xe35c5c, $shadesTolerance)
+   $checkSocket1Offensive2 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0xe35c5c, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Offensive 2")
 	   Return 'offensive2'
 	EndIf
-	$checkSocket1Offensive3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xd38871, $shadesTolerance)
+	$checkSocket1Offensive3 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0xd38871, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Offensive 3")
 	   Return 'offensive3'
@@ -831,17 +838,17 @@ Func getSocket($socketNumberToCheck)
 
 
    ; defensive socket check
-   $checkSocket1Defensive1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x3fae60, $shadesTolerance)
+   $checkSocket1Defensive1 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0x3fae60, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Defensive 1")
 	   Return 'defensive1'
    EndIf
-   $checkSocket1Defensive2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x7dd389, $shadesTolerance)
+   $checkSocket1Defensive2 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0x7dd389, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Defensive 2")
 	   Return 'defensive2'
    EndIf
-	$checkSocket1Defensive3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x90ac69, $shadesTolerance)
+	$checkSocket1Defensive3 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0x90ac69, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Defensive 3")
 	   Return 'defensive3'
@@ -849,17 +856,17 @@ Func getSocket($socketNumberToCheck)
 
 
    ; support socket check
-   $checkSocket1Support1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x3d6ada, $shadesTolerance)
+   $checkSocket1Support1 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0x3d6ada, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 1")
 	   Return 'support1'
    EndIf
-   $checkSocket1Support2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x229abf, $shadesTolerance)
+   $checkSocket1Support2 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0x229abf, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 2")0xF2EEDC0xF2EEDC0xF2EEDC
 	   Return 'support2'
    EndIf
-	$checkSocket1Support3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x9cdcf6, $shadesTolerance)
+	$checkSocket1Support3 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0x9cdcf6, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 3")
 	   Return 'support3'

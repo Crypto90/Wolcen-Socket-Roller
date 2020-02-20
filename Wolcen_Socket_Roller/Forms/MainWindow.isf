@@ -25,7 +25,7 @@ GUICtrlCreateLabel("by Crypto90",212,52,56,18,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
 $sock1 = GUICtrlCreateCombo("",37,108,211,21,$CBS_DROPDOWNLIST,-1)
-GUICtrlSetData(-1,"unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+GUICtrlSetData(-1,"offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
 GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
 GUICtrlSetBkColor(-1,"-2")
 GUICtrlCreateLabel("Socket 1:",37,80,87,21,-1,-1)
@@ -33,28 +33,28 @@ GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
 $sock2 = GUICtrlCreateCombo("",37,167,211,21,$CBS_DROPDOWNLIST,-1)
-GUICtrlSetData(-1,"unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+GUICtrlSetData(-1,"unset|any|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
 GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
 GUICtrlCreateLabel("Socket 2:",37,140,87,21,-1,-1)
 GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
 $sock3 = GUICtrlCreateCombo("",37,224,211,21,$CBS_DROPDOWNLIST,-1)
-GUICtrlSetData(-1,"unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+GUICtrlSetData(-1,"unset|any|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
 GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
 GUICtrlCreateLabel("Socket 3:",37,196,87,21,-1,-1)
 GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$startButtonHdn2 = GUICtrlCreatePic("",36,321,211,35,-1,-1)
+$startButtonHdn2 = GUICtrlCreatePic("",36,330,211,35,-1,-1)
 GUICtrlCreateLabel("Socket log:",293,20,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-GUICtrlCreateLabel("v1.8.8",36,52,51,12,-1,-1)
+GUICtrlCreateLabel("v1.8.9",36,52,51,12,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$coffee = GUICtrlCreatePic("",36,365,211,35,-1,-1)
+$coffee = GUICtrlCreatePic("",36,371,211,35,-1,-1)
 $socketLog = GUICtrlCreateEdit("",293,52,419,363,BitOr($ES_READONLY,$WS_VSCROLL),$WS_EX_TRANSPARENT)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"0x000000")
@@ -65,7 +65,12 @@ GUICtrlSetFont(-1,10,700,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
 $maxRolls = GUICtrlCreateInput("0",209,255,39,17,$ES_NUMBER,$WS_EX_CLIENTEDGE)
-$slowmode = GUICtrlCreateCheckbox("Slow mode (for debugging)",36,279,211,25,-1,-1)
+GUICtrlCreateLabel("Sleep (ms) after roll:",40,278,160,16,-1,-1)
+GUICtrlSetFont(-1,10,700,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xF2EEDC")
+GUICtrlSetBkColor(-1,"-2")
+$sleepAfterClickRoll = GUICtrlCreateInput("200",209,277,39,17,$ES_NUMBER,$WS_EX_CLIENTEDGE)
+GUICtrlCreateLabel("Do not make this too fast! The Game needs some time to redraw the sockets.",40,296,203,27,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
 
@@ -184,7 +189,7 @@ tooltip=
 bgimage=
 textcolour=0x000000
 id=$sock1
-text=unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+text=offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
 state=$GUI_SHOW+$GUI_ENABLE
 style=$CBS_DROPDOWNLIST
 exstyle=
@@ -242,7 +247,7 @@ tooltip=
 bgimage=
 textcolour=0x000000
 id=$sock2
-text=unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+text=unset|any|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
 state=$GUI_SHOW+$GUI_ENABLE
 style=$CBS_DROPDOWNLIST
 exstyle=
@@ -300,7 +305,7 @@ tooltip=
 bgimage=
 textcolour=0x000000
 id=$sock3
-text=unset|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+text=unset|any|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
 state=$GUI_SHOW+$GUI_ENABLE
 style=$CBS_DROPDOWNLIST
 exstyle=
@@ -358,7 +363,7 @@ tooltip=
 bgimage=
 textcolour=0xF2EEDC
 id=
-text=v1.8.8
+text=v1.8.9
 state=$GUI_SHOW+$GUI_ENABLE
 style=
 exstyle=
@@ -404,7 +409,7 @@ handle=429
 locked=0
 resize=
 x=36
-y=321
+y=330
 width=211
 height=35
 func=
@@ -433,7 +438,7 @@ handle=430
 locked=0
 resize=
 x=36
-y=365
+y=371
 width=211
 height=35
 func=
@@ -543,15 +548,73 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000D1C5A]
-type=checkbox
-handle=434
+[0x000628DC]
+type=label
+handle=450
 locked=0
 resize=
-x=36
-y=279
-width=211
-height=25
+x=40
+y=278
+width=160
+height=16
+func=
+font=MS Sans Serif
+fontsize=10
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xF2EEDC
+id=
+text=Sleep (ms) after roll:
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=16
+[0x00992656]
+type=input
+handle=451
+locked=0
+resize=
+x=209
+y=277
+width=39
+height=17
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$sleepAfterClickRoll
+text=200
+state=$GUI_SHOW+$GUI_ENABLE
+style=$ES_NUMBER
+exstyle=$WS_EX_CLIENTEDGE
+bgcolour=
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=17
+[0x006F0550]
+type=label
+handle=442
+locked=0
+resize=
+x=40
+y=296
+width=203
+height=27
 func=
 font=MS Sans Serif
 fontsize=8
@@ -560,16 +623,16 @@ fontattribute=0
 tooltip=
 bgimage=
 textcolour=0xF2EEDC
-id=$slowmode
-text=Slow mode (for debugging)
+id=
+text=Do not make this too fast! The Game needs some time to redraw the sockets.
 state=$GUI_SHOW+$GUI_ENABLE
 style=
 exstyle=
 bgcolour=-2
 code=
-order=16
 tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
+order=18
 #ce
