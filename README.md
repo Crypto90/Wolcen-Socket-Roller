@@ -70,10 +70,12 @@ defense II -- defense I -- defense II
 
 <br/>
 
-# FAQ:
+# FAQ & Known issues:
 <br/>
 
 ###### Q: Mouse does not move after it switches to the game. The reroll button does not get clicked.
 A: Its a permission issue on your pc, run the tool as administrator.
-
+<br/>
+<br/>
+Make sure your windows desktop scaling settings is at 100%
 
