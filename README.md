@@ -65,6 +65,7 @@ defense II -- defense I -- defense II
 ![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_ingame_1.8_scan_area.jpg)
 
 <br/>
+
 # FAQ:
 <br/>
 Q: Mouse does not move after it switches to the game.
