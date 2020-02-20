@@ -29,7 +29,8 @@ If you like my work, you can donate me a coffe. Happy looting :)
 To stop it while its looping, ALT-TAB out of the game to a different program, this will stop the loop.
 <br/>
 <br/>
-# Resolutions / Aspect ratios
+
+# Resolutions & Aspect ratios
 With version 1.8.2 support for all common aspect rations got added to support more resolutions dynamically:
 <br/>
 21:9 (ultrawide 3440x1440)<br/>
