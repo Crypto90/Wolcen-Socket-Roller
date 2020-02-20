@@ -45,6 +45,19 @@ Others should work too, because the coordinates get calculated. If your resoluti
 <br/>
 <br/>
 
+The result order does not matter.
+<br/>
+defense II -- defense II -- defense I
+<br/>
+matches the same as
+<br/>
+defense I -- defense II -- defense II
+<br/>
+matches the same as
+<br/>
+defense II -- defense I -- defense II
+<br/>
+
 ![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_ingame_1.8_scan_area.jpg)
 
 <br/>
