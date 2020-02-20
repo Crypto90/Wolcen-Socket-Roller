@@ -579,7 +579,7 @@ Func runMain()
 		EndIf
 		
 		
-	    If  $maxRollsValue > 0 And $rollCounter >= $maxRolls Then 
+	    If  $maxRollsValue > 0 And $rollCounter >= $maxRollsValue Then 
 			$finished =  True
 			GUICtrlSetData($socketLog, "Max rolls of " & $maxRollsValue & " reached. Aborting." & @CRLF, 1)
 			ExitLoop
