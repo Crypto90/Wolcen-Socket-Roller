@@ -39,6 +39,15 @@ GUICtrlSetImage($coffee, @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg')
 $MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v2.jpg',0,0,735,430,$WS_CLIPSIBLINGS)
 
 
+$currentver =  GUICtrlRead($currentVersion)
+;check for update
+InetGet ("https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/version.txt", @TempDir & "\Wolcen_Socket_Roller\version.txt")
+$latestver = FileRead(@TempDir & "\Wolcen_Socket_Roller\version.txt")
+FileDelete(@TempDir & "\Wolcen_Socket_Roller\version.txt")
+If $latestver > $currentver Then
+	GUICtrlSetState($update, $GUI_HIDE)
+	GUICtrlSetState($update, $GUI_SHOW)
+EndIf
 
 
 Func _GetURLImage($sURL, $sDirectory = @ScriptDir)
@@ -75,6 +84,8 @@ $sleepAfterClickRollValue =  200
 ;game position to support window mode and relative coordinates based on window position
 $gameX =  0
 $gameY =  0
+$borderSize = 0
+$titleHeight = 0
 
 ;support for multiple different aspect ratios
 $baseResolutionWidth =  0
@@ -136,7 +147,7 @@ While 1
 		Case $GUI_EVENT_CLOSE,  $idOK
 			ExitLoop
 		Case $sleepAfterClickRoll
-			$sleepAfterClickRollValue = Int(GUICtrlRead($sleepAfterClickRoll0xF2EEDC))
+			$sleepAfterClickRollValue = Int(GUICtrlRead($sleepAfterClickRoll))
 		Case $coffee
 			$sUrl='https://ko-fi.com/crypto90'
 			ShellExecute($sUrl)
@@ -193,6 +204,14 @@ Func _UIA_DrawRect($tLeft, $tRight, $tTop, $tBottom, $color = 0xFF, $PenWidth = 
     $y1 = $tTop
     $y2 = $tBottom
 	
+	if $borderSize > 0 Then 
+		$x1 =  $x1 +  $borderSize
+		$x2 =  $x2 +  $borderSize
+	EndIf
+	if $titleHeight > 0 Then 
+		$y1 =  $y1 +  $titleHeight
+		$y2 =  $y2 +  $titleHeight
+	EndIf
 	
     ;$hDC = _WinAPI_GetWindowDC(0) ; DC of entire screen (desktop)
 	
@@ -269,19 +288,37 @@ Func runMain()
 	;winWaitActive("Wolcen: Lords of Mayhem")
 	
 	winWaitActive("Wolcen: Lords of Mayhem")
+	
 	$size = WinGetPos("Wolcen: Lords of Mayhem")
+	$gameInnerSize =  WinGetClientSize("Wolcen: Lords of Mayhem")
 	$gameWidth = $size[2]
 	$gameHeight = $size[3]
-	;MsgBox(0, "Active window stats (x,y,width,height):", $size[0] & " " & $size[1] & " " & $size[2] & " " & $size[3])
-	$gameAspectRatio = $gameWidth /  $gameHeight
 	$gameX =  $size[0]
 	$gameY =  $size[1]
 	
+	;GUICtrlSetData($socketLog, "Game resolution before window check: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 ultrawide" & @CRLF, 1)
+	;GUICtrlSetData($socketLog, "Inner window width: " & $gameInnerSize[0] & " Inner height: " & $gameInnerSize[1] & @CRLF, 1)
+	;GUICtrlSetData($socketLog, "Before window check Game X: " & $gameX & " Game Y: " & $gameY & @CRLF, 1)
+	
+	;if we run window mode, we have borders we need to take care of
+	$borderSize = (($gameWidth - $gameInnerSize[0]) /  2)
+	$titleHeight = (($gameHeight - $gameInnerSize[1]) - $borderSize)
+	
+	If $borderSize > 0 Then 
+		$gameWidth = $gameWidth - ($borderSize * 2)
+		$gameX =  $gameX + $borderSize
+	EndIf
+	If $titleHeight > 0 Then 
+		$gameHeight = (($gameHeight - $titleHeight) - $borderSize)
+		$gameY =  $gameY + $titleHeight
+	EndIf
+	
+	
+	;GUICtrlSetData($socketLog, "Border size: " & $borderSize & "px Title height: " & $titleHeight & "px" & @CRLF, 1)
+	;GUICtrlSetData($socketLog, "After window check Game X: " & $gameX & " Game Y: " & $gameY & @CRLF, 1)
 	
 	;support for multiple different aspect ratios
-	
-	
-	
+	$gameAspectRatio = $gameWidth /  $gameHeight
 	
 	;21 : 9 ultrawide
 	If $gameAspectRatio ==  (3440 / 1440) Then 
@@ -544,6 +581,14 @@ Func runMain()
 	$rerollClickX = Round( ($baseRerollClickX / $baseResolutionWidth) * $gameWidth )
 	$rerollClickY = Round( ($baseRerollClickY / $baseResolutionHeight) * $gameHeight )
 	
+	;window mode check
+	if $borderSize > 0 Then 
+		$rerollClickX =  $rerollClickX +  $borderSize
+	EndIf
+	if $titleHeight > 0 Then 
+		$rerollClickY =  $rerollClickY +  $titleHeight
+	EndIf
+	
 	
 	$checkActiveWindowTitle = WinGetTitle("[ACTIVE]")
 	If $checkActiveWindowTitle <> "Wolcen: Lords of Mayhem" Then
@@ -690,7 +735,7 @@ Func runMain()
 		Else 
 			;no wanted combination found, reroll
 			;speed up checks, do no sleep if one of the sockets changed from previous roll
-		  If $previousSocket1 <> $gotSocket1 Or $previousSocket2 <> $gotSocket2 Or $previousSocket3 <> $gotSocket3 Then
+		  If (($previousSocket1 <> $gotSocket1) Or ($previousSocket2 <> $gotSocket2 Or $wantedSocket2 == "any") Or ($previousSocket3 <> $gotSocket3 Or $wantedSocket3 == "any")) Then
 			;sockets changed for sure, so we can reroll instantly, update previous socket variables
 			
 			
@@ -713,10 +758,9 @@ Func runMain()
 		  Else
 			;sockets unchanged, in this case the server/game was slower to redisplay the new sockets or we get two times in a row the same roll results
 			Sleep(100)
-			GUICtrlSetData($socketLog, "Socket check unchanged..." & @CRLF, 1)
 			$unchangedSocketsCounter =  $unchangedSocketsCounter +  1
-			; 3 times unchanged, which means in 500ms nothing changed, we force reroll
-			If $unchangedSocketsCounter >= 5 Then 
+			; 3 times unchanged, which means in 300ms nothing changed, we force reroll
+			If $unchangedSocketsCounter >= 3 Then 
 				$previousSocket1 =  ''
 				$previousSocket2 =  ''
 				$previousSocket3 =  ''
@@ -759,11 +803,28 @@ Func getSocket($socketNumberToCheck)
 	
    ;recalculate coordinates based on current resolution
 	$size = WinGetPos("Wolcen: Lords of Mayhem")
+	$gameInnerSize =  WinGetClientSize("Wolcen: Lords of Mayhem")
 	$gameWidth = $size[2]
 	$gameHeight = $size[3]
 	$gameX =  $size[0]
 	$gameY =  $size[1]
-
+	
+	;if we run window mode, we have borders we need to take care of
+	$borderSize = (($gameWidth - $gameInnerSize[0]) /  2)
+	$titleHeight = (($gameHeight - $gameInnerSize[1]) - $borderSize)
+	
+	If $borderSize > 0 Then 
+		$gameWidth = $gameWidth - ($borderSize * 2)
+		$gameX =  $gameX + $borderSize
+	EndIf
+	If $titleHeight > 0 Then 
+		$gameHeight = (($gameHeight - $titleHeight) - $borderSize)
+		$gameY =  $gameY + $titleHeight
+	EndIf
+	
+	
+	
+	
 	
    $socketTopLeftXSearch = 0
    $socketTopLeftYSearch = 0
@@ -817,7 +878,14 @@ Func getSocket($socketNumberToCheck)
 	;reroll button cooridnates
 	$rerollClickX = Round( ($baseRerollClickX / $baseResolutionWidth) * $gameWidth )		
 	$rerollClickY = Round( ($baseRerollClickY / $baseResolutionHeight) * $gameHeight )
-
+	
+	;window mode check
+	if $borderSize > 0 Then 
+		$rerollClickX =  $rerollClickX +  $borderSize
+	EndIf
+	if $titleHeight > 0 Then 
+		$rerollClickY =  $rerollClickY +  $titleHeight
+	EndIf
 
    ;offensive socket checks
    $checkSocket1Offensive1 = PixelSearch($gameX +  $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0xc43b62, $shadesTolerance)

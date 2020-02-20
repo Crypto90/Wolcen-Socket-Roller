@@ -51,7 +51,7 @@ GUICtrlCreateLabel("Socket log:",293,20,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-GUICtrlCreateLabel("v1.8.9",36,52,51,12,-1,-1)
+$currentVersion = GUICtrlCreateLabel("v1.9.0",36,52,51,12,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
 $coffee = GUICtrlCreatePic("",36,371,211,35,-1,-1)
@@ -72,6 +72,10 @@ GUICtrlSetBkColor(-1,"-2")
 $sleepAfterClickRoll = GUICtrlCreateInput("200",209,277,39,17,$ES_NUMBER,$WS_EX_CLIENTEDGE)
 GUICtrlCreateLabel("Do not make this too fast! The Game needs some time to redraw the sockets.",40,296,203,27,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
+GUICtrlSetBkColor(-1,"-2")
+$update = GUICtrlCreateLabel("A newer version is available!",572,14,138,15,-1,-1)
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetColor(-1,"0x00FF00")
 GUICtrlSetBkColor(-1,"-2")
 
 
@@ -362,8 +366,8 @@ fontattribute=0
 tooltip=
 bgimage=
 textcolour=0xF2EEDC
-id=
-text=v1.8.9
+id=$currentVersion
+text=v1.9.0
 state=$GUI_SHOW+$GUI_ENABLE
 style=
 exstyle=
@@ -635,4 +639,33 @@ iconindex=
 iconlarge=0
 textmode=text
 order=18
+[0x014729F0]
+type=label
+handle=434
+locked=0
+resize=
+x=572
+y=14
+width=138
+height=15
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x00FF00
+id=$update
+text=A newer version is available!
+state=$GUI_HIDE+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+order=19
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
 #ce
