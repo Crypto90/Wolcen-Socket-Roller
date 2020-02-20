@@ -68,13 +68,9 @@ defense II -- defense I -- defense II
 
 # FAQ:
 <br/>
-
 ###### Q: Mouse does not move after it switches to the game. The reroll button does not get clicked.
-<br/>
 A: Its a permission issue on your pc, run the tool as administrator.
 <br/>
 <br/>
-
 ###### Q: Why are the red scan line marker get painted/drawn on a wrong position?
-<br/>
 A: This is only an optical issue caused by a bug how windows is handling multi monitor setups and defining x:0 y:0 with multiple different resolution monitors. In this case windows does mess up drawing zero position. It only affecty the red drawing lines, the scan positions are still correct. To fix this, try to align your monitors edge to edge in windows so top left zero point is in a strait line or disable/disconnect one of the bug causing multi monitors.
