@@ -32,7 +32,7 @@ GUICtrlSetImage($startButtonHdn2, @TempDir & '\Wolcen_Socket_Roller\button_start
 GUICtrlSetImage($coffee, @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg')
 
 ;background image
-$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background.jpg',0,0,735,356,$WS_CLIPSIBLINGS)
+$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v2.jpg',0,0,735,430,$WS_CLIPSIBLINGS)
 
 
 
@@ -84,6 +84,10 @@ $baseSocket3TopLeftX = 0
 $baseSocket3TopLeftY =  0
 $baseSocket3BottomRightX = 0
 $baseSocket3BottomRightY = 0
+
+;5 worked great for 1080p or higher resolutions. But lower than 1080p, it failed. Tested with off1 off1 off3 and 1366x768 resolution
+;10 is too high, which matches support blues together as one
+$shadesTolerance =  6
 
 GUISetState(@SW_SHOW,  $MainWindow)
 
@@ -255,7 +259,7 @@ Func runMain()
 
 	;winWaitActive("Wolcen: Lords of Mayhem")
 	
-	winWaitActive("Wolcen")
+	winWaitActive("Wolcen: Lords of Mayhem")
 	$size = WinGetPos("Wolcen: Lords of Mayhem")
 	$gameWidth = $size[2]
 	$gameHeight = $size[3]
@@ -462,6 +466,31 @@ Func runMain()
 		$baseSocket3BottomRightY = 270
 	EndIf
 	
+	;1366x768 - resolution was buggy with native 16:9 so it gets an explicit entry -- done
+	If $gameAspectRatio ==  (1366 / 768) Then 
+		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 16:9" & @CRLF, 1)
+		$baseResolutionWidth =  1366
+		$baseResolutionHeight =  768
+		$baseRerollClickX =  239
+		$baseRerollClickY =  657
+		;base socket1
+		$baseSocket1TopLeftX = 68
+		$baseSocket1TopLeftY =  360
+		$baseSocket1BottomRightX = 96
+		$baseSocket1BottomRightY = 391
+		;base socket2
+		$baseSocket2TopLeftX = 68
+		$baseSocket2TopLeftY =  391
+		$baseSocket2BottomRightX = 96
+		$baseSocket2BottomRightY = 425
+		;base socket3
+		$baseSocket3TopLeftX = 68
+		$baseSocket3TopLeftY =  425
+		$baseSocket3BottomRightX = 96
+		$baseSocket3BottomRightY = 460
+	EndIf
+	
+	
 	;1 : 1 -- unsupported
 	;24 : 9 -- currently unsupported
 	;3 : 2 -- currently unsupported
@@ -545,16 +574,15 @@ Func runMain()
 	While $finished == False
 		
 		If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
-			$finished =  True
-			GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
-			Return
+			stopLoop()
+			ExitLoop
 		EndIf
 		
 		
 	    If  $maxRollsValue > 0 And $rollCounter >= $maxRolls Then 
 			$finished =  True
 			GUICtrlSetData($socketLog, "Max rolls of " & $maxRollsValue & " reached. Aborting." & @CRLF, 1)
-			Return
+			ExitLoop
 		EndIf
 		
 		
@@ -572,6 +600,8 @@ Func runMain()
 		;prevent unneeded area checks start
 		;if found socket is not in wanted, reroll directly
 		If $gotSocket1 <> $wantedSocket1 And $gotSocket1 <> $wantedSocket2 And $gotSocket1 <> $wantedSocket3 Then
+			$gotSocket2 =  'ignored'
+			$gotSocket3 =  'ignored'
 			$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
 		    $sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
 		    ;append to log edit box
@@ -596,6 +626,7 @@ Func runMain()
 			
 			;if found socket is not in wanted, reroll directly
 			If $gotSocket2 <> $wantedSocket1 And $gotSocket2 <> $wantedSocket2 And $gotSocket2 <> $wantedSocket3 Then
+				$gotSocket3 =  'ignored'
 				$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
 				$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
 				;append to log edit box
@@ -650,7 +681,7 @@ Func runMain()
 			GUICtrlSetData($socketLog, $sString & @CRLF, 1)
 			GUICtrlSetData($socketLog, "------------------------------------------------------------------------------------------------------------------" & @CRLF & @CRLF, 1)
 			GUICtrlSetData($socketLog, "Finished after " & $rollCounter & " rolls!" & @CRLF, 1)
-			Return
+			ExitLoop
 		Else 
 			;no wanted combination found, reroll
 			;speed up checks, do no sleep if one of the sockets changed from previous roll
@@ -693,7 +724,7 @@ Func runMain()
 		  If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
 			$finished =  True
 			GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
-			Return
+			ExitLoop
 		  EndIf
 		EndIf
 		
@@ -782,17 +813,17 @@ Func getSocket($socketNumberToCheck)
 
 
    ;offensive socket checks
-   $checkSocket1Offensive1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xc43b62, 5)
+   $checkSocket1Offensive1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xc43b62, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Offensive 1")
 	   Return 'offensive1'
    EndIf
-   $checkSocket1Offensive2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xe35c5c, 5)
+   $checkSocket1Offensive2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xe35c5c, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Offensive 2")
 	   Return 'offensive2'
 	EndIf
-	$checkSocket1Offensive3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xd38871, 5)
+	$checkSocket1Offensive3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0xd38871, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Offensive 3")
 	   Return 'offensive3'
@@ -800,17 +831,17 @@ Func getSocket($socketNumberToCheck)
 
 
    ; defensive socket check
-   $checkSocket1Defensive1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x3fae60, 5)
+   $checkSocket1Defensive1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x3fae60, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Defensive 1")
 	   Return 'defensive1'
    EndIf
-   $checkSocket1Defensive2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x7dd389, 5)
+   $checkSocket1Defensive2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x7dd389, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Defensive 2")
 	   Return 'defensive2'
    EndIf
-	$checkSocket1Defensive3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x90ac69, 5)
+	$checkSocket1Defensive3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x90ac69, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Defensive 3")
 	   Return 'defensive3'
@@ -818,17 +849,17 @@ Func getSocket($socketNumberToCheck)
 
 
    ; support socket check
-   $checkSocket1Support1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x3d6ada, 5)
+   $checkSocket1Support1 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x3d6ada, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 1")
 	   Return 'support1'
    EndIf
-   $checkSocket1Support2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x229abf, 5)
+   $checkSocket1Support2 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x229abf, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 2")0xF2EEDC0xF2EEDC0xF2EEDC
 	   Return 'support2'
    EndIf
-	$checkSocket1Support3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x9cdcf6, 5)
+	$checkSocket1Support3 = PixelSearch($socketTopLeftXSearch, $socketTopLeftYSearch, $socketBottomRightXSearch, $socketBottomRightYSearch, 0x9cdcf6, $shadesTolerance)
    If Not @error Then
 	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 3")
 	   Return 'support3'

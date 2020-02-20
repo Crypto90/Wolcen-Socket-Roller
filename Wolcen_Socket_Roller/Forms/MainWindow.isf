@@ -9,15 +9,14 @@
 If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')
 FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)
 FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)
-FileInstall('Images\background.jpg', @TempDir & '\Wolcen_Socket_Roller\background.jpg', 1)
+FileInstall('Images\background_v2.jpg', @TempDir & '\Wolcen_Socket_Roller\background_v2.jpg', 1)
 
 $MainWindow = GUICreate("Wolcen Socket Roller by Crypto90",735,430,-1,-1,-1,-1)
-$MainWindow_BGimage = GUICtrlCreatePic(@scriptdir&"\"&"Images\background.jpg",0,0,735,430,$WS_CLIPSIBLINGS)
+$MainWindow_BGimage = GUICtrlCreatePic(@scriptdir&"\"&"Images\background_v2.jpg",0,0,735,430,$WS_CLIPSIBLINGS)
 GUICtrlSetState(-1,$GUI_DISABLE)
 GUICtrlSetResizing(-1,102)
 ;background image
-FileInstall('Images\background.jpg', @TempDir & '\Wolcen_Socket_Roller\background.jpg', 1)
-$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background.jpg',0,0,735,356,$WS_CLIPSIBLINGS)
+$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v2.jpg',0,0,735,430,$WS_CLIPSIBLINGS)
 GUICtrlCreateLabel("Wolcen Socket Roller",35,20,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
@@ -52,7 +51,7 @@ GUICtrlCreateLabel("Socket log:",293,20,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-GUICtrlCreateLabel("v1.8.5",35,52,34,12,-1,-1)
+GUICtrlCreateLabel("v1.8.7",36,52,51,12,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
 $coffee = GUICtrlCreatePic("",36,365,211,35,-1,-1)
@@ -74,7 +73,7 @@ GUICtrlSetBkColor(-1,"-2")
 
 #cs
 [gui]
-bgimage=Images\background.jpg
+bgimage=Images\background_v2.jpg
 Handle_deklaration=default
 Handle_deklaration_const=false
 title=Wolcen Socket Roller by Crypto90
@@ -85,8 +84,8 @@ exstyle=-1
 bgcolour=0xF0F0F0
 handle=$MainWindow
 parent=
-code=;background image[BREAK]FileInstall('Images\background.jpg', @TempDir & '\Wolcen_Socket_Roller\background.jpg', 1)[BREAK]$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background.jpg',0,0,735,356,$WS_CLIPSIBLINGS)
-codebeforegui=If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')[BREAK]FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)[BREAK]FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)[BREAK]FileInstall('Images\background.jpg', @TempDir & '\Wolcen_Socket_Roller\background.jpg', 1)
+code=;background image[BREAK]$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v2.jpg',0,0,735,430,$WS_CLIPSIBLINGS)
+codebeforegui=If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')[BREAK]FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)[BREAK]FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)[BREAK]FileInstall('Images\background_v2.jpg', @TempDir & '\Wolcen_Socket_Roller\background_v2.jpg', 1)
 xpos=-1
 ypos=-1
 center_gui=true
@@ -109,7 +108,7 @@ gui_event_resized=
 gui_event_dropped=
 defaultfont=MS Sans Serif
 defaultfontsize=8
-[0x000120AC]
+[0x001A1C2C]
 type=label
 handle=419
 locked=0
@@ -138,7 +137,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000120AE]
+[0x003A2222]
 type=label
 handle=420
 locked=0
@@ -167,7 +166,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000120B0]
+[0x001724FE]
 type=combo
 handle=421
 locked=0
@@ -196,7 +195,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000120B4]
+[0x007524F2]
 type=label
 handle=422
 locked=0
@@ -225,7 +224,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000120B6]
+[0x0048233C]
 type=combo
 handle=423
 locked=0
@@ -254,7 +253,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=6
-[0x000120BA]
+[0x00061CA2]
 type=label
 handle=424
 locked=0
@@ -283,7 +282,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=7
-[0x000120BC]
+[0x00071CF2]
 type=combo
 handle=425
 locked=0
@@ -312,7 +311,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=8
-[0x000120C0]
+[0x00BD20DA]
 type=label
 handle=426
 locked=0
@@ -341,14 +340,14 @@ iconindex=
 iconlarge=0
 textmode=text
 order=9
-[0x000120C2]
+[0x004722F8]
 type=label
 handle=427
 locked=0
 resize=
-x=35
+x=36
 y=52
-width=34
+width=51
 height=12
 func=
 font=MS Sans Serif
@@ -359,7 +358,7 @@ tooltip=
 bgimage=
 textcolour=0xF2EEDC
 id=
-text=v1.8.5
+text=v1.8.7
 state=$GUI_SHOW+$GUI_ENABLE
 style=
 exstyle=
@@ -370,7 +369,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000120C4]
+[0x001A021A]
 type=label
 handle=428
 locked=0
@@ -399,7 +398,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=11
-[0x000120C6]
+[0x002D1CB2]
 type=image
 handle=429
 locked=0
@@ -428,7 +427,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000120C8]
+[0x001C23D8]
 type=image
 handle=430
 locked=0
@@ -457,7 +456,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=12
-[0x000120CA]
+[0x001A2322]
 type=edit
 handle=431
 locked=0
@@ -486,9 +485,9 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x005A053E]
+[0x000B017C]
 type=label
-handle=440
+handle=432
 locked=0
 resize=
 x=40
@@ -515,9 +514,9 @@ iconindex=
 iconlarge=0
 textmode=text
 order=14
-[0x00911D3C]
+[0x00061CAA]
 type=input
-handle=441
+handle=433
 locked=0
 resize=
 x=209
@@ -544,9 +543,9 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x002406C6]
+[0x000D1C5A]
 type=checkbox
-handle=442
+handle=434
 locked=0
 resize=
 x=36
