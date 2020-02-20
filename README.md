@@ -9,7 +9,7 @@ https://www.reddit.com/r/Wolcen/comments/f6fm0q/wolcen_socket_roller_download_so
 <br/>
 <br/>
 
-![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_1.8.png)
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/screenshot_1.8.9.png)
 <br/>
 <br/>
 <br/>
