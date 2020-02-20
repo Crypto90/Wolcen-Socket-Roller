@@ -70,7 +70,7 @@ EndFunc   ;==>_GetURLImage
 $finished = False
 
 ;sleep interval in milliseconds how long to wait after reroll got clicked
-$sleepAfterClickRollValue =  100
+$sleepAfterClickRollValue =  200
 
 ;game position to support window mode and relative coordinates based on window position
 $gameX =  0
