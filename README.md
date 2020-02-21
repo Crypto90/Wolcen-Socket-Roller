@@ -1,4 +1,4 @@
-# Wolcen-Socket-Roller v1.9.1 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K314GUP)
+# Wolcen-Socket-Roller v1.9.2 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K314GUP)
 Download here:
 <br/>
 https://github.com/Crypto90/Wolcen-Socket-Roller/releases
