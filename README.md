@@ -26,7 +26,7 @@ If you like my work, you can donate me a coffe. Happy looting :)
 <br/>
 # How to use:
 1. Make sure you run your game in borderless window (fullscreen does not work because the npc window closes on ALT+TAB).
-2. Talk with "ZANAFER STARK" NPC where you can reroll your item sockets.
+2. Talk with "ZANAFER STARK" NPC where you can reroll your item sockets and place your item for rolling.
 3. Run the Wolcen_Socket_Roller.exe and select your wanted sockets.
 4. Click the Start button, your game will automatically come to foreground and it starts rolling (if your mouse is not moving, run the tool with admin rights).
 <br/>
