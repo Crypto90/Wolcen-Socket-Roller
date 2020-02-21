@@ -24,6 +24,11 @@
 ;fix windows coordinate line drawing mess
 ;#include <WinAPIConv.au3>
 
+
+;log scanning areas as screenshot
+#include <Misc.au3>
+#include <ScreenCapture.au3>
+
 ;mouse position relative to window and not 
 AutoItSetOption("MouseCoordMode",0)
 
@@ -36,14 +41,16 @@ GUICtrlSetImage($startButtonHdn2, @TempDir & '\Wolcen_Socket_Roller\button_start
 GUICtrlSetImage($coffee, @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg')
 
 ;background image
-$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v2.jpg',0,0,735,430,$WS_CLIPSIBLINGS)
+$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v3.jpg',0,0,880,430,$WS_CLIPSIBLINGS)
 
 
-$currentver =  GUICtrlRead($currentVersion)
+$currentver = StringStripWS(GUICtrlRead($currentVersion), $STR_STRIPLEADING + $STR_STRIPTRAILING)
 ;check for update
 InetGet ("https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/version.txt", @TempDir & "\Wolcen_Socket_Roller\version.txt")
 $latestver = FileRead(@TempDir & "\Wolcen_Socket_Roller\version.txt")
+$latestver = StringStripWS($latestver, $STR_STRIPLEADING + $STR_STRIPTRAILING)
 FileDelete(@TempDir & "\Wolcen_Socket_Roller\version.txt")
+
 If $latestver > $currentver Then
 	GUICtrlSetState($update, $GUI_HIDE)
 	GUICtrlSetState($update, $GUI_SHOW)
@@ -74,6 +81,147 @@ Func _GetURLImage($sURL, $sDirectory = @ScriptDir)
     InetClose($hDownload)
     Return $sDirectory
 EndFunc   ;==>_GetURLImage
+
+
+; _GUICtrlRichEdit_AppendTextEx($RichEdit, $text, $font="Arial", $color="000000", $size=12, $bold=0, $italic=0, $underline=0, $strike=0)
+;   This function was created to make it simpler to use RichEdit controls.
+;
+;   Note: to set the line spacing to a size bigger than the text, 
+;   you need to call this function once to write the text, and then call
+;   it again and write a space with a larger size, and that will give you
+;   spacing between the lines.
+;
+;Peramiters
+;   $RichEdit = handle of RichEdit control
+;   $text = the string to write. You need to add @CRLF for a newline
+;   $font = the font family to use, default = "Arial"
+;   $color = the rrggbb hex color code to use, default = "000000" (black)
+;   $size = the font size to use in points, will be rounded to the nearest 0.5 points before use, default = 12
+;   $bold = flag to make the text bold, default = 0 (not bold)
+;   $italic = flag to make the text italic, default = 0 (not italic)
+;   $strike = flag to make the text strikethrough, default = 0
+;   $underline = int, what kind of underlining to use. default = 0
+;       1 = Underline
+;       2 = Double Underline
+;       3 = Thick Underline
+;       4 = Underline words only
+;       5 = Wave Underline
+;       6 = Dotted Underline
+;       7 = Dash Underline
+;       8 = Dot Dash Underline
+;   
+;Return value
+;   On success: Returns the value from _GUICtrlRichEdit_AppendText()
+;   On failure: Sets @error to non-0
+;       1 = Error with color
+;
+Func _GUICtrlRichEdit_AppendTextEx($RichEdit, $text, $font="Arial", $color="000000", $size=12, $bold=0, $italic=0, $strike=0, $underline=0)
+  Local $command = "{\rtf1\ansi"
+  Local $r, $g, $b, $ul[9] = ["8", '\ul', '\uldb', '\ulth', '\ulw', '\ulwave', '\uld', '\uldash', '\uldashd']
+
+  If $font <> "" Then $command &= "{\fonttbl\f0\f"&$font&";}"
+  If $color <> "" Then
+    If StringLen($color) <> 6 And StringLen($color) = 8 Then Return SetError(1)
+    $b = dec(StringRight($color,2))
+    if @error Then seterror(1, 1)
+    $color = StringTrimRight($color,2)
+    $g = dec(StringRight($color,2))
+    if @error Then seterror(1, 2)
+    $color = StringTrimRight($color,2)
+    $r = dec(StringRight($color,2))
+    if @error Then seterror(1, 3)
+    If $r+$b+$g > 0 Then
+      $command &= "{\colortbl;\red"&$r&"\green"&$g&"\blue"&$b&";}\cf1"
+    EndIf
+  EndIf
+ 
+  If $size Then $command &= "\fs"&round($size*2)&" "
+  If $strike Then $command &= "\strike "
+  If $italic Then $command &= "\i "
+  If $bold Then $command &= "\b "
+  If $underline > 0 and $underline < 9 Then $command &= $ul[$underline]&" "
+;~   ConsoleWrite($command&$text&"}"&@CRLF) ; Debugging line
+  Return _GUICtrlRichEdit_AppendText($RichEdit, $command&StringReplace($text,@CRLF,"\line")&"}" )
+EndFunc
+
+Func _GUICtrlRichEdit_InsertBitmap($hWnd, $sFile, $sFormatFunctions = "\", $sBitmapFunctions = "\", $iBgColor = Default) ;coded by UEZ build 2016-02-16
+    If Not FileExists($sFile) Then Return SetError(0, 0, 1)
+    If Not _WinAPI_IsClassName($hWnd, $__g_sRTFClassName) Then Return SetError(0, 0, 2)
+    _GDIPlus_Startup()
+    Local $hImage = _GDIPlus_ImageLoadFromFile($sFile)
+    If @error Then
+        _GDIPlus_Shutdown()
+        Return SetError(0, 0, 3)
+    EndIf
+    Local Const $aDim = _GDIPlus_ImageGetDimension($hImage)
+    Local Const $hBitmap = _GDIPlus_BitmapCreateFromScan0(($aDim[0] / 2), ($aDim[1] / 2)), $hGfx = _GDIPlus_ImageGetGraphicsContext($hBitmap)
+    If $iBgColor = Default Then
+        $iBgColor = 0xFF000000 + _WinAPI_SwitchColor(_GUICtrlRichEdit_GetBkColor($hWnd))
+    EndIf
+    _GDIPlus_GraphicsClear($hGfx, $iBgColor)
+    ;_GDIPlus_GraphicsDrawImageRect($hGfx, $hImage, 0, 0, $aDim[0], $aDim[1])
+    _GDIPlus_GraphicsDrawImageRect($hGfx, $hImage, 0, 0, ($aDim[0] /  2), ($aDim[1] / 2))
+    _GDIPlus_GraphicsDispose($hGfx)
+    Local $binStream = _GDIPlus_StreamImage2BinaryString($hBitmap, "BMP", 100)
+    If @error Then
+        _GDIPlus_ImageDispose($hImage)
+        _GDIPlus_ImageDispose($hBitmap)
+        _GDIPlus_Shutdown()
+        Return SetError(0, 0, 4)
+    EndIf
+    Local $binBmp = StringMid($binStream, 31)
+    ;Local Const $binRtf = "{\rtf1\viewkind4" & $sFormatFunctions & " {\pict{\*\picprop}" & $sBitmapFunctions & "dibitmap " & $binBmp & "}\par}" ;check out http://www.biblioscape.com/rtf15_spec.htm \par creates line breaks
+    Local Const $binRtf = "{\rtf1\viewkind4" & $sFormatFunctions & " {\pict{\*\picprop}" & $sBitmapFunctions & "dibitmap " & $binBmp & "}}" ;check out http://www.biblioscape.com/rtf15_spec.htm
+    _GUICtrlRichEdit_AppendText($hWnd, $binRtf)
+    $binStream = 0
+    $binBmp = 0
+    _GDIPlus_ImageDispose($hImage)
+    _GDIPlus_ImageDispose($hBitmap)
+    _GDIPlus_Shutdown()
+    Return 1
+EndFunc   ;==>_GUICtrlRichEdit_InsertBitmap
+
+Func _GDIPlus_StreamImage2BinaryString($hBitmap, $sFormat = "JPG", $iQuality = 80, $bSave = False, $sFileName = @TempDir & "\Wolcen_Socket_Roller\Converted.jpg") ;coded by UEZ 2013 build 2014-01-25 (based on the code by Andreik)
+    Local $sImgCLSID, $tGUID, $tParams, $tData
+    Switch $sFormat
+        Case "JPG"
+            $sImgCLSID = _GDIPlus_EncodersGetCLSID($sFormat)
+            $tGUID = _WinAPI_GUIDFromString($sImgCLSID)
+            $tData = DllStructCreate("int Quality")
+            DllStructSetData($tData, "Quality", $iQuality) ;quality 0-100
+            Local $pData = DllStructGetPtr($tData)
+            $tParams = _GDIPlus_ParamInit(1)
+            _GDIPlus_ParamAdd($tParams, $GDIP_EPGQUALITY, 1, $GDIP_EPTLONG, $pData)
+        Case "PNG", "BMP", "GIF", "TIF"
+            $sImgCLSID = _GDIPlus_EncodersGetCLSID($sFormat)
+            $tGUID = _WinAPI_GUIDFromString($sImgCLSID)
+        Case Else
+            Return SetError(1, 0, 0)
+    EndSwitch
+    Local $hStream = _WinAPI_CreateStreamOnHGlobal() ;http://msdn.microsoft.com/en-us/library/ms864401.aspx
+    If @error Then Return SetError(2, 0, 0)
+    _GDIPlus_ImageSaveToStream($hBitmap, $hStream, DllStructGetPtr($tGUID), DllStructGetPtr($tParams))
+    If @error Then Return SetError(3, 0, 0)
+
+    Local $hMemory = _WinAPI_GetHGlobalFromStream($hStream) ;http://msdn.microsoft.com/en-us/library/aa911736.aspx
+    If @error Then Return SetError(4, 0, 0)
+    Local $iMemSize = _MemGlobalSize($hMemory)
+    If Not $iMemSize Then Return SetError(5, 0, 0)
+    Local $pMem = _MemGlobalLock($hMemory)
+    $tData = DllStructCreate("byte[" & $iMemSize & "]", $pMem)
+    Local $bData = DllStructGetData($tData, 1)
+    _WinAPI_ReleaseStream($hStream) ;http://msdn.microsoft.com/en-us/library/windows/desktop/ms221473(v=vs.85).aspx
+    _MemGlobalFree($hMemory)
+    If $bSave Then
+        Local $hFile = FileOpen($sFileName, 18)
+        If @error Then Return SetError(6, 0, $bData)
+        FileWrite($hFile, $bData)
+        FileClose($hFile)
+    EndIf
+    Return $bData
+EndFunc   ;==>_GDIPlus_StreamImage2BinaryString
+
+
 
 
 $finished = False
@@ -116,8 +264,11 @@ _GUICtrlComboBox_SetCurSel($sock1, 0)
 _GUICtrlComboBox_SetCurSel($sock2, 0)
 _GUICtrlComboBox_SetCurSel($sock3, 0)
 
+
 ;$socketLogOld = GUICtrlCreateEdit("",293,42,433,306,BitOR($WS_VSCROLL, $ES_AUTOVSCROLL, $ES_READONLY),-1)
 ;increase limit of textbox
+GUICtrlSendMsg($socketLog2, $EM_LIMITTEXT, -1, 0) ; Removes the limit on the number of characters of the 30000
+
 
 
 ;$startButtonHdn2 = GUICtrlCreateButton("Start",15,271,231,30,-1,-1)
@@ -134,8 +285,32 @@ HotKeySet("{ALT}", "stopLoop")
 
 Func stopLoop()
     $finished =  True
-	GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+	;GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+	_GUICtrlRichEdit_AppendTextEx($socketLog2, "Aborted!", "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
 EndFunc   ;==>stops the loop if running
+
+
+
+
+
+;welcome text
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC", 12, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "Thanks for using my Wolcen socket roller tool!" & @CRLF, "MS Sans Serif", "F2EEDC", 12, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "If you like my work and want to support me, a small donation would make me happy and helps to support this project." & @CRLF, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+;how to use
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC", 12, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC", 12, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "How to use:" & @CRLF, "MS Sans Serif", "F2EEDC", 12, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "1. Make sure you run your game in borderless window or window mode (fullscreen does not work because the npc window closes on ALT+TAB)." & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "2. Talk with 'ZANAFER STARK' NPC where you can reroll your item sockets and place your item for rolling." & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "3. Run the Wolcen_Socket_Roller.exe and select your wanted sockets." & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "4. Click the Start button, your game will automatically come to foreground and it starts rolling (if your mouse is not moving, run the tool with admin rights)." & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "To stop it while its looping, ALT-TAB out of the game to a different program, this will stop the loop." & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "Please post feature requests and bug reports on github:" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
+_GUICtrlRichEdit_AppendTextEx($socketLog2, "https://github.com/Crypto90/Wolcen-Socket-Roller" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
 
 
 ;$sFile = _GetURLImage("http://download1.ts3musicbot.net/BuyMeACoffee_blue.jpg", @TempDir)
@@ -153,7 +328,10 @@ While 1
 			ShellExecute($sUrl)
 		Case $startButtonHdn2
 			$finished = False
-			GUICtrlSetData($socketLog, '')
+			;GUICtrlSetData($socketLog, '')
+			_GUICtrlRichEdit_SetSel($socketLog2, 0, -1, True)    ; select all, but hide
+			_GUICtrlRichEdit_ReplaceText($socketLog2, "")     ; replace all
+			_GUICtrlRichEdit_SetSel($socketLog2, 0, 0)           ; set cursor to start
 			Sleep(1000)
 			runMain()
 	EndSwitch
@@ -273,7 +451,12 @@ Func runMain()
 
 
 
-
+	;check if the game is running not running
+	If WinGetProcess("Wolcen: Lords of Mayhem") == -1 Then 
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Wolcen: Lords of Mayhem is not running... Aborting." & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
+		$finished =  True
+		Return
+	EndIf
 
 
 
@@ -322,7 +505,8 @@ Func runMain()
 	
 	;21 : 9 ultrawide
 	If $gameAspectRatio ==  (3440 / 1440) Then 
-		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 ultrawide" & @CRLF, 1)
+		;GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 ultrawide" & @CRLF, 1)
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 ultrawide" & @CRLF, "MS Sans Serif", "FFFF00", 8, 0, 0, 0, 0)
 		$baseResolutionWidth =  3440
 		$baseResolutionHeight =  1440
 		$baseRerollClickX =  390
@@ -346,7 +530,8 @@ Func runMain()
 	
 	;21 : 9 ultra ultra wide
 	If $gameAspectRatio ==  (5120 / 1440) Then 
-		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 ultrawide" & @CRLF, 1)
+		;GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 ultrawide" & @CRLF, 1)
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 ultrawide" & @CRLF, "MS Sans Serif", "FFFF00", 8, 0, 0, 0, 0)
 		$baseResolutionWidth =  5120
 		$baseResolutionHeight =  1440
 		$baseRerollClickX =  462
@@ -370,7 +555,8 @@ Func runMain()
 	
 	;21 : 9 wide -- done
 	If $gameAspectRatio ==  (2560 / 1080) Then 
-		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 wide" & @CRLF, 1)
+		;GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 wide" & @CRLF, 1)
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 21:9 wide" & @CRLF, "MS Sans Serif", "FFFF00", 8, 0, 0, 0, 0)
 		$baseResolutionWidth =  2560
 		$baseResolutionHeight =  1080
 		$baseRerollClickX =  330
@@ -395,7 +581,8 @@ Func runMain()
 	
 	;16 : 10 / 8 : 5 -- done
 	If $gameAspectRatio ==  (16 / 10) Then
-		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 16:10 / 8:5" & @CRLF, 1)
+		;GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 16:10 / 8:5" & @CRLF, 1)
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 16:10 / 8:5" & @CRLF, "MS Sans Serif", "FFFF00", 8, 0, 0, 0, 0)
 		$baseResolutionWidth =  1280
 		$baseResolutionHeight =  800
 		$baseRerollClickX =  227
@@ -419,7 +606,8 @@ Func runMain()
 	
 	;16 : 9 -- done
 	If $gameAspectRatio ==  (16 / 9) Then
-		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 16:9" & @CRLF, 1)
+		;GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 16:9" & @CRLF, 1)
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 16:9" & @CRLF, "MS Sans Serif", "FFFF00", 8, 0, 0, 0, 0)
 		$baseResolutionWidth =  1280
 		$baseResolutionHeight =  720
 		$baseRerollClickX =  227
@@ -443,7 +631,8 @@ Func runMain()
 	
 	;5 : 3
 	If $gameAspectRatio ==  (5 / 3) Then 
-		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 5:3" & @CRLF, 1)
+		;GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 5:3" & @CRLF, 1)
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 5:3" & @CRLF, "MS Sans Serif", "FFFF00", 8, 0, 0, 0, 0)
 		$baseResolutionWidth =  1280
 		$baseResolutionHeight =  768
 		$baseRerollClickX =  227
@@ -467,7 +656,8 @@ Func runMain()
 	
 	;5 : 4
 	If $gameAspectRatio ==  (5 / 4) Then 
-		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 5:4" & @CRLF, 1)
+		;GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 5:4" & @CRLF, 1)
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 5:4" & @CRLF, "MS Sans Serif", "FFFF00", 8, 0, 0, 0, 0)
 		$baseResolutionWidth =  1280
 		$baseResolutionHeight =  1024
 		$baseRerollClickX =  227
@@ -491,7 +681,8 @@ Func runMain()
 	
 	;4 : 3
 	If $gameAspectRatio ==  (4 / 3) Then 
-		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 4:3" & @CRLF, 1)
+		;GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 4:3" & @CRLF, 1)
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 4:3" & @CRLF, "MS Sans Serif", "FFFF00", 8, 0, 0, 0, 0)
 		$baseResolutionWidth =  800
 		$baseResolutionHeight =  600
 		$baseRerollClickX =  140
@@ -515,7 +706,8 @@ Func runMain()
 	
 	;1366x768 - resolution was buggy with native 16:9 so it gets an explicit entry -- done
 	If $gameAspectRatio ==  (1366 / 768) Then 
-		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 16:9" & @CRLF, 1)
+		;GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 16:9" & @CRLF, 1)
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio: 16:9" & @CRLF, "MS Sans Serif", "FFFF00", 8, 0, 0, 0, 0)
 		$baseResolutionWidth =  1366
 		$baseResolutionHeight =  768
 		$baseRerollClickX =  239
@@ -546,7 +738,8 @@ Func runMain()
 	
 	;if we have no match on above checks, we mostly run with a minimal different 16:9 ratio with some special resolution, we run default 16:9 logic here
 	If $baseResolutionWidth == 0 Then 
-		GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio could not get autodetected, fallback to default: 16:9" & @CRLF, 1)
+		;GUICtrlSetData($socketLog, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio could not get autodetected, fallback to default: 16:9" & @CRLF, 1)
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Game resolution: " & $gameWidth & "x" & $gameHeight & " Aspect ratio could not get autodetected, fallback to default: 16:9" & @CRLF, "MS Sans Serif", "FFFF00", 8, 0, 0, 0, 0)
 		$baseResolutionWidth =  1280
 		$baseResolutionHeight =  720
 		$baseRerollClickX =  227
@@ -592,8 +785,9 @@ Func runMain()
 	
 	$checkActiveWindowTitle = WinGetTitle("[ACTIVE]")
 	If $checkActiveWindowTitle <> "Wolcen: Lords of Mayhem" Then
-		GUICtrlSetData($socketLog, "Wolcen: Lords of Mayhem is not running... Aborting." & @CRLF, 1)
-		stopLoop()
+		;GUICtrlSetData($socketLog, "Wolcen: Lords of Mayhem is not running... Aborting." & @CRLF, 1)
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Wolcen: Lords of Mayhem is not running... Aborting." & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
+		$finished =  True
 		Return
 	EndIf
 
@@ -610,13 +804,16 @@ Func runMain()
 	;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: " & getSocket(1))
 	;MsgBox($MB_SYSTEMMODAL, "", "Socket 2: " & getSocket(2))
 	;MsgBox($MB_SYSTEMMODAL, "", "Socket 3: " & getSocket(3))
-	GUICtrlSetData($socketLog, "------------------------------------------------------------------------------------------------------------------" & @CRLF, 1)
-	GUICtrlSetData($socketLog, "Started..." & @CRLF, 1)
+	;GUICtrlSetData($socketLog, "-----------------------------------------------------------------------------------------------" & @CRLF, 1)
+	_GUICtrlRichEdit_AppendTextEx($socketLog2, "-----------------------------------------------------------------------------------------------" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+	;GUICtrlSetData($socketLog, "Started..." & @CRLF, 1)
+	_GUICtrlRichEdit_AppendTextEx($socketLog2, "Started..." & @CRLF, "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0)
 	$sString = "Searching for:  " & $wantedSocket1 & "  --  " & $wantedSocket2 & "  --  " & $wantedSocket3
 	;append to log edit box
-	GUICtrlSetData($socketLog, $sString & @CRLF, 1)
-	GUICtrlSetData($socketLog, "------------------------------------------------------------------------------------------------------------------" & @CRLF & @CRLF, 1)
-	
+	;GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+	_GUICtrlRichEdit_AppendTextEx($socketLog2, $sString & @CRLF, "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0)
+	;GUICtrlSetData($socketLog, "-----------------------------------------------------------------------------------------------" & @CRLF & @CRLF, 1)
+	_GUICtrlRichEdit_AppendTextEx($socketLog2, "-----------------------------------------------------------------------------------------------" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
 	
 	
 	$previousSocket1 =  ''
@@ -636,7 +833,8 @@ Func runMain()
 		
 	    If  $maxRollsValue > 0 And $rollCounter >= $maxRollsValue Then 
 			$finished =  True
-			GUICtrlSetData($socketLog, "Max rolls of " & $maxRollsValue & " reached. Aborting." & @CRLF, 1)
+			;GUICtrlSetData($socketLog, "Max rolls of " & $maxRollsValue & " reached. Aborting." & @CRLF, 1)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Max rolls of " & $maxRollsValue & " reached. Aborting." & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
 			ExitLoop
 		EndIf
 		
@@ -652,10 +850,47 @@ Func runMain()
 		If $gotSocket1 <> $wantedSocket1 And $gotSocket1 <> $wantedSocket2 And $gotSocket1 <> $wantedSocket3 And $wantedSocket2 <> "any" And $wantedSocket3 <> "any" Then
 			$gotSocket2 =  'ignored'
 			$gotSocket3 =  'ignored'
+			
+			
+			
+			
+			
 			$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
-		    $sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $rollCounter , "MS Sans Serif", "FF8C00", 8, 0, 0, 0, 0) ;rollcounter
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $timestamp, "MS Sans Serif", "777777", 8, 0, 0, 0, 0) ;timestamp
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+			
+			;adding screenshots...
+			;socket1
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 1: ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket1.jpg')
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket1, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+			;socket2
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 2: ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			If $gotSocket2 <> 'ignored' Then
+				_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket2.jpg')
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+			EndIf
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket2, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+			;socket3
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 3: ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			If $gotSocket3 <> 'ignored' Then
+				_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket3.jpg')
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+			EndIf
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket3, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;end line
+			
+			
+			;$sString = "Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+		    ;$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
 		    ;append to log edit box
-		    GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+		    ;GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+			;_GUICtrlRichEdit_AppendTextEx($socketLog2, $sString & @CRLF, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
 			
 			$previousSocket1 =  $gotSocket1
 			$previousSocket2 =  $gotSocket2
@@ -678,9 +913,40 @@ Func runMain()
 			If $gotSocket2 <> $wantedSocket1 And $gotSocket2 <> $wantedSocket2 And $gotSocket2 <> $wantedSocket3 And $wantedSocket2 <> "any" And $wantedSocket3 <> "any" Then
 				$gotSocket3 =  'ignored'
 				$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
-				$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, $rollCounter , "MS Sans Serif", "FF8C00", 8, 0, 0, 0, 0) ;rollcounter
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, $timestamp, "MS Sans Serif", "777777", 8, 0, 0, 0, 0) ;timestamp
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+				
+				;adding screenshots...
+				;socket1
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 1: ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+				_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket1.jpg')
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket1, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " | ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+				;socket2
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 2: ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+				If $gotSocket2 <> 'ignored' Then
+					_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket2.jpg')
+					_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+				EndIf
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket2, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " | ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+				;socket3
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 3: ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+				If $gotSocket3 <> 'ignored' Then
+					_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket3.jpg')
+					_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+				EndIf
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket3, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;end line
+				
+				;$sString = "Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+				;$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
 				;append to log edit box
-				GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+				;GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+				;_GUICtrlRichEdit_AppendTextEx($socketLog2, $sString & @CRLF, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
 				
 				$previousSocket1 =  $gotSocket1
 				$previousSocket2 =  $gotSocket2
@@ -701,9 +967,36 @@ Func runMain()
 			;if found socket is not in wanted, reroll directly
 			If $gotSocket3 <> $wantedSocket1 And $gotSocket3 <> $wantedSocket2 And $gotSocket3 <> $wantedSocket3 And $wantedSocket2 <> "any" And $wantedSocket3 <> "any"  Then
 				$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
-				$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, $rollCounter , "MS Sans Serif", "FF8C00", 8, 0, 0, 0, 0) ;rollcounter
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, $timestamp, "MS Sans Serif", "777777", 8, 0, 0, 0, 0) ;timestamp
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+				
+				;adding screenshots...
+				;socket1
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 1: ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+				_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket1.jpg')
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket1, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " | ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+				;socket2
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 2: ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+				_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket2.jpg')
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket2, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " | ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+				;socket3
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 3: ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+				_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket3.jpg')
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket3, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;end line
+				
+				;$sString = "Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+				;$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
 				;append to log edit box
-				GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+				;GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+				;_GUICtrlRichEdit_AppendTextEx($socketLog2, $sString & @CRLF, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
 				
 				$previousSocket1 =  $gotSocket1
 				$previousSocket2 =  $gotSocket2
@@ -727,10 +1020,40 @@ Func runMain()
 			$finished = True
 			Beep(500, 2000)
 			$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
-			$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
-			GUICtrlSetData($socketLog, $sString & @CRLF, 1)
-			GUICtrlSetData($socketLog, "------------------------------------------------------------------------------------------------------------------" & @CRLF & @CRLF, 1)
-			GUICtrlSetData($socketLog, "Finished after " & $rollCounter & " rolls!" & @CRLF, 1)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $rollCounter , "MS Sans Serif", "FF8C00", 8, 0, 0, 0, 0) ;rollcounter
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $timestamp, "MS Sans Serif", "777777", 8, 0, 0, 0, 0) ;timestamp
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+			
+			;adding screenshots...
+			;socket1
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 1: ", "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket1.jpg')
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket1, "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | ", "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0) ;line
+			;socket2
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 2: ", "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket2.jpg')
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket2, "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | ", "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0) ;line
+			;socket3
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 3: ", "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket3.jpg')
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket3, "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0) ;end line
+			
+			
+			;$sString = "Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+		    ;$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+			;GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+			;_GUICtrlRichEdit_AppendTextEx($socketLog2, $sString & @CRLF, "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0)
+			;GUICtrlSetData($socketLog, "-----------------------------------------------------------------------------------------------" & @CRLF & @CRLF, 1)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "-----------------------------------------------------------------------------------------------" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			;GUICtrlSetData($socketLog, "Finished after " & $rollCounter & " rolls!" & @CRLF, 1)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Finished after " & $rollCounter & " rolls!" & @CRLF, "MS Sans Serif", "00FF00", 8, 0, 0, 0, 0)
 			ExitLoop
 		Else 
 			;no wanted combination found, reroll
@@ -740,9 +1063,36 @@ Func runMain()
 			
 			
 			$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
-		    $sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $rollCounter , "MS Sans Serif", "FF8C00", 8, 0, 0, 0, 0) ;rollcounter
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $timestamp, "MS Sans Serif", "777777", 8, 0, 0, 0, 0) ;timestamp
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+			
+			;adding screenshots...
+			;socket1
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 1: ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket1.jpg')
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket1, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+			;socket2
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 2: ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket2.jpg')
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket2, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+			;socket3
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Socket 3: ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_InsertBitmap($socketLog2, @TempDir & '\Wolcen_Socket_Roller\socket3.jpg')
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, " ", "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0);space
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, $gotSocket3, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;end line
+			
+			;$sString = "Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
+		    ;$sString = $timestamp & " | " & $rollCounter & " | Socket 1: " & $gotSocket1 & " -- Socket 2: " & $gotSocket2 & " -- Socket 3: " & $gotSocket3
 		    ;append to log edit box
-		    GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+		    ;GUICtrlSetData($socketLog, $sString & @CRLF, 1)
+			;_GUICtrlRichEdit_AppendTextEx($socketLog2, $sString & @CRLF, "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0)
 			
 			$previousSocket1 =  $gotSocket1
 			$previousSocket2 =  $gotSocket2
@@ -774,7 +1124,8 @@ Func runMain()
 
 		  If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
 			$finished =  True
-			GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+			;GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Aborted!" & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
 			ExitLoop
 		  EndIf
 		EndIf
@@ -838,6 +1189,9 @@ Func getSocket($socketNumberToCheck)
 		$socket1BottomRightX = Round( ($baseSocket1BottomRightX / $baseResolutionWidth) * $gameWidth )
 		$socket1BottomRightY = Round( ($baseSocket1BottomRightY / $baseResolutionHeight) * $gameHeight )
 		
+		;capture area for logging screenshot
+		_ScreenCapture_CaptureWnd(@TempDir & '\Wolcen_Socket_Roller\socket1.jpg', WinGetHandle ( "Wolcen: Lords of Mayhem" ), $socket1TopLeftX + $borderSize, $socket1TopLeftY + $titleHeight, $socket1BottomRightX + $borderSize, $socket1BottomRightY + $titleHeight)
+		
 		;draw rect
 		_UIA_DrawRect($socket1TopLeftX, $socket1BottomRightX, $socket1TopLeftY, $socket1BottomRightY, 0x0000FF, 2)
 	  
@@ -851,6 +1205,9 @@ Func getSocket($socketNumberToCheck)
 		$socket2TopLeftY = Round( ($baseSocket2TopLeftY / $baseResolutionHeight) * $gameHeight )
 		$socket2BottomRightX = Round( ($baseSocket2BottomRightX / $baseResolutionWidth) * $gameWidth )
 		$socket2BottomRightY = Round( ($baseSocket2BottomRightY / $baseResolutionHeight) * $gameHeight )
+		
+		;capture area for logging screenshot
+		_ScreenCapture_CaptureWnd(@TempDir & '\Wolcen_Socket_Roller\socket2.jpg', WinGetHandle ( "Wolcen: Lords of Mayhem" ), $socket2TopLeftX + $borderSize, $socket2TopLeftY + $titleHeight, $socket2BottomRightX + $borderSize, $socket2BottomRightY + $titleHeight)
 		;draw rect
 		_UIA_DrawRect($socket2TopLeftX, $socket2BottomRightX, $socket2TopLeftY, $socket2BottomRightY, 0x0000FF, 2)
 
@@ -865,6 +1222,9 @@ Func getSocket($socketNumberToCheck)
 		$socket3TopLeftY = Round( ($baseSocket3TopLeftY / $baseResolutionHeight) * $gameHeight )
 		$socket3BottomRightX = Round( ($baseSocket3BottomRightX / $baseResolutionWidth) * $gameWidth )
 		$socket3BottomRightY = Round( ($baseSocket3BottomRightY / $baseResolutionHeight) * $gameHeight )
+		
+		;capture area for logging screenshot
+		_ScreenCapture_CaptureWnd(@TempDir & '\Wolcen_Socket_Roller\socket3.jpg', WinGetHandle ( "Wolcen: Lords of Mayhem" ), $socket3TopLeftX + $borderSize, $socket3TopLeftY + $titleHeight, $socket3BottomRightX + $borderSize, $socket3BottomRightY + $titleHeight)
 		;draw rect
 		_UIA_DrawRect($socket3TopLeftX, $socket3BottomRightX, $socket3TopLeftY, $socket3BottomRightY, 0x0000FF, 2)
 
