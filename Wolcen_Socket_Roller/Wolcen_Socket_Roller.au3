@@ -57,6 +57,8 @@ If $latestver > $currentver Then
 EndIf
 
 
+;additional functions start
+
 Func _GetURLImage($sURL, $sDirectory = @ScriptDir)
     Local $hDownload, $sFile
     $sFile = StringRegExpReplace($sURL, "^.*/", "")
@@ -222,10 +224,21 @@ Func _GDIPlus_StreamImage2BinaryString($hBitmap, $sFormat = "JPG", $iQuality = 8
 EndFunc   ;==>_GDIPlus_StreamImage2BinaryString
 
 
+Func _GetMin($n1, $n2, $n3=Default, $n4=Default, $n5=Default, $n6=Default, $n7=Default, $n8=Default, $n9=Default, $n10=Default)
+    Local $min = $n1, $val
+    For $i = 2 To 10
+        $val = Eval('n' & $i)
+        If IsKeyword($val) Then ExitLoop
+        If $val < $min Then $min = $val
+    Next
+    Return $min
+EndFunc
+
+;additional functions end
 
 
 $finished = False
-
+$finishSoundToPlay = 1
 ;sleep interval in milliseconds how long to wait after reroll got clicked
 $sleepAfterClickRollValue =  200
 
@@ -255,7 +268,61 @@ $baseSocket3BottomRightY = 0
 
 ;5 worked great for 1080p or higher resolutions. But lower than 1080p, it failed. Tested with off1 off1 off3 and 1366x768 resolution
 ;10 is too high, which matches support blues together as one
-$shadesTolerance =  6
+$shadesTolerance =  10
+
+$gameWindowHandl = 0
+
+;new color matching code
+
+;offensive1 color data
+$offensive1ColorHex = 0xc43b62
+$offensive1ColorR = BitShift(BitAND($offensive1ColorHex,0xFF0000),16)
+$offensive1ColorG = BitShift(BitAND($offensive1ColorHex, 0xFF00),8)
+$offensive1ColorB = BitAND($offensive1ColorHex, 0xFF)
+;offensive2 color data
+$offensive2ColorHex = 0xe35c5c
+$offensive2ColorR = BitShift(BitAND($offensive2ColorHex,0xFF0000),16)
+$offensive2ColorG = BitShift(BitAND($offensive2ColorHex, 0xFF00),8)
+$offensive2ColorB = BitAND($offensive2ColorHex, 0xFF)
+;offensive3 color data
+$offensive3ColorHex = 0xd38871
+$offensive3ColorR = BitShift(BitAND($offensive3ColorHex,0xFF0000),16)
+$offensive3ColorG = BitShift(BitAND($offensive3ColorHex, 0xFF00),8)
+$offensive3ColorB = BitAND($offensive3ColorHex, 0xFF)
+
+
+;defensive1 color data
+$defensive1ColorHex = 0x3fae60
+$defensive1ColorR = BitShift(BitAND($defensive1ColorHex,0xFF0000),16)
+$defensive1ColorG = BitShift(BitAND($defensive1ColorHex, 0xFF00),8)
+$defensive1ColorB = BitAND($defensive1ColorHex, 0xFF)
+;defensive2 color data
+$defensive2ColorHex = 0x7dd389
+$defensive2ColorR = BitShift(BitAND($defensive2ColorHex,0xFF0000),16)
+$defensive2ColorG = BitShift(BitAND($defensive2ColorHex, 0xFF00),8)
+$defensive2ColorB = BitAND($defensive2ColorHex, 0xFF)
+;defensive3 color data
+$defensive3ColorHex = 0x90ac69
+$defensive3ColorR = BitShift(BitAND($defensive3ColorHex,0xFF0000),16)
+$defensive3ColorG = BitShift(BitAND($defensive3ColorHex, 0xFF00),8)
+$defensive3ColorB = BitAND($defensive3ColorHex, 0xFF)
+
+
+;support1 color data
+$support1ColorHex = 0x3d6ada
+$support1ColorR = BitShift(BitAND($support1ColorHex,0xFF0000),16)
+$support1ColorG = BitShift(BitAND($support1ColorHex, 0xFF00),8)
+$support1ColorB = BitAND($support1ColorHex, 0xFF)
+;support2 color data
+$support2ColorHex = 0x229abf
+$support2ColorR = BitShift(BitAND($support2ColorHex,0xFF0000),16)
+$support2ColorG = BitShift(BitAND($support2ColorHex, 0xFF00),8)
+$support2ColorB = BitAND($support2ColorHex, 0xFF)
+;support3 color data
+$support3ColorHex = 0x9cdcf6
+$support3ColorR = BitShift(BitAND($support3ColorHex,0xFF0000),16)
+$support3ColorG = BitShift(BitAND($support3ColorHex, 0xFF00),8)
+$support3ColorB = BitAND($support3ColorHex, 0xFF)
 
 GUISetState(@SW_SHOW,  $MainWindow)
 
@@ -264,11 +331,14 @@ _GUICtrlComboBox_SetCurSel($sock1, 0)
 _GUICtrlComboBox_SetCurSel($sock2, 0)
 _GUICtrlComboBox_SetCurSel($sock3, 0)
 
+;auto select first finish sound
+_GUICtrlComboBox_SetCurSel($finishSound, 1)
+
 
 ;$socketLogOld = GUICtrlCreateEdit("",293,42,433,306,BitOR($WS_VSCROLL, $ES_AUTOVSCROLL, $ES_READONLY),-1)
 ;increase limit of textbox
 GUICtrlSendMsg($socketLog2, $EM_LIMITTEXT, -1, 0) ; Removes the limit on the number of characters of the 30000
-
+;fix socketlog flashing on update
 
 
 ;$startButtonHdn2 = GUICtrlCreateButton("Start",15,271,231,30,-1,-1)
@@ -284,9 +354,11 @@ HotKeySet("{ALT}", "stopLoop")
 
 
 Func stopLoop()
+	If $finished == False Then
+		;GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+		_GUICtrlRichEdit_AppendTextEx($socketLog2, "Aborted!" & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
+	EndIf
     $finished =  True
-	;GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
-	_GUICtrlRichEdit_AppendTextEx($socketLog2, "Aborted!", "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
 EndFunc   ;==>stops the loop if running
 
 
@@ -323,9 +395,25 @@ While 1
 			ExitLoop
 		Case $sleepAfterClickRoll
 			$sleepAfterClickRollValue = Int(GUICtrlRead($sleepAfterClickRoll))
+		Case $finishSound
+			$finishSoundToPlay = _GUICtrlComboBox_GetCurSel ( $finishSound )
+			If $finishSoundToPlay > 0 Then
+				SoundPlay(@TempDir & '\Wolcen_Socket_Roller\finished_' & $finishSoundToPlay & '.mp3', 0)
+			EndIf
+			;0: No sound
+			;1: Zelda small item
+			;2: Zelda item
+			;3: Zelda secret
+			;4: Zelda heart container
+			;5: Zelda spirit orb
+			;6: Zelda hey listen
+			;7: Air horn
+			;8: FairyTail wow
+
 		Case $coffee
 			$sUrl='https://ko-fi.com/crypto90'
 			ShellExecute($sUrl)
+			SoundPlay(@TempDir & '\Wolcen_Socket_Roller\donate.mp3', 0)
 		Case $startButtonHdn2
 			$finished = False
 			;GUICtrlSetData($socketLog, '')
@@ -393,7 +481,7 @@ Func _UIA_DrawRect($tLeft, $tRight, $tTop, $tBottom, $color = 0xFF, $PenWidth = 
 	
     ;$hDC = _WinAPI_GetWindowDC(0) ; DC of entire screen (desktop)
 	
-	$hDC = _WinAPI_GetWindowDC(WinGetHandle ( "Wolcen: Lords of Mayhem" ))
+	$hDC = _WinAPI_GetWindowDC($gameWindowHandl)
     $hPen = _WinAPI_CreatePen($PS_SOLID, $PenWidth, $color)
     $obj_orig = _WinAPI_SelectObject($hDC, $hPen)
 
@@ -577,7 +665,7 @@ Func runMain()
 		$baseSocket3BottomRightX = 135
 		$baseSocket3BottomRightY = 645
 	EndIf
-		
+	
 	
 	;16 : 10 / 8 : 5 -- done
 	If $gameAspectRatio ==  (16 / 10) Then
@@ -823,6 +911,10 @@ Func runMain()
 	$unchangedSocketsCounter =  0
 	$rollCounter =  0
 	$maxRollsValue =  Int(GUICtrlRead($maxRolls))
+	
+	$gameWindowHandl =  WinGetHandle ( "Wolcen: Lords of Mayhem" )
+	
+	
 	While $finished == False
 		
 		If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
@@ -1018,7 +1110,11 @@ Func runMain()
 	   	If ($gotSocket1 == $wantedSocket1 And ($gotSocket2 == $wantedSocket2 Or $wantedSocket2 ==  "any") And ($gotSocket3 == $wantedSocket3 Or $wantedSocket3 ==  "any")) Or ($gotSocket1 == $wantedSocket1 And ($gotSocket2 == $wantedSocket3 Or $wantedSocket3 ==  "any") And ($gotSocket3 == $wantedSocket2 Or $wantedSocket2 ==  "any"))  Or (($gotSocket1 == $wantedSocket2 Or $wantedSocket2 ==  "any") And $gotSocket2 == $wantedSocket1 And ($gotSocket3 == $wantedSocket3 Or $wantedSocket3 ==  "any"))  Or (($gotSocket1 == $wantedSocket2 Or $wantedSocket2 ==  "any") And ($gotSocket2 == $wantedSocket3 Or $wantedSocket3 ==  "any") And $gotSocket3 == $wantedSocket1)  Or (($gotSocket1 == $wantedSocket3 Or $wantedSocket3 ==  "any") And $gotSocket2 == $wantedSocket1 And ($gotSocket3 == $wantedSocket2 Or $wantedSocket2 ==  "any"))  Or (($gotSocket1 == $wantedSocket3 Or $wantedSocket3 ==  "any") And ($gotSocket2 == $wantedSocket2 Or $wantedSocket2 ==  "any") And $gotSocket3 == $wantedSocket1) Then
 			;found a searched combination
 			$finished = True
-			Beep(500, 2000)
+			
+			If $finishSoundToPlay > 0 Then
+				SoundPlay(@TempDir & '\Wolcen_Socket_Roller\finished_' & $finishSoundToPlay & '.mp3', 0)
+			EndIf
+			
 			$timestamp = @HOUR & ":" & @MIN & ":" & @SEC
 			_GUICtrlRichEdit_AppendTextEx($socketLog2, $rollCounter , "MS Sans Serif", "FF8C00", 8, 0, 0, 0, 0) ;rollcounter
 			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
@@ -1123,9 +1219,11 @@ Func runMain()
 		  
 
 		  If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
+			If $finished == False Then
+				;GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+				_GUICtrlRichEdit_AppendTextEx($socketLog2, "Aborted!" & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
+			EndIf
 			$finished =  True
-			;GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
-			_GUICtrlRichEdit_AppendTextEx($socketLog2, "Aborted!" & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
 			ExitLoop
 		  EndIf
 		EndIf
@@ -1152,6 +1250,10 @@ EndFunc
 
 Func getSocket($socketNumberToCheck)
 	
+	;debug
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Scanning area for socket: " & $socketNumberToCheck & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
+	
+	
    ;recalculate coordinates based on current resolution
 	$size = WinGetPos("Wolcen: Lords of Mayhem")
 	$gameInnerSize =  WinGetClientSize("Wolcen: Lords of Mayhem")
@@ -1177,10 +1279,12 @@ Func getSocket($socketNumberToCheck)
 	
 	
 	
-   $socketTopLeftXSearch = 0
-   $socketTopLeftYSearch = 0
-   $socketBottomRightXSearch = 0
-   $socketBottomRightYSearch = 0
+   Local $socketTopLeftXSearch = 0
+   Local $socketTopLeftYSearch = 0
+   Local $socketBottomRightXSearch = 0
+   Local $socketBottomRightYSearch = 0
+   
+   
 
    If $socketNumberToCheck == 1 Then
 		;Socket 1 area coordinates
@@ -1190,7 +1294,7 @@ Func getSocket($socketNumberToCheck)
 		$socket1BottomRightY = Round( ($baseSocket1BottomRightY / $baseResolutionHeight) * $gameHeight )
 		
 		;capture area for logging screenshot
-		_ScreenCapture_CaptureWnd(@TempDir & '\Wolcen_Socket_Roller\socket1.jpg', WinGetHandle ( "Wolcen: Lords of Mayhem" ), $socket1TopLeftX + $borderSize, $socket1TopLeftY + $titleHeight, $socket1BottomRightX + $borderSize, $socket1BottomRightY + $titleHeight)
+		_ScreenCapture_CaptureWnd(@TempDir & '\Wolcen_Socket_Roller\socket1.jpg', $gameWindowHandl, $socket1TopLeftX + $borderSize, $socket1TopLeftY + $titleHeight, $socket1BottomRightX + $borderSize, $socket1BottomRightY + $titleHeight)
 		
 		;draw rect
 		_UIA_DrawRect($socket1TopLeftX, $socket1BottomRightX, $socket1TopLeftY, $socket1BottomRightY, 0x0000FF, 2)
@@ -1207,7 +1311,7 @@ Func getSocket($socketNumberToCheck)
 		$socket2BottomRightY = Round( ($baseSocket2BottomRightY / $baseResolutionHeight) * $gameHeight )
 		
 		;capture area for logging screenshot
-		_ScreenCapture_CaptureWnd(@TempDir & '\Wolcen_Socket_Roller\socket2.jpg', WinGetHandle ( "Wolcen: Lords of Mayhem" ), $socket2TopLeftX + $borderSize, $socket2TopLeftY + $titleHeight, $socket2BottomRightX + $borderSize, $socket2BottomRightY + $titleHeight)
+		_ScreenCapture_CaptureWnd(@TempDir & '\Wolcen_Socket_Roller\socket2.jpg', $gameWindowHandl, $socket2TopLeftX + $borderSize, $socket2TopLeftY + $titleHeight, $socket2BottomRightX + $borderSize, $socket2BottomRightY + $titleHeight)
 		;draw rect
 		_UIA_DrawRect($socket2TopLeftX, $socket2BottomRightX, $socket2TopLeftY, $socket2BottomRightY, 0x0000FF, 2)
 
@@ -1224,7 +1328,7 @@ Func getSocket($socketNumberToCheck)
 		$socket3BottomRightY = Round( ($baseSocket3BottomRightY / $baseResolutionHeight) * $gameHeight )
 		
 		;capture area for logging screenshot
-		_ScreenCapture_CaptureWnd(@TempDir & '\Wolcen_Socket_Roller\socket3.jpg', WinGetHandle ( "Wolcen: Lords of Mayhem" ), $socket3TopLeftX + $borderSize, $socket3TopLeftY + $titleHeight, $socket3BottomRightX + $borderSize, $socket3BottomRightY + $titleHeight)
+		_ScreenCapture_CaptureWnd(@TempDir & '\Wolcen_Socket_Roller\socket3.jpg', $gameWindowHandl, $socket3TopLeftX + $borderSize, $socket3TopLeftY + $titleHeight, $socket3BottomRightX + $borderSize, $socket3BottomRightY + $titleHeight)
 		;draw rect
 		_UIA_DrawRect($socket3TopLeftX, $socket3BottomRightX, $socket3TopLeftY, $socket3BottomRightY, 0x0000FF, 2)
 
@@ -1246,60 +1350,221 @@ Func getSocket($socketNumberToCheck)
 	if $titleHeight > 0 Then 
 		$rerollClickY =  $rerollClickY +  $titleHeight
 	EndIf
-
+	
+	
+	
+	
+	;debug
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Scanning area for socket: " & $socketNumberToCheck & " x1: " & $socketTopLeftXSearch + $borderSize & " y1: " & $socketTopLeftYSearch + $titleHeight & " x2: " & $socketBottomRightXSearch + $borderSize & " y2: " & $socketBottomRightYSearch + $titleHeight & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
+	
+	;MouseMove($socketBottomRightXSearch + $borderSize, $socketBottomRightYSearch + $titleHeight, 0)
+	
    ;offensive socket checks
-   $checkSocket1Offensive1 = PixelSearch($gameX +  $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0xc43b62, $shadesTolerance)
-   If Not @error Then
-	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Offensive 1")
-	   Return 'offensive1'
-   EndIf
-   $checkSocket1Offensive2 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0xe35c5c, $shadesTolerance)
-   If Not @error Then
-	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Offensive 2")
-	   Return 'offensive2'
+    ;$checkSocketOffensive1 = PixelSearch($socketTopLeftXSearch + $borderSize, $socketTopLeftYSearch + $titleHeight, $socketBottomRightXSearch + $borderSize, $socketBottomRightYSearch + $titleHeight, $offensive1ColorHex, $shadesTolerance, 1, $gameWindowHandl)
+    $checkSocketOffensive1 = PixelSearch($gameX +  $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, $offensive1ColorHex, $shadesTolerance)
+	If Not @error Then
+		;Return 'offensive1'
+		Return getSocketTypeForPixel($checkSocketOffensive1[0], $checkSocketOffensive1[1])
 	EndIf
-	$checkSocket1Offensive3 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0xd38871, $shadesTolerance)
-   If Not @error Then
-	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Offensive 3")
-	   Return 'offensive3'
-   EndIf
-
-
+    ;$checkSocketOffensive2 = PixelSearch($socketTopLeftXSearch + $borderSize, $socketTopLeftYSearch + $titleHeight, $socketBottomRightXSearch + $borderSize, $socketBottomRightYSearch + $titleHeight, $offensive2ColorHex, $shadesTolerance, 1, $gameWindowHandl)
+    $checkSocketOffensive2 = PixelSearch($gameX +  $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, $offensive2ColorHex, $shadesTolerance)
+	If Not @error Then
+		;Return 'offensive2'
+		Return getSocketTypeForPixel($checkSocketOffensive2[0], $checkSocketOffensive2[1])
+	EndIf
+	;$checkSocketOffensive3 = PixelSearch($socketTopLeftXSearch + $borderSize, $socketTopLeftYSearch + $titleHeight, $socketBottomRightXSearch + $borderSize, $socketBottomRightYSearch + $titleHeight, $offensive3ColorHex, $shadesTolerance, 1, $gameWindowHandl)
+	$checkSocketOffensive3 = PixelSearch($gameX +  $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, $offensive3ColorHex, $shadesTolerance)
+	If Not @error Then
+		;Return 'offensive3'
+		Return getSocketTypeForPixel($checkSocketOffensive3[0], $checkSocketOffensive3[1])
+	EndIf
+	
+	
    ; defensive socket check
-   $checkSocket1Defensive1 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0x3fae60, $shadesTolerance)
-   If Not @error Then
-	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Defensive 1")
-	   Return 'defensive1'
-   EndIf
-   $checkSocket1Defensive2 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0x7dd389, $shadesTolerance)
-   If Not @error Then
-	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Defensive 2")
-	   Return 'defensive2'
-   EndIf
-	$checkSocket1Defensive3 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0x90ac69, $shadesTolerance)
-   If Not @error Then
-	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Defensive 3")
-	   Return 'defensive3'
-   EndIf
-
-
-   ; support socket check
-   $checkSocket1Support1 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0x3d6ada, $shadesTolerance)
-   If Not @error Then
-	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 1")
-	   Return 'support1'
-   EndIf
-   $checkSocket1Support2 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0x229abf, $shadesTolerance)
-   If Not @error Then
-	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 2")0xF2EEDC0xF2EEDC0xF2EEDC
-	   Return 'support2'
-   EndIf
-	$checkSocket1Support3 = PixelSearch($gameX + $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, 0x9cdcf6, $shadesTolerance)
-   If Not @error Then
-	   ;MsgBox($MB_SYSTEMMODAL, "", "Socket 1: Support 3")
-	   Return 'support3'
+    ;$checkSocketDefensive1 = PixelSearch($socketTopLeftXSearch + $borderSize, $socketTopLeftYSearch + $titleHeight, $socketBottomRightXSearch + $borderSize, $socketBottomRightYSearch + $titleHeight, $defensive1ColorHex, $shadesTolerance, 1, $gameWindowHandl)
+    $checkSocketDefensive1 = PixelSearch($gameX +  $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, $defensive1ColorHex, $shadesTolerance)
+    If Not @error Then
+		;Return 'defensive1'
+		Return getSocketTypeForPixel($checkSocketDefensive1[0], $checkSocketDefensive1[1])
 	EndIf
-
+	;$checkSocketDefensive2 = PixelSearch($socketTopLeftXSearch + $borderSize, $socketTopLeftYSearch + $titleHeight, $socketBottomRightXSearch + $borderSize, $socketBottomRightYSearch + $titleHeight, $defensive2ColorHex, $shadesTolerance, 1, $gameWindowHandl)
+	$checkSocketDefensive2 = PixelSearch($gameX +  $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, $defensive2ColorHex, $shadesTolerance)
+	If Not @error Then
+		;Return 'defensive2'
+		Return getSocketTypeForPixel($checkSocketDefensive2[0], $checkSocketDefensive2[1])
+	EndIf
+	;$checkSocketDefensive3 = PixelSearch($socketTopLeftXSearch + $borderSize, $socketTopLeftYSearch + $titleHeight, $socketBottomRightXSearch + $borderSize, $socketBottomRightYSearch + $titleHeight, $defensive3ColorHex, $shadesTolerance, 1, $gameWindowHandl)
+	$checkSocketDefensive3 = PixelSearch($gameX +  $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, $defensive3ColorHex, $shadesTolerance)
+	If Not @error Then
+		;Return 'defensive3'
+		Return getSocketTypeForPixel($checkSocketDefensive3[0], $checkSocketDefensive3[1])
+	EndIf
+	
+	
+	
+   ; support socket check
+	;$checkSocketSupport1 = PixelSearch($socketTopLeftXSearch + $borderSize, $socketTopLeftYSearch + $titleHeight, $socketBottomRightXSearch + $borderSize, $socketBottomRightYSearch + $titleHeight, $support1ColorHex, $shadesTolerance, 1, $gameWindowHandl)
+	$checkSocketSupport1 = PixelSearch($gameX +  $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, $support1ColorHex, $shadesTolerance)
+	If Not @error Then
+		;Return 'support1'
+		Return getSocketTypeForPixel($checkSocketSupport1[0], $checkSocketSupport1[1])
+	EndIf
+    ;$checkSocketSupport2 = PixelSearch($socketTopLeftXSearch + $borderSize, $socketTopLeftYSearch + $titleHeight, $socketBottomRightXSearch + $borderSize, $socketBottomRightYSearch + $titleHeight, $support2ColorHex, $shadesTolerance, 1, $gameWindowHandl)
+    $checkSocketSupport2 = PixelSearch($gameX +  $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, $support2ColorHex, $shadesTolerance)
+	If Not @error Then
+		;Return 'support2'
+		Return getSocketTypeForPixel($checkSocketSupport2[0], $checkSocketSupport2[1])
+	EndIf
+	;$checkSocketSupport3 = PixelSearch($socketTopLeftXSearch + $borderSize, $socketTopLeftYSearch + $titleHeight, $socketBottomRightXSearch + $borderSize, $socketBottomRightYSearch + $titleHeight, $support3ColorHex, $shadesTolerance, 1, $gameWindowHandl)
+	$checkSocketSupport3 = PixelSearch($gameX +  $socketTopLeftXSearch, $gameY + $socketTopLeftYSearch, $gameX + $socketBottomRightXSearch, $gameY + $socketBottomRightYSearch, $support3ColorHex, $shadesTolerance)
+	If Not @error Then
+		;Return 'support3'
+		Return getSocketTypeForPixel($checkSocketSupport3[0], $checkSocketSupport3[1])
+	EndIf
+    
+    
 	;if no socket found
 	Return 'unset'
+EndFunc
+
+Func getSocketTypeForPixel($iX2, $iY2)
+	
+	$iX =  $iX2
+	$iY =  $iY2
+	
+	$socketDetected = 'unset'
+	
+	;new method using euclidean distance between colors _euclideanDist($x1, $y1, $x2, $y2)
+	
+	
+	;$gameWindowHandl =  WinGetHandle ( "Wolcen: Lords of Mayhem" );we define it before this function call
+	;1. we need to scan the desired area pixel by pixel 
+	
+	;debug output
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Scanning pixels from x1: " & ($socketTopLeftXSearch + $borderSize) & " to x2: " & ($socketBottomRightXSearch + $borderSize) & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Scanning pixels from y1: " & ($socketTopLeftYSearch + $titleHeight) & " to y2: " & ($socketBottomRightYSearch + $titleHeight) & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Total amount of pixels for scanning 1 socket: " & (($socketTopLeftYSearch + $titleHeight) * ($socketBottomRightYSearch + $titleHeight)) & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	
+	$currentLowestColorDifference =  -1
+	$iColor = PixelGetColor ( $iX, $iY, $gameWindowHandl )
+	
+	
+	$Hex = Execute("0x" & Hex($iColor, 6))
+
+	
+	
+	$scannedR = BitShift(BitAND($Hex,0xFF0000),16)
+	$scannedG = BitShift(BitAND($Hex, 0xFF00),8)
+	$scannedB = BitAND($Hex, 0xFF)
+	
+	;DEBUG
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Color found for X: " & $iX & " and Y: " & $iY & " is: " & $iColor & " | Hex: " & $Hex & " | R:" & $scannedR & " G: " & $scannedG & " B: " & $scannedB & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+
+	
+	
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Offensive1 R:" & $offensive1ColorR & " G: " & $offensive1ColorG & " B: " & $offensive1ColorB & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Offensive2 R:" & $offensive2ColorR & " G: " & $offensive2ColorG & " B: " & $offensive2ColorB & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Offensive3 R:" & $offensive3ColorR & " G: " & $offensive3ColorG & " B: " & $offensive3ColorB & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Defensive1 R:" & $defensive1ColorR & " G: " & $defensive1ColorG & " B: " & $defensive1ColorB & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Defensive2 R:" & $defensive2ColorR & " G: " & $defensive2ColorG & " B: " & $defensive2ColorB & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Defensive3 R:" & $defensive3ColorR & " G: " & $defensive3ColorG & " B: " & $defensive3ColorB & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Support1 R:" & $support1ColorR & " G: " & $support1ColorG & " B: " & $support1ColorB & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Support2 R:" & $support2ColorR & " G: " & $support2ColorG & " B: " & $support2ColorB & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Support3 R:" & $support3ColorR & " G: " & $support3ColorG & " B: " & $support3ColorB & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	
+	
+	;2. calculate color distance for each socket and unset color
+	;$offensive1
+	$ColorDistOffensive1 = Sqrt(($scannedR - $offensive1ColorR) ^ 2 + ($scannedG - $offensive1ColorG) ^ 2 + ($scannedB - $offensive1ColorB) ^ 2)
+	If $currentLowestColorDifference == -1 Or $ColorDistOffensive1 < $currentLowestColorDifference Then
+		$currentLowestColorDifference = $ColorDistOffensive1
+	EndIf
+	;$offensive2
+	$ColorDistOffensive2 = Sqrt(($scannedR - $offensive2ColorR) ^ 2 + ($scannedG - $offensive2ColorG) ^ 2 + ($scannedB - $offensive2ColorB) ^ 2)
+	If $ColorDistOffensive2 < $currentLowestColorDifference Then
+		$currentLowestColorDifference = $ColorDistOffensive2
+	EndIf
+	;$offensive3
+	$ColorDistOffensive3 = Sqrt(($scannedR - $offensive3ColorR) ^ 2 + ($scannedG - $offensive3ColorG) ^ 2 + ($scannedB - $offensive3ColorB) ^ 2)
+	If $ColorDistOffensive3 < $currentLowestColorDifference Then
+		$currentLowestColorDifference = $ColorDistOffensive3
+	EndIf
+	
+	;defensive1
+	$ColorDistDefensive1 = Sqrt(($scannedR - $defensive1ColorR) ^ 2 + ($scannedG - $defensive1ColorG) ^ 2 + ($scannedB - $defensive1ColorB) ^ 2)
+	If $ColorDistDefensive1 < $currentLowestColorDifference Then
+		$currentLowestColorDifference = $ColorDistDefensive1
+	EndIf
+	;defensive2
+	$ColorDistDefensive2 = Sqrt(($scannedR - $defensive2ColorR) ^ 2 + ($scannedG - $defensive2ColorG) ^ 2 + ($scannedB - $defensive2ColorB) ^ 2)
+	If $ColorDistDefensive2 < $currentLowestColorDifference Then
+		$currentLowestColorDifference = $ColorDistDefensive2
+	EndIf
+	;defensive3
+	$ColorDistDefensive3 = Sqrt(($scannedR - $defensive3ColorR) ^ 2 + ($scannedG - $defensive3ColorG) ^ 2 + ($scannedB - $defensive3ColorB) ^ 2)
+	If $ColorDistDefensive3 < $currentLowestColorDifference Then
+		$currentLowestColorDifference = $ColorDistDefensive3
+	EndIf
+	
+	;support1
+	$ColorDistSupport1 = Sqrt(($scannedR - $support1ColorR) ^ 2 + ($scannedG - $support1ColorG) ^ 2 + ($scannedB - $support1ColorB) ^ 2)
+	If $ColorDistSupport1 < $currentLowestColorDifference Then
+		$currentLowestColorDifference = $ColorDistSupport1
+	EndIf
+	;support2
+	$ColorDistSupport2 = Sqrt(($scannedR - $support2ColorR) ^ 2 + ($scannedG - $support2ColorG) ^ 2 + ($scannedB - $support2ColorB) ^ 2)
+	If $ColorDistSupport2 < $currentLowestColorDifference Then
+		$currentLowestColorDifference = $ColorDistSupport2
+	EndIf
+	;support3
+	$ColorDistSupport3 = Sqrt(($scannedR - $support3ColorR) ^ 2 + ($scannedG - $support3ColorG) ^ 2 + ($scannedB - $support3ColorB) ^ 2)
+	If $ColorDistSupport3 < $currentLowestColorDifference Then
+		$currentLowestColorDifference = $ColorDistSupport3
+	EndIf
+	
+	;DEBUG
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "$ColorDistOffensive1: " & $ColorDistOffensive1 & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "$ColorDistOffensive2: " & $ColorDistOffensive2 & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "$ColorDistOffensive3: " & $ColorDistOffensive3 & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "$ColorDistDefensive1: " & $ColorDistDefensive1 & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "$ColorDistDefensive2: " & $ColorDistDefensive2 & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "$ColorDistDefensive3: " & $ColorDistDefensive3 & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "$ColorDistSupport1: " & $ColorDistSupport1 & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "$ColorDistSupport2: " & $ColorDistSupport2 & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "$ColorDistSupport3: " & $ColorDistSupport3 & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+
+
+
+
+	
+	
+	; 3. now we have the smallest color difference, now lets check which one it is
+	If $ColorDistOffensive1 == $currentLowestColorDifference Then 
+		$socketDetected = 'offensive1'
+	ElseIf $ColorDistOffensive2 == $currentLowestColorDifference Then
+		$socketDetected = 'offensive2'
+	ElseIf $ColorDistOffensive3 == $currentLowestColorDifference Then
+		$socketDetected = 'offensive3'
+	ElseIf $ColorDistDefensive1 == $currentLowestColorDifference Then
+		$socketDetected = 'defensive1'
+	ElseIf $ColorDistDefensive2 == $currentLowestColorDifference Then
+		$socketDetected = 'defensive2'
+	ElseIf $ColorDistDefensive3 == $currentLowestColorDifference Then
+		$socketDetected = 'defensive3'
+	ElseIf $ColorDistSupport1 == $currentLowestColorDifference Then
+		$socketDetected = 'support1'
+	ElseIf $ColorDistSupport2 == $currentLowestColorDifference Then
+		$socketDetected = 'support2'
+	ElseIf $ColorDistSupport3 == $currentLowestColorDifference Then
+		$socketDetected = 'support3'
+	EndIf
+	
+	
+	;debug output
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "SocketNumberToCheck: " & $socketNumberToCheck & " | SocketDetected: " & $socketDetected & " | smallestColorDifferenceValueFound: " & $smallestColorDifferenceValueFound & @CRLF, "MS Sans Serif", "FFFFFF", 8, 0, 0, 0, 0)
+	
+	Return $socketDetected
+	
 EndFunc
