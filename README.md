@@ -78,6 +78,5 @@ A: Its a permission issue on your pc, run the tool as administrator.
 <br/>
 <br/>
 • Make sure your windows desktop scaling settings is at 100%, higher scaling does not work currently.
-<br/>
-• Smaller game resolutions do blurry and shrink the socket text which makes it harder for the tool to detect the correct color if they are very similar. Larger resolutions work fine. Im currently reworking the color matching to a "highest matching percentage of color in area" logic instead of "first color found in area" which will fix this issue.
+
 
