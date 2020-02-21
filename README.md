@@ -37,7 +37,7 @@ To stop it while its looping, ALT-TAB out of the game to a different program, th
 # Resolutions & Aspect ratios
 With version 1.8.2 support for all common aspect rations got added to support more resolutions dynamically:
 <br/>
-21:9 (ultrawide 3440x1440)<br/>
+21:9 (ultrawide 3440x1440 and 5120x1440)<br/>
 21:9 (wide 2560x1080)  <br/>
 16:10 and 8:5<br/>
 16:9<br/>
