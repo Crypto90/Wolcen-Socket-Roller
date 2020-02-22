@@ -5,7 +5,7 @@ https://github.com/Crypto90/Wolcen-Socket-Roller/releases
 <br/>
 Reddit discussion:
 <br/>
-https://www.reddit.com/r/Wolcen/comments/f6fm0q/wolcen_socket_roller_download_source_now_updated/
+https://www.reddit.com/r/Wolcen/comments/f7ezh3/wolcen_socket_roller_download_source_now_updated/
 <br/>
 <br/>
 
