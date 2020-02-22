@@ -1,4 +1,4 @@
-	
+#AutoIt3Wrapper_Res_HiDpi=Y
 
 #include <MsgBoxConstants.au3>
 #include <AutoItConstants.au3>
@@ -29,19 +29,53 @@
 #include <Misc.au3>
 #include <ScreenCapture.au3>
 
+
+;include inline images
+#include "Images\background_v3.jpg.au3"
+#include "Images\button_start.jpg.au3"
+#include "Images\button_donate.jpg.au3"
+
+
+
+;include inline sounds
+#include "Sounds\donate.mp3.au3"
+#include "Sounds\finished_1.mp3.au3"
+#include "Sounds\finished_2.mp3.au3"
+#include "Sounds\finished_3.mp3.au3"
+#include "Sounds\finished_4.mp3.au3"
+#include "Sounds\finished_5.mp3.au3"
+#include "Sounds\finished_6.mp3.au3"
+#include "Sounds\finished_7.mp3.au3"
+#include "Sounds\finished_8.mp3.au3"
+
 ;mouse position relative to window and not 
 AutoItSetOption("MouseCoordMode",0)
 
 
 ;EMBED IMAGES INTO EXE
+;background image
+;$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v3.jpg',0,0,880,430,$WS_CLIPSIBLINGS)
+$dynBg =  _background_v3jpg_Startup()
+$MainWindow_BGimage = GUICtrlCreatePic($dynBg,0,0,880,430,$WS_CLIPSIBLINGS)
+_background_v3jpg_Shutdown($dynBg)
+
 ;start button image
-GUICtrlSetImage($startButtonHdn2, @TempDir & '\Wolcen_Socket_Roller\button_start.jpg')
+;GUICtrlSetImage($startButton, @TempDir & '\Wolcen_Socket_Roller\button_start.jpg')
+$dynImageStart = _button_startjpg_Startup()
+GUICtrlSetImage($startButton, $dynImageStart)
+FileCopy($dynImageStart, "D:\debug.jpg", $FC_OVERWRITE)
+_button_startjpg_Shutdown($dynImageStart)
+
+
+
 
 ;donate button image
-GUICtrlSetImage($coffee, @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg')
+;GUICtrlSetImage($coffee, @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg')
+$dynImageDonate =  _button_donatejpg_Startup()
+GUICtrlSetImage($coffee, $dynImageDonate)
+_button_donatejpg_Shutdown($dynImageDonate)
 
-;background image
-$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v3.jpg',0,0,880,430,$WS_CLIPSIBLINGS)
+
 
 
 $currentver = StringStripWS(GUICtrlRead($currentVersion), $STR_STRIPLEADING + $STR_STRIPTRAILING)
@@ -333,14 +367,14 @@ _GUICtrlComboBox_SetCurSel($sock2, 0)
 _GUICtrlComboBox_SetCurSel($sock3, 0)
 
 ;auto select first finish sound
-$customFinishSoundPathCheckExistMp3 =  FileExists(@ScriptDir & "\Sounds\custom.mp3")
-$customFinishSoundPathCheckExistWav =  FileExists(@ScriptDir & "\Sounds\custom.wav")
+$customFinishSoundPathCheckExistMp3 =  FileExists(@ScriptDir & "custom.mp3")
+$customFinishSoundPathCheckExistWav =  FileExists(@ScriptDir & "custom.wav")
 If $customFinishSoundPathCheckExistMp3 Then
 	_GUICtrlComboBox_SetCurSel($finishSound, 9)
-	$customFinishSoundPath = @ScriptDir & "\Sounds\custom.mp3"
+	$customFinishSoundPath = @ScriptDir & "custom.mp3"
 ElseIf $customFinishSoundPathCheckExistWav Then
 	_GUICtrlComboBox_SetCurSel($finishSound, 9)
-	$customFinishSoundPath = @ScriptDir & "\Sounds\custom.wav"
+	$customFinishSoundPath = @ScriptDir & "custom.wav"
 Else 
 	_GUICtrlComboBox_SetCurSel($finishSound, 1)
 EndIf
@@ -354,7 +388,7 @@ GUICtrlSendMsg($socketLog2, $EM_LIMITTEXT, -1, 0) ; Removes the limit on the num
 ;fix socketlog flashing on update
 
 
-;$startButtonHdn2 = GUICtrlCreateButton("Start",15,271,231,30,-1,-1)
+;$startButton = GUICtrlCreateButton("Start",15,271,231,30,-1,-1)
 
 
 
@@ -414,21 +448,23 @@ While 1
 				$sFileOpenDialog = FileOpenDialog("Select a custom finish sound file. Choose a mp3 or wav file.", @WindowsDir & "\", "Audio (*.mp3;*.wav)", $FD_FILEMUSTEXIST)
 				If Not @error Then
 					$ext = stringRight($sFileOpenDialog, 4)
-					FileCopy($sFileOpenDialog, @ScriptDir & "\Sounds\custom" & $ext, $FC_OVERWRITE)
-					$customFinishSoundPath =  @ScriptDir & "\Sounds\custom" & $ext
+					FileCopy($sFileOpenDialog, @ScriptDir & "custom" & $ext, $FC_OVERWRITE)
+					$customFinishSoundPath =  @ScriptDir & "custom" & $ext
 					SoundPlay($customFinishSoundPath, 0)
 				EndIf
 				FileChangeDir(@ScriptDir)
 			ElseIf $finishSoundToPlay > 0 Then
 				;SoundPlay(@TempDir & '\Wolcen_Socket_Roller\finished_' & $finishSoundToPlay & '.mp3', 0)
-				SoundPlay(@ScriptDir & '\Sounds\finished_' & $finishSoundToPlay & '.mp3', 0)
+				;SoundPlay(@ScriptDir & '\Sounds\finished_' & $finishSoundToPlay & '.mp3', 0)
+				$inlineSound =  Call("_finished_" & $finishSoundToPlay & "mp3_Startup")
+				SoundPlay($inlineSound, 0)
 				;check if a custom file exist, if yes delete it
-				$customFinishSoundPathCheckExistMp3 =  FileExists(@ScriptDir & "\Sounds\custom.mp3")
-				$customFinishSoundPathCheckExistWav =  FileExists(@ScriptDir & "\Sounds\custom.wav")
+				$customFinishSoundPathCheckExistMp3 =  FileExists(@ScriptDir & "custom.mp3")
+				$customFinishSoundPathCheckExistWav =  FileExists(@ScriptDir & "custom.wav")
 				If $customFinishSoundPathCheckExistMp3 Then
-					FileDelete(@ScriptDir & "\Sounds\custom.mp3")
+					FileDelete(@ScriptDir & "custom.mp3")
 				ElseIf $customFinishSoundPathCheckExistWav Then
-					FileDelete(@ScriptDir & "\Sounds\custom.wav")
+					FileDelete(@ScriptDir & "custom.wav")
 				EndIf
 			EndIf
 			;0: No sound
@@ -445,8 +481,13 @@ While 1
 			$sUrl='https://ko-fi.com/crypto90'
 			ShellExecute($sUrl)
 			;SoundPlay(@TempDir & '\Wolcen_Socket_Roller\donate.mp3', 0)
-			SoundPlay(@ScriptDir & '\Sounds\donate.mp3', 0)
-		Case $startButtonHdn2
+			;SoundPlay(@ScriptDir & '\Sounds\donate.mp3', 0)
+			$inlineDonateSound = _donatemp3_Startup()
+			SoundPlay($inlineDonateSound, 0)
+		Case $update
+			$sUrl='https://github.com/Crypto90/Wolcen-Socket-Roller/releases'
+			ShellExecute($sUrl)
+		Case $startButton
 			$finished = False
 			;GUICtrlSetData($socketLog, '')
 			_GUICtrlRichEdit_SetSel($socketLog2, 0, -1, True)    ; select all, but hide
@@ -1147,7 +1188,9 @@ Func runMain()
 				SoundPlay($customFinishSoundPath, 0)
 			ElseIf $finishSoundToPlay > 0 Then
 				;SoundPlay(@TempDir & '\Wolcen_Socket_Roller\finished_' & $finishSoundToPlay & '.mp3', 0)
-				SoundPlay(@ScriptDir & '\Sounds\finished_' & $finishSoundToPlay & '.mp3', 0)
+				;SoundPlay(@ScriptDir & '\Sounds\finished_' & $finishSoundToPlay & '.mp3', 0)
+				$inlineSound =  Call("_finished_" & $finishSoundToPlay & "mp3_Startup")
+				SoundPlay($inlineSound, 0)
 			EndIf
 			
 			$timestamp = @HOUR & ":" & @MIN & ":" & @SEC

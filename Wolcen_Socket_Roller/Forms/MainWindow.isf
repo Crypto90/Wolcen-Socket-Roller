@@ -7,11 +7,13 @@
 #include <GuiRichEdit.au3>
 #include <ComboConstants.au3>
 
-If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')
+#AutoIt3Wrapper_Res_HiDpi=Y
+
+;If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')
 ;images
-FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)
-FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)
-FileInstall('Images\background_v3.jpg', @TempDir & '\Wolcen_Socket_Roller\background_v3.jpg', 1)
+;FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)
+;FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)
+;FileInstall('Images\background_v3.jpg', @TempDir & '\Wolcen_Socket_Roller\background_v3.jpg', 1)
 ;sounds
 ;FileInstall('Sounds\donate.mp3', @TempDir & '\Wolcen_Socket_Roller\donate.mp3', 1)
 ;FileInstall('Sounds\finished_1.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_1.mp3', 1);Zelda small item
@@ -27,8 +29,13 @@ $MainWindow = GUICreate("Wolcen Socket Roller by Crypto90",880,430,-1,-1,-1,-1)
 $MainWindow_BGimage = GUICtrlCreatePic(@scriptdir&"\"&"Images\background_v3.jpg",0,0,880,430,$WS_CLIPSIBLINGS)
 GUICtrlSetState(-1,$GUI_DISABLE)
 GUICtrlSetResizing(-1,102)
+#AutoIt3Wrapper_Res_HiDpi=Y
 ;background image
-$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v3.jpg',0,0,880,430,$WS_CLIPSIBLINGS)
+;$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v3.jpg',0,0,880,430,$WS_CLIPSIBLINGS)
+#include "..\Images\background_v3.jpg.au3"
+$dynBg =  _background_v3jpg_Startup()
+$MainWindow_BGimage = GUICtrlCreatePic($dynBg,0,0,880,430,$WS_CLIPSIBLINGS)
+_background_v3jpg_Shutdown($dynBg)
 GUICtrlCreateLabel("Wolcen Socket Roller",35,20,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
@@ -58,7 +65,7 @@ GUICtrlCreateLabel("Socket 3:",37,196,87,21,-1,-1)
 GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$startButtonHdn2 = GUICtrlCreatePic("",36,330,211,35,-1,-1)
+$startButton = GUICtrlCreatePic("",36,330,211,35,-1,-1)
 GUICtrlCreateLabel("Socket log:",293,20,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
@@ -115,8 +122,8 @@ exstyle=-1
 bgcolour=0xF0F0F0
 handle=$MainWindow
 parent=
-code=;background image[BREAK]$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v3.jpg',0,0,880,430,$WS_CLIPSIBLINGS)
-codebeforegui=If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')[BREAK];images[BREAK]FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)[BREAK]FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)[BREAK]FileInstall('Images\background_v3.jpg', @TempDir & '\Wolcen_Socket_Roller\background_v3.jpg', 1)[BREAK];sounds[BREAK];FileInstall('Sounds\donate.mp3', @TempDir & '\Wolcen_Socket_Roller\donate.mp3', 1)[BREAK];FileInstall('Sounds\finished_1.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_1.mp3', 1);Zelda small item[BREAK];FileInstall('Sounds\finished_2.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_2.mp3', 1);Zelda item[BREAK];FileInstall('Sounds\finished_3.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_3.mp3', 1);Zelda secret[BREAK];FileInstall('Sounds\finished_4.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_4.mp3', 1);Zelda heart container[BREAK];FileInstall('Sounds\finished_5.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_5.mp3', 1);Zelda spirit orb[BREAK];FileInstall('Sounds\finished_6.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_6.mp3', 1);Zelda hey listen[BREAK];FileInstall('Sounds\finished_7.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_7.mp3', 1);air horn[BREAK];FileInstall('Sounds\finished_8.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_8.mp3', 1);fairy tail wooow[BREAK]
+code=#AutoIt3Wrapper_Res_HiDpi=Y[BREAK];background image[BREAK];$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v3.jpg',0,0,880,430,$WS_CLIPSIBLINGS)[BREAK]#include "..\Images\background_v3.jpg.au3"[BREAK]$dynBg =  _background_v3jpg_Startup()[BREAK]$MainWindow_BGimage = GUICtrlCreatePic($dynBg,0,0,880,430,$WS_CLIPSIBLINGS)[BREAK]_background_v3jpg_Shutdown($dynBg)[BREAK]
+codebeforegui=#AutoIt3Wrapper_Res_HiDpi=Y[BREAK][BREAK];If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')[BREAK];images[BREAK];FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)[BREAK];FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)[BREAK];FileInstall('Images\background_v3.jpg', @TempDir & '\Wolcen_Socket_Roller\background_v3.jpg', 1)[BREAK];sounds[BREAK];FileInstall('Sounds\donate.mp3', @TempDir & '\Wolcen_Socket_Roller\donate.mp3', 1)[BREAK];FileInstall('Sounds\finished_1.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_1.mp3', 1);Zelda small item[BREAK];FileInstall('Sounds\finished_2.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_2.mp3', 1);Zelda item[BREAK];FileInstall('Sounds\finished_3.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_3.mp3', 1);Zelda secret[BREAK];FileInstall('Sounds\finished_4.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_4.mp3', 1);Zelda heart container[BREAK];FileInstall('Sounds\finished_5.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_5.mp3', 1);Zelda spirit orb[BREAK];FileInstall('Sounds\finished_6.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_6.mp3', 1);Zelda hey listen[BREAK];FileInstall('Sounds\finished_7.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_7.mp3', 1);air horn[BREAK];FileInstall('Sounds\finished_8.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_8.mp3', 1);fairy tail wooow
 xpos=-1
 ypos=-1
 center_gui=true
@@ -139,7 +146,7 @@ gui_event_resized=
 gui_event_dropped=
 defaultfont=MS Sans Serif
 defaultfontsize=8
-[0x000330AC]
+[0x00062838]
 type=label
 handle=419
 locked=0
@@ -168,7 +175,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000330AE]
+[0x00062836]
 type=label
 handle=420
 locked=0
@@ -197,7 +204,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00033076]
+[0x00072934]
 type=combo
 handle=421
 locked=0
@@ -226,7 +233,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00033062]
+[0x00062922]
 type=label
 handle=422
 locked=0
@@ -255,7 +262,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00033272]
+[0x00082932]
 type=combo
 handle=423
 locked=0
@@ -284,7 +291,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=6
-[0x0003326E]
+[0x00062920]
 type=label
 handle=424
 locked=0
@@ -313,7 +320,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=7
-[0x00033066]
+[0x00062840]
 type=combo
 handle=425
 locked=0
@@ -342,7 +349,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=8
-[0x0003306C]
+[0x000627EC]
 type=label
 handle=426
 locked=0
@@ -371,7 +378,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=9
-[0x00033072]
+[0x000627FA]
 type=label
 handle=427
 locked=0
@@ -400,7 +407,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00033074]
+[0x000627FC]
 type=label
 handle=428
 locked=0
@@ -429,7 +436,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=11
-[0x00033060]
+[0x000627F2]
 type=image
 handle=429
 locked=0
@@ -446,7 +453,7 @@ fontattribute=0
 tooltip=
 bgimage=
 textcolour=0xffffff
-id=$startButtonHdn2
+id=$startButton
 text=Start
 state=$GUI_SHOW+$GUI_ENABLE
 style=
@@ -458,7 +465,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x0003327E]
+[0x000626D6]
 type=image
 handle=430
 locked=0
@@ -487,7 +494,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=12
-[0x00033120]
+[0x0006282E]
 type=edit
 handle=431
 locked=0
@@ -516,7 +523,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00033294]
+[0x00062862]
 type=label
 handle=432
 locked=0
@@ -545,7 +552,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=14
-[0x0003310E]
+[0x000627E6]
 type=input
 handle=433
 locked=0
@@ -574,7 +581,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00033290]
+[0x000627F6]
 type=label
 handle=434
 locked=0
@@ -603,7 +610,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=16
-[0x000330DE]
+[0x0008283C]
 type=input
 handle=435
 locked=0
@@ -632,7 +639,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=17
-[0x000330E6]
+[0x000B26E4]
 type=label
 handle=436
 locked=0
@@ -661,7 +668,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=18
-[0x000330EA]
+[0x00062834]
 type=label
 handle=437
 locked=0
@@ -690,7 +697,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x0003327C]
+[0x0006284C]
 type=combo
 handle=438
 locked=0
@@ -719,7 +726,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000330EE]
+[0x0008279A]
 type=label
 handle=439
 locked=0
@@ -748,7 +755,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=22
-[0x00142A9C]
+[0x006C0BB0]
 type=richedit
 handle=440
 locked=0
