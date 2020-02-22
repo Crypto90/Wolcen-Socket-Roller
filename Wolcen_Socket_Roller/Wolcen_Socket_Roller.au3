@@ -239,6 +239,7 @@ EndFunc
 
 $finished = False
 $finishSoundToPlay = 1
+$customFinishSoundPath =  ''
 ;sleep interval in milliseconds how long to wait after reroll got clicked
 $sleepAfterClickRollValue =  200
 
@@ -332,7 +333,19 @@ _GUICtrlComboBox_SetCurSel($sock2, 0)
 _GUICtrlComboBox_SetCurSel($sock3, 0)
 
 ;auto select first finish sound
-_GUICtrlComboBox_SetCurSel($finishSound, 1)
+$customFinishSoundPathCheckExistMp3 =  FileExists(@ScriptDir & "\Sounds\custom.mp3")
+$customFinishSoundPathCheckExistWav =  FileExists(@ScriptDir & "\Sounds\custom.wav")
+If $customFinishSoundPathCheckExistMp3 Then
+	_GUICtrlComboBox_SetCurSel($finishSound, 9)
+	$customFinishSoundPath = @ScriptDir & "\Sounds\custom.mp3"
+ElseIf $customFinishSoundPathCheckExistWav Then
+	_GUICtrlComboBox_SetCurSel($finishSound, 9)
+	$customFinishSoundPath = @ScriptDir & "\Sounds\custom.wav"
+Else 
+	_GUICtrlComboBox_SetCurSel($finishSound, 1)
+EndIf
+
+
 
 
 ;$socketLogOld = GUICtrlCreateEdit("",293,42,433,306,BitOR($WS_VSCROLL, $ES_AUTOVSCROLL, $ES_READONLY),-1)
@@ -397,8 +410,26 @@ While 1
 			$sleepAfterClickRollValue = Int(GUICtrlRead($sleepAfterClickRoll))
 		Case $finishSound
 			$finishSoundToPlay = _GUICtrlComboBox_GetCurSel ( $finishSound )
-			If $finishSoundToPlay > 0 Then
-				SoundPlay(@TempDir & '\Wolcen_Socket_Roller\finished_' & $finishSoundToPlay & '.mp3', 0)
+			If $finishSoundToPlay == 9 Then 
+				$sFileOpenDialog = FileOpenDialog("Select a custom finish sound file. Choose a mp3 or wav file.", @WindowsDir & "\", "Audio (*.mp3;*.wav)", $FD_FILEMUSTEXIST)
+				If Not @error Then
+					$ext = stringRight($sFileOpenDialog, 4)
+					FileCopy($sFileOpenDialog, @ScriptDir & "\Sounds\custom" & $ext, $FC_OVERWRITE)
+					$customFinishSoundPath =  @ScriptDir & "\Sounds\custom" & $ext
+					SoundPlay($customFinishSoundPath, 0)
+				EndIf
+				FileChangeDir(@ScriptDir)
+			ElseIf $finishSoundToPlay > 0 Then
+				;SoundPlay(@TempDir & '\Wolcen_Socket_Roller\finished_' & $finishSoundToPlay & '.mp3', 0)
+				SoundPlay(@ScriptDir & '\Sounds\finished_' & $finishSoundToPlay & '.mp3', 0)
+				;check if a custom file exist, if yes delete it
+				$customFinishSoundPathCheckExistMp3 =  FileExists(@ScriptDir & "\Sounds\custom.mp3")
+				$customFinishSoundPathCheckExistWav =  FileExists(@ScriptDir & "\Sounds\custom.wav")
+				If $customFinishSoundPathCheckExistMp3 Then
+					FileDelete(@ScriptDir & "\Sounds\custom.mp3")
+				ElseIf $customFinishSoundPathCheckExistWav Then
+					FileDelete(@ScriptDir & "\Sounds\custom.wav")
+				EndIf
 			EndIf
 			;0: No sound
 			;1: Zelda small item
@@ -409,11 +440,12 @@ While 1
 			;6: Zelda hey listen
 			;7: Air horn
 			;8: FairyTail wow
-
+			;9: custom mp3/wav
 		Case $coffee
 			$sUrl='https://ko-fi.com/crypto90'
 			ShellExecute($sUrl)
-			SoundPlay(@TempDir & '\Wolcen_Socket_Roller\donate.mp3', 0)
+			;SoundPlay(@TempDir & '\Wolcen_Socket_Roller\donate.mp3', 0)
+			SoundPlay(@ScriptDir & '\Sounds\donate.mp3', 0)
 		Case $startButtonHdn2
 			$finished = False
 			;GUICtrlSetData($socketLog, '')
@@ -1111,8 +1143,11 @@ Func runMain()
 			;found a searched combination
 			$finished = True
 			
-			If $finishSoundToPlay > 0 Then
-				SoundPlay(@TempDir & '\Wolcen_Socket_Roller\finished_' & $finishSoundToPlay & '.mp3', 0)
+			If $finishSoundToPlay == 9 Then
+				SoundPlay($customFinishSoundPath, 0)
+			ElseIf $finishSoundToPlay > 0 Then
+				;SoundPlay(@TempDir & '\Wolcen_Socket_Roller\finished_' & $finishSoundToPlay & '.mp3', 0)
+				SoundPlay(@ScriptDir & '\Sounds\finished_' & $finishSoundToPlay & '.mp3', 0)
 			EndIf
 			
 			$timestamp = @HOUR & ":" & @MIN & ":" & @SEC

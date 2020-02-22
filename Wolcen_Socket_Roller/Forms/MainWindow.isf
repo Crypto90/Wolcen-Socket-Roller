@@ -13,15 +13,15 @@ FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_
 FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)
 FileInstall('Images\background_v3.jpg', @TempDir & '\Wolcen_Socket_Roller\background_v3.jpg', 1)
 ;sounds
-FileInstall('Sounds\donate.mp3', @TempDir & '\Wolcen_Socket_Roller\donate.mp3', 1)
-FileInstall('Sounds\finished_1.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_1.mp3', 1);Zelda small item
-FileInstall('Sounds\finished_2.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_2.mp3', 1);Zelda item
-FileInstall('Sounds\finished_3.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_3.mp3', 1);Zelda secret
-FileInstall('Sounds\finished_4.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_4.mp3', 1);Zelda heart container
-FileInstall('Sounds\finished_5.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_5.mp3', 1);Zelda spirit orb
-FileInstall('Sounds\finished_6.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_6.mp3', 1);Zelda hey listen
-FileInstall('Sounds\finished_7.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_7.mp3', 1);air horn
-FileInstall('Sounds\finished_8.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_8.mp3', 1);fairy tail wooow
+;FileInstall('Sounds\donate.mp3', @TempDir & '\Wolcen_Socket_Roller\donate.mp3', 1)
+;FileInstall('Sounds\finished_1.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_1.mp3', 1);Zelda small item
+;FileInstall('Sounds\finished_2.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_2.mp3', 1);Zelda item
+;FileInstall('Sounds\finished_3.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_3.mp3', 1);Zelda secret
+;FileInstall('Sounds\finished_4.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_4.mp3', 1);Zelda heart container
+;FileInstall('Sounds\finished_5.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_5.mp3', 1);Zelda spirit orb
+;FileInstall('Sounds\finished_6.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_6.mp3', 1);Zelda hey listen
+;FileInstall('Sounds\finished_7.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_7.mp3', 1);air horn
+;FileInstall('Sounds\finished_8.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_8.mp3', 1);fairy tail wooow
 
 $MainWindow = GUICreate("Wolcen Socket Roller by Crypto90",880,430,-1,-1,-1,-1)
 $MainWindow_BGimage = GUICtrlCreatePic(@scriptdir&"\"&"Images\background_v3.jpg",0,0,880,430,$WS_CLIPSIBLINGS)
@@ -63,7 +63,7 @@ GUICtrlCreateLabel("Socket log:",293,20,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$currentVersion = GUICtrlCreateLabel("v1.9.2",36,52,51,12,-1,-1)
+$currentVersion = GUICtrlCreateLabel("v1.9.3",36,52,51,12,-1,$WS_EX_TRANSPARENT)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
 $coffee = GUICtrlCreatePic("",36,371,211,35,-1,-1)
@@ -86,16 +86,15 @@ $sleepAfterClickRoll = GUICtrlCreateInput("200",209,277,39,17,$ES_NUMBER,$WS_EX_
 GUICtrlCreateLabel("Do not make this too fast! The Game needs some time to redraw the sockets.",40,296,203,27,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$update = GUICtrlCreateLabel("A newer version is available!",572,14,138,15,-1,-1)
+$update = GUICtrlCreateLabel("A newer version is available!",720,4,138,15,-1,$WS_EX_TRANSPARENT)
 GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
 GUICtrlSetColor(-1,"0x00FF00")
 GUICtrlSetBkColor(-1,"-2")
-$socketLog2 = _GUICtrlRichEdit_Create($MainWindow,"",293,52,561,363,BitOr($ES_READONLY,$ES_MULTILINE,$WS_VSCROLL),$WS_EX_TRANSPARENT)
-GUICtrlSetColor(-1,"0xF2EEDC")
-GUICtrlSetBkColor(-1,"0x000000")
 $finishSound = GUICtrlCreateCombo("",704,24,150,21,$CBS_DROPDOWNLIST,-1)
-GUICtrlSetData(-1,"No sound|Zelda small item|Zelda item|Zelda secret|Zelda heart container|Zelda spirit orb|Zelda hey listen|Air horn|FairyTail wow|")
+GUICtrlSetData(-1,"No sound|Zelda small item|Zelda item|Zelda secret|Zelda heart container|Zelda spirit orb|Zelda hey listen|Air horn|FairyTail wow|Custom mp3/wav")
 GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
+$socketLog2 = _GUICtrlRichEdit_Create($MainWindow,"",293,52,561,365,BitOr($ES_READONLY,$ES_MULTILINE,$WS_VSCROLL),$WS_EX_TRANSPARENT)
+GUICtrlSetBkColor(-1,"0x000000")
 GUICtrlCreateLabel("Finish sound:",592,24,109,21,-1,-1)
 GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
@@ -117,7 +116,7 @@ bgcolour=0xF0F0F0
 handle=$MainWindow
 parent=
 code=;background image[BREAK]$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v3.jpg',0,0,880,430,$WS_CLIPSIBLINGS)
-codebeforegui=If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')[BREAK];images[BREAK]FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)[BREAK]FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)[BREAK]FileInstall('Images\background_v3.jpg', @TempDir & '\Wolcen_Socket_Roller\background_v3.jpg', 1)[BREAK];sounds[BREAK]FileInstall('Sounds\donate.mp3', @TempDir & '\Wolcen_Socket_Roller\donate.mp3', 1)[BREAK]FileInstall('Sounds\finished_1.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_1.mp3', 1);Zelda small item[BREAK]FileInstall('Sounds\finished_2.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_2.mp3', 1);Zelda item[BREAK]FileInstall('Sounds\finished_3.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_3.mp3', 1);Zelda secret[BREAK]FileInstall('Sounds\finished_4.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_4.mp3', 1);Zelda heart container[BREAK]FileInstall('Sounds\finished_5.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_5.mp3', 1);Zelda spirit orb[BREAK]FileInstall('Sounds\finished_6.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_6.mp3', 1);Zelda hey listen[BREAK]FileInstall('Sounds\finished_7.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_7.mp3', 1);air horn[BREAK]FileInstall('Sounds\finished_8.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_8.mp3', 1);fairy tail wooow[BREAK]
+codebeforegui=If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')[BREAK];images[BREAK]FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)[BREAK]FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)[BREAK]FileInstall('Images\background_v3.jpg', @TempDir & '\Wolcen_Socket_Roller\background_v3.jpg', 1)[BREAK];sounds[BREAK];FileInstall('Sounds\donate.mp3', @TempDir & '\Wolcen_Socket_Roller\donate.mp3', 1)[BREAK];FileInstall('Sounds\finished_1.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_1.mp3', 1);Zelda small item[BREAK];FileInstall('Sounds\finished_2.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_2.mp3', 1);Zelda item[BREAK];FileInstall('Sounds\finished_3.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_3.mp3', 1);Zelda secret[BREAK];FileInstall('Sounds\finished_4.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_4.mp3', 1);Zelda heart container[BREAK];FileInstall('Sounds\finished_5.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_5.mp3', 1);Zelda spirit orb[BREAK];FileInstall('Sounds\finished_6.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_6.mp3', 1);Zelda hey listen[BREAK];FileInstall('Sounds\finished_7.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_7.mp3', 1);air horn[BREAK];FileInstall('Sounds\finished_8.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_8.mp3', 1);fairy tail wooow[BREAK]
 xpos=-1
 ypos=-1
 center_gui=true
@@ -140,7 +139,7 @@ gui_event_resized=
 gui_event_dropped=
 defaultfont=MS Sans Serif
 defaultfontsize=8
-[0x00081F0E]
+[0x000330AC]
 type=label
 handle=419
 locked=0
@@ -169,7 +168,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000A201C]
+[0x000330AE]
 type=label
 handle=420
 locked=0
@@ -198,7 +197,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00081EF4]
+[0x00033076]
 type=combo
 handle=421
 locked=0
@@ -227,7 +226,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00081F02]
+[0x00033062]
 type=label
 handle=422
 locked=0
@@ -256,7 +255,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00081F00]
+[0x00033272]
 type=combo
 handle=423
 locked=0
@@ -285,7 +284,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=6
-[0x00081F0C]
+[0x0003326E]
 type=label
 handle=424
 locked=0
@@ -314,7 +313,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=7
-[0x00081F0A]
+[0x00033066]
 type=combo
 handle=425
 locked=0
@@ -343,7 +342,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=8
-[0x00091F1A]
+[0x0003306C]
 type=label
 handle=426
 locked=0
@@ -372,7 +371,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=9
-[0x00081EF8]
+[0x00033072]
 type=label
 handle=427
 locked=0
@@ -390,10 +389,10 @@ tooltip=
 bgimage=
 textcolour=0xF2EEDC
 id=$currentVersion
-text=v1.9.2
+text=v1.9.3
 state=$GUI_SHOW+$GUI_ENABLE
 style=
-exstyle=
+exstyle=$WS_EX_TRANSPARENT
 bgcolour=-2
 code=
 order=11
@@ -401,7 +400,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00202078]
+[0x00033074]
 type=label
 handle=428
 locked=0
@@ -430,7 +429,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=11
-[0x000B03EC]
+[0x00033060]
 type=image
 handle=429
 locked=0
@@ -459,7 +458,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00070550]
+[0x0003327E]
 type=image
 handle=430
 locked=0
@@ -488,7 +487,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=12
-[0x00070556]
+[0x00033120]
 type=edit
 handle=431
 locked=0
@@ -517,7 +516,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00070554]
+[0x00033294]
 type=label
 handle=432
 locked=0
@@ -546,7 +545,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=14
-[0x00070558]
+[0x0003310E]
 type=input
 handle=433
 locked=0
@@ -575,7 +574,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x0009079A]
+[0x00033290]
 type=label
 handle=434
 locked=0
@@ -604,7 +603,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=16
-[0x00070738]
+[0x000330DE]
 type=input
 handle=435
 locked=0
@@ -633,7 +632,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=17
-[0x00070740]
+[0x000330E6]
 type=label
 handle=436
 locked=0
@@ -662,13 +661,13 @@ iconindex=
 iconlarge=0
 textmode=text
 order=18
-[0x00070744]
+[0x000330EA]
 type=label
 handle=437
 locked=0
 resize=
-x=572
-y=14
+x=720
+y=4
 width=138
 height=15
 func=
@@ -683,7 +682,7 @@ id=$update
 text=A newer version is available!
 state=$GUI_HIDE+$GUI_ENABLE
 style=
-exstyle=
+exstyle=$WS_EX_TRANSPARENT
 bgcolour=-2
 code=
 order=19
@@ -691,38 +690,9 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x000A05A0]
-type=richedit
-handle=438
-locked=0
-resize=
-x=293
-y=52
-width=561
-height=363
-func=
-font=MS Sans Serif
-fontsize=8
-fontstyle=400
-fontattribute=0
-tooltip=
-bgimage=
-textcolour=0xF2EEDC
-id=$socketLog2
-text=
-state=$GUI_SHOW+$GUI_ENABLE
-style=$ES_READONLY+$ES_MULTILINE+$WS_VSCROLL
-exstyle=$WS_EX_TRANSPARENT
-bgcolour=0x000000
-code=
-order=20
-tabpage=-1
-iconindex=
-iconlarge=0
-textmode=text
-[0x00140A2E]
+[0x0003327C]
 type=combo
-handle=447
+handle=438
 locked=0
 resize=
 x=704
@@ -738,7 +708,7 @@ tooltip=
 bgimage=
 textcolour=0x000000
 id=$finishSound
-text=No sound|Zelda small item|Zelda item|Zelda secret|Zelda heart container|Zelda spirit orb|Zelda hey listen|Air horn|FairyTail wow|
+text=No sound|Zelda small item|Zelda item|Zelda secret|Zelda heart container|Zelda spirit orb|Zelda hey listen|Air horn|FairyTail wow|Custom mp3/wav
 state=$GUI_SHOW+$GUI_ENABLE
 style=$CBS_DROPDOWNLIST
 exstyle=
@@ -749,9 +719,9 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00110A6C]
+[0x000330EE]
 type=label
-handle=448
+handle=439
 locked=0
 resize=
 x=592
@@ -778,4 +748,33 @@ iconindex=
 iconlarge=0
 textmode=text
 order=22
+[0x00142A9C]
+type=richedit
+handle=440
+locked=0
+resize=
+x=293
+y=52
+width=561
+height=365
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$socketLog2
+text=
+state=$GUI_SHOW+$GUI_ENABLE
+style=$ES_READONLY+$ES_MULTILINE+$WS_VSCROLL
+exstyle=$WS_EX_TRANSPARENT
+bgcolour=0x000000
+code=
+order=22
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
 #ce
