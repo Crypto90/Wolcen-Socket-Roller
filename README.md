@@ -52,6 +52,13 @@ If your resolution does not work, please create in issue here on github and uplo
 <br/>
 <br/>
 
+# Powerful socket search options
+<br/>
+
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/Screenshots/socket_search_options_1.9.6.png)
+<br/>
+<br/>
+
 # Socket order
 The result order does not matter, all combinations of your wanted socket get matched.
 <br/>
