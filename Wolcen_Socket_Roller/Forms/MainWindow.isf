@@ -38,7 +38,8 @@ $MainWindow_BGimage = GUICtrlCreatePic($dynBg,0,0,880,430,$WS_CLIPSIBLINGS)
 _background_v3jpg_Shutdown($dynBg)
 
 #include <GuiRichEdit.au3>
-$socketLog2 = _GUICtrlRichEdit_Create($MainWindow,"",293,52,561,365,BitOr($ES_READONLY,$ES_MULTILINE,$WS_VSCROLL),$WS_EX_TRANSPARENT)
+;$socketLog2 = _GUICtrlRichEdit_Create($MainWindow,"",293,52,561,365,BitOr($ES_READONLY,$ES_MULTILINE,$WS_VSCROLL),$WS_EX_TRANSPARENT)
+$socketLog2 = _GUICtrlRichEdit_Create($MainWindow,"",293,52,561,345,BitOr($ES_READONLY,$ES_MULTILINE,$WS_VSCROLL),$WS_EX_TRANSPARENT)
 GUICtrlSetBkColor(-1,"0x000000")
 
 $titleTop = GUICtrlCreateLabel("Wolcen Socket Roller",35,20,233,32,-1,-1)
@@ -48,54 +49,54 @@ GUICtrlSetBkColor(-1,"-2")
 $copyright = GUICtrlCreateLabel("by Crypto90",212,52,56,18,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$sock1 = GUICtrlCreateCombo("",37,108,211,21,$CBS_DROPDOWNLIST,-1)
-GUICtrlSetData(-1,"offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+$sock1 = GUICtrlCreateCombo("",38,101,211,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlSetData(-1,"offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3|X or Y")
 GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
 GUICtrlSetBkColor(-1,"-2")
-$socket1Label = GUICtrlCreateLabel("Socket 1:",37,80,87,21,-1,-1)
+$socket1Label = GUICtrlCreateLabel("Socket 1:",38,73,87,21,-1,-1)
 GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$sock2 = GUICtrlCreateCombo("",37,167,211,21,$CBS_DROPDOWNLIST,-1)
-GUICtrlSetData(-1,"unset|any|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+$sock2 = GUICtrlCreateCombo("",38,158,211,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlSetData(-1,"unset|any|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3|X or Y")
 GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
-$socket2Label = GUICtrlCreateLabel("Socket 2:",37,140,87,21,-1,-1)
+$socket2Label = GUICtrlCreateLabel("Socket 2:",38,131,87,21,-1,-1)
 GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$sock3 = GUICtrlCreateCombo("",37,224,211,21,$CBS_DROPDOWNLIST,-1)
-GUICtrlSetData(-1,"unset|any|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+$sock3 = GUICtrlCreateCombo("",38,215,211,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlSetData(-1,"unset|any|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3|X or Y")
 GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
-$socket3Label = GUICtrlCreateLabel("Socket 3:",37,196,87,21,-1,-1)
+$socket3Label = GUICtrlCreateLabel("Socket 3:",38,187,87,21,-1,-1)
 GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$startButton = GUICtrlCreatePic("",36,330,211,35,-1,-1)
+$startButton = GUICtrlCreatePic("",36,338,211,35,-1,-1)
 $socketLogLabel = GUICtrlCreateLabel("Socket log:",293,20,233,32,-1,-1)
 GUICtrlSetFont(-1,20,400,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$currentVersion = GUICtrlCreateLabel("v1.9.5",36,52,51,12,-1,$WS_EX_TRANSPARENT)
+$currentVersion = GUICtrlCreateLabel("v1.9.6",36,52,51,12,-1,$WS_EX_TRANSPARENT)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$coffee = GUICtrlCreatePic("",36,371,211,35,-1,-1)
+$coffee = GUICtrlCreatePic("",36,379,211,35,-1,-1)
 $socketLog = GUICtrlCreateEdit("",441,6,52,30,BitOr($ES_READONLY,$WS_VSCROLL),$WS_EX_TRANSPARENT)
 GUICtrlSetState(-1,$GUI_HIDE)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"0x000000")
 GUICtrlSetLimit(-1,0x7FFFFFFF)
 GUICtrlSetLimit($socketLog,0x7FFFFFFF)
-$maxRollsLabel = GUICtrlCreateLabel("Max rolls (0 = no limit):",40,255,160,16,-1,-1)
+$maxRollsLabel = GUICtrlCreateLabel("Max rolls (0 = no limit):",40,263,160,16,-1,-1)
 GUICtrlSetFont(-1,10,700,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$maxRolls = GUICtrlCreateInput("0",209,255,39,17,$ES_NUMBER,$WS_EX_CLIENTEDGE)
-$sleepLabel = GUICtrlCreateLabel("Sleep (ms) after roll:",40,278,160,16,-1,-1)
+$maxRolls = GUICtrlCreateInput("0",209,263,39,17,$ES_NUMBER,$WS_EX_CLIENTEDGE)
+$sleepLabel = GUICtrlCreateLabel("Sleep (ms) after roll:",40,286,160,16,-1,-1)
 GUICtrlSetFont(-1,10,700,0,"MS Sans Serif")
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
-$sleepAfterClickRoll = GUICtrlCreateInput("200",209,277,39,17,$ES_NUMBER,$WS_EX_CLIENTEDGE)
-$sleepInfoLabel = GUICtrlCreateLabel("Do not make this too fast! The Game needs some time to redraw the sockets.",40,296,203,27,-1,-1)
+$sleepAfterClickRoll = GUICtrlCreateInput("200",209,285,39,17,$ES_NUMBER,$WS_EX_CLIENTEDGE)
+$sleepInfoLabel = GUICtrlCreateLabel("Do not make this too fast! The Game needs some time to redraw the sockets.",40,304,203,27,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
 $update = GUICtrlCreateLabel("A newer version is available!",720,4,138,15,-1,$WS_EX_TRANSPARENT)
@@ -105,8 +106,73 @@ GUICtrlSetBkColor(-1,"-2")
 $finishSound = GUICtrlCreateCombo("",704,24,150,21,$CBS_DROPDOWNLIST,-1)
 GUICtrlSetData(-1,"No sound|Zelda small item|Zelda item|Zelda secret|Zelda heart container|Zelda spirit orb|Zelda hey listen|Air horn|FairyTail wow|Custom mp3/wav")
 GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
+$logScreenshotsCheckbox = GUICtrlCreateCheckbox("Log screenshots",754,394,100,20,-1,-1)
+GUICtrlSetState(-1,BitOr($GUI_UNCHECKED,$GUI_SHOW,$GUI_ENABLE))
 $finishsoundLabel = GUICtrlCreateLabel("Finish sound:",592,24,109,21,-1,-1)
 GUICtrlSetFont(-1,12,700,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xF2EEDC")
+GUICtrlSetBkColor(-1,"-2")
+$sock1X = GUICtrlCreateCombo("",37,101,90,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlSetData(-1,"X|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
+GUICtrlSetBkColor(-1,"-2")
+$sock1Y = GUICtrlCreateCombo("",159,101,90,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlSetData(-1,"Y|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
+GUICtrlSetBkColor(-1,"-2")
+$sock2X = GUICtrlCreateCombo("",37,158,90,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlSetData(-1,"X|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
+GUICtrlSetBkColor(-1,"-2")
+$sock2OrLabel = GUICtrlCreateLabel("OR",133,163,21,16,-1,-1)
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetFont(-1,10,700,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xF2EEDC")
+GUICtrlSetBkColor(-1,"-2")
+$sock2Y = GUICtrlCreateCombo("",159,158,90,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlSetData(-1,"Y|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
+GUICtrlSetBkColor(-1,"-2")
+$sock2XCloseLabel = GUICtrlCreateLabel("X",256,158,17,21,-1,-1)
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetFont(-1,15,700,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xFF0000")
+GUICtrlSetBkColor(-1,"-2")
+$sock3X = GUICtrlCreateCombo("",37,215,90,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlSetData(-1,"X|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
+GUICtrlSetBkColor(-1,"-2")
+$sock3OrLabel = GUICtrlCreateLabel("OR",133,220,21,16,-1,-1)
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetFont(-1,10,700,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xF2EEDC")
+GUICtrlSetBkColor(-1,"-2")
+$sock3Y = GUICtrlCreateCombo("",159,215,90,21,$CBS_DROPDOWNLIST,-1)
+GUICtrlSetData(-1,"Y|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3")
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetFont(-1,8,700,0,"MS Sans Serif")
+GUICtrlSetBkColor(-1,"-2")
+$sock3XCloseLabel = GUICtrlCreateLabel("X",256,215,17,21,-1,-1)
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetFont(-1,15,700,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xFF0000")
+GUICtrlSetBkColor(-1,"-2")
+$sock1OrLabel = GUICtrlCreateLabel("OR",133,106,21,16,-1,-1)
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetFont(-1,10,700,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xF2EEDC")
+GUICtrlSetBkColor(-1,"-2")
+$sock1XCloseLabel = GUICtrlCreateLabel("X",256,101,17,21,-1,-1)
+GUICtrlSetState(-1,BitOr($GUI_HIDE,$GUI_ENABLE))
+GUICtrlSetFont(-1,15,700,0,"MS Sans Serif")
+GUICtrlSetColor(-1,"0xFF0000")
+GUICtrlSetBkColor(-1,"-2")
+GUICtrlCreateLabel("Different socket orders also get matched!",40,243,213,13,-1,-1)
 GUICtrlSetColor(-1,"0xF2EEDC")
 GUICtrlSetBkColor(-1,"-2")
 
@@ -125,7 +191,7 @@ exstyle=-1
 bgcolour=0xF0F0F0
 handle=$MainWindow
 parent=
-code=#AutoIt3Wrapper_Res_HiDpi=Y[BREAK];background image[BREAK];$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v3.jpg',0,0,880,430,$WS_CLIPSIBLINGS)[BREAK]#include "..\Images\background_v3.jpg.au3"[BREAK]$dynBg =  _background_v3jpg_Startup()[BREAK]$MainWindow_BGimage = GUICtrlCreatePic($dynBg,0,0,880,430,$WS_CLIPSIBLINGS)[BREAK]_background_v3jpg_Shutdown($dynBg)[BREAK][BREAK]#include <GuiRichEdit.au3>[BREAK]$socketLog2 = _GUICtrlRichEdit_Create($MainWindow,"",293,52,561,365,BitOr($ES_READONLY,$ES_MULTILINE,$WS_VSCROLL),$WS_EX_TRANSPARENT)[BREAK]GUICtrlSetBkColor(-1,"0x000000")[BREAK][BREAK]
+code=#AutoIt3Wrapper_Res_HiDpi=Y[BREAK];background image[BREAK];$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v3.jpg',0,0,880,430,$WS_CLIPSIBLINGS)[BREAK]#include "..\Images\background_v3.jpg.au3"[BREAK]$dynBg =  _background_v3jpg_Startup()[BREAK]$MainWindow_BGimage = GUICtrlCreatePic($dynBg,0,0,880,430,$WS_CLIPSIBLINGS)[BREAK]_background_v3jpg_Shutdown($dynBg)[BREAK][BREAK]#include <GuiRichEdit.au3>[BREAK];$socketLog2 = _GUICtrlRichEdit_Create($MainWindow,"",293,52,561,365,BitOr($ES_READONLY,$ES_MULTILINE,$WS_VSCROLL),$WS_EX_TRANSPARENT)[BREAK]$socketLog2 = _GUICtrlRichEdit_Create($MainWindow,"",293,52,561,345,BitOr($ES_READONLY,$ES_MULTILINE,$WS_VSCROLL),$WS_EX_TRANSPARENT)[BREAK]GUICtrlSetBkColor(-1,"0x000000")[BREAK][BREAK]
 codebeforegui=#AutoIt3Wrapper_Res_HiDpi=Y[BREAK][BREAK];If Not FileExists(@TempDir & '\Wolcen_Socket_Roller') Then DirCreate(@TempDir & '\Wolcen_Socket_Roller')[BREAK];images[BREAK];FileInstall('Images\button_start.jpg', @TempDir & '\Wolcen_Socket_Roller\button_start.jpg', 1)[BREAK];FileInstall('Images\button_donate.jpg', @TempDir & '\Wolcen_Socket_Roller\button_donate.jpg', 1)[BREAK];FileInstall('Images\background_v3.jpg', @TempDir & '\Wolcen_Socket_Roller\background_v3.jpg', 1)[BREAK];sounds[BREAK];FileInstall('Sounds\donate.mp3', @TempDir & '\Wolcen_Socket_Roller\donate.mp3', 1)[BREAK];FileInstall('Sounds\finished_1.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_1.mp3', 1);Zelda small item[BREAK];FileInstall('Sounds\finished_2.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_2.mp3', 1);Zelda item[BREAK];FileInstall('Sounds\finished_3.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_3.mp3', 1);Zelda secret[BREAK];FileInstall('Sounds\finished_4.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_4.mp3', 1);Zelda heart container[BREAK];FileInstall('Sounds\finished_5.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_5.mp3', 1);Zelda spirit orb[BREAK];FileInstall('Sounds\finished_6.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_6.mp3', 1);Zelda hey listen[BREAK];FileInstall('Sounds\finished_7.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_7.mp3', 1);air horn[BREAK];FileInstall('Sounds\finished_8.mp3', @TempDir & '\Wolcen_Socket_Roller\finished_8.mp3', 1);fairy tail wooow[BREAK][BREAK]
 xpos=-1
 ypos=-1
@@ -149,7 +215,7 @@ gui_event_resized=
 gui_event_dropped=
 defaultfont=MS Sans Serif
 defaultfontsize=8
-[0x00012146]
+[0x006222F0]
 type=label
 handle=419
 locked=0
@@ -178,7 +244,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00012148]
+[0x006422EE]
 type=label
 handle=420
 locked=0
@@ -207,13 +273,13 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x0001214A]
+[0x003F1B52]
 type=combo
 handle=421
 locked=0
 resize=
-x=37
-y=108
+x=38
+y=101
 width=211
 height=21
 func=
@@ -225,7 +291,7 @@ tooltip=
 bgimage=
 textcolour=0x000000
 id=$sock1
-text=offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+text=offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3|X or Y
 state=$GUI_SHOW+$GUI_ENABLE
 style=$CBS_DROPDOWNLIST
 exstyle=
@@ -236,13 +302,13 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x0001214E]
+[0x007D2290]
 type=label
 handle=422
 locked=0
 resize=
-x=37
-y=80
+x=38
+y=73
 width=87
 height=21
 func=
@@ -265,13 +331,13 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00012150]
+[0x002A2288]
 type=combo
 handle=423
 locked=0
 resize=
-x=37
-y=167
+x=38
+y=158
 width=211
 height=21
 func=
@@ -283,7 +349,7 @@ tooltip=
 bgimage=
 textcolour=0x000000
 id=$sock2
-text=unset|any|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+text=unset|any|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3|X or Y
 state=$GUI_SHOW+$GUI_ENABLE
 style=$CBS_DROPDOWNLIST
 exstyle=
@@ -294,13 +360,13 @@ iconindex=
 iconlarge=0
 textmode=text
 order=6
-[0x00012154]
+[0x0009216A]
 type=label
 handle=424
 locked=0
 resize=
-x=37
-y=140
+x=38
+y=131
 width=87
 height=21
 func=
@@ -323,13 +389,13 @@ iconindex=
 iconlarge=0
 textmode=text
 order=7
-[0x00012156]
+[0x00332304]
 type=combo
 handle=425
 locked=0
 resize=
-x=37
-y=224
+x=38
+y=215
 width=211
 height=21
 func=
@@ -341,7 +407,7 @@ tooltip=
 bgimage=
 textcolour=0x000000
 id=$sock3
-text=unset|any|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+text=unset|any|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3|X or Y
 state=$GUI_SHOW+$GUI_ENABLE
 style=$CBS_DROPDOWNLIST
 exstyle=
@@ -352,13 +418,13 @@ iconindex=
 iconlarge=0
 textmode=text
 order=8
-[0x0001215A]
+[0x00092174]
 type=label
 handle=426
 locked=0
 resize=
-x=37
-y=196
+x=38
+y=187
 width=87
 height=21
 func=
@@ -381,7 +447,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=9
-[0x0001215C]
+[0x00092170]
 type=label
 handle=427
 locked=0
@@ -399,7 +465,7 @@ tooltip=
 bgimage=
 textcolour=0xF2EEDC
 id=$currentVersion
-text=v1.9.5
+text=v1.9.6
 state=$GUI_SHOW+$GUI_ENABLE
 style=
 exstyle=$WS_EX_TRANSPARENT
@@ -410,7 +476,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x0001215E]
+[0x00092176]
 type=label
 handle=428
 locked=0
@@ -439,13 +505,13 @@ iconindex=
 iconlarge=0
 textmode=text
 order=11
-[0x00012160]
+[0x00092172]
 type=image
 handle=429
 locked=0
 resize=
 x=36
-y=330
+y=338
 width=211
 height=35
 func=
@@ -468,13 +534,13 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00012162]
+[0x002900F0]
 type=image
 handle=430
 locked=0
 resize=
 x=36
-y=371
+y=379
 width=211
 height=35
 func=
@@ -497,7 +563,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=12
-[0x00012164]
+[0x00102178]
 type=edit
 handle=431
 locked=0
@@ -526,13 +592,13 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00012166]
+[0x001522EC]
 type=label
 handle=432
 locked=0
 resize=
 x=40
-y=255
+y=263
 width=160
 height=16
 func=
@@ -555,13 +621,13 @@ iconindex=
 iconlarge=0
 textmode=text
 order=14
-[0x00012168]
+[0x000D22BE]
 type=input
 handle=433
 locked=0
 resize=
 x=209
-y=255
+y=263
 width=39
 height=17
 func=
@@ -584,13 +650,13 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x0001216A]
+[0x0039223E]
 type=label
 handle=434
 locked=0
 resize=
 x=40
-y=278
+y=286
 width=160
 height=16
 func=
@@ -613,13 +679,13 @@ iconindex=
 iconlarge=0
 textmode=text
 order=16
-[0x0001216C]
+[0x020C22E0]
 type=input
 handle=435
 locked=0
 resize=
 x=209
-y=277
+y=285
 width=39
 height=17
 func=
@@ -642,13 +708,13 @@ iconindex=
 iconlarge=0
 textmode=text
 order=17
-[0x0001216E]
+[0x002022B8]
 type=label
 handle=436
 locked=0
 resize=
 x=40
-y=296
+y=304
 width=203
 height=27
 func=
@@ -671,7 +737,7 @@ iconindex=
 iconlarge=0
 textmode=text
 order=18
-[0x00012170]
+[0x00351CC0]
 type=label
 handle=437
 locked=0
@@ -700,7 +766,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00012172]
+[0x00301BB6]
 type=combo
 handle=438
 locked=0
@@ -729,7 +795,7 @@ tabpage=-1
 iconindex=
 iconlarge=0
 textmode=text
-[0x00012176]
+[0x00401B54]
 type=label
 handle=439
 locked=0
@@ -758,4 +824,410 @@ iconindex=
 iconlarge=0
 textmode=text
 order=22
+[0x002E1BB8]
+type=checkbox
+handle=440
+locked=0
+resize=
+x=754
+y=394
+width=100
+height=20
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$logScreenshotsCheckbox
+text=Log screenshots
+state=$GUI_UNCHECKED+$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=0xF0F0F0
+code=
+order=22
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+[0x003B1C02]
+type=combo
+handle=441
+locked=0
+resize=
+x=37
+y=101
+width=90
+height=21
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$sock1X
+text=X|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+state=$GUI_HIDE+$GUI_ENABLE
+style=$CBS_DROPDOWNLIST
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=23
+[0x00431B6A]
+type=combo
+handle=442
+locked=0
+resize=
+x=159
+y=101
+width=90
+height=21
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$sock1Y
+text=Y|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+state=$GUI_HIDE+$GUI_ENABLE
+style=$CBS_DROPDOWNLIST
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=25
+[0x00841CD2]
+type=label
+handle=443
+locked=0
+resize=
+x=256
+y=101
+width=17
+height=21
+func=
+font=MS Sans Serif
+fontsize=15
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xFF0000
+id=$sock1XCloseLabel
+text=X
+state=$GUI_HIDE+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=34
+[0x00452184]
+type=label
+handle=444
+locked=0
+resize=
+x=133
+y=106
+width=21
+height=16
+func=
+font=MS Sans Serif
+fontsize=10
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xF2EEDC
+id=$sock1OrLabel
+text=OR
+state=$GUI_HIDE+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=34
+[0x0A4C1C12]
+type=combo
+handle=445
+locked=0
+resize=
+x=37
+y=158
+width=90
+height=21
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$sock2X
+text=X|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+state=$GUI_HIDE+$GUI_ENABLE
+style=$CBS_DROPDOWNLIST
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=27
+[0x002F02E2]
+type=label
+handle=446
+locked=0
+resize=
+x=133
+y=163
+width=21
+height=16
+func=
+font=MS Sans Serif
+fontsize=10
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xF2EEDC
+id=$sock2OrLabel
+text=OR
+state=$GUI_HIDE+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=28
+[0x00391CBE]
+type=combo
+handle=447
+locked=0
+resize=
+x=159
+y=158
+width=90
+height=21
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$sock2Y
+text=Y|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+state=$GUI_HIDE+$GUI_ENABLE
+style=$CBS_DROPDOWNLIST
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=29
+[0x008B203E]
+type=label
+handle=448
+locked=0
+resize=
+x=256
+y=158
+width=17
+height=21
+func=
+font=MS Sans Serif
+fontsize=15
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xFF0000
+id=$sock2XCloseLabel
+text=X
+state=$GUI_HIDE+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=30
+[0x002D075C]
+type=combo
+handle=449
+locked=0
+resize=
+x=37
+y=215
+width=90
+height=21
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$sock3X
+text=X|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+state=$GUI_HIDE+$GUI_ENABLE
+style=$CBS_DROPDOWNLIST
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=31
+[0x004B1B3E]
+type=label
+handle=450
+locked=0
+resize=
+x=133
+y=220
+width=21
+height=16
+func=
+font=MS Sans Serif
+fontsize=10
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xF2EEDC
+id=$sock3OrLabel
+text=OR
+state=$GUI_HIDE+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=32
+[0x00481C52]
+type=combo
+handle=451
+locked=0
+resize=
+x=159
+y=215
+width=90
+height=21
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0x000000
+id=$sock3Y
+text=Y|offensive1|offensive2|offensive3|defensive1|defensive2|defensive3|support1|support2|support3
+state=$GUI_HIDE+$GUI_ENABLE
+style=$CBS_DROPDOWNLIST
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=33
+[0x0066229A]
+type=label
+handle=452
+locked=0
+resize=
+x=256
+y=215
+width=17
+height=21
+func=
+font=MS Sans Serif
+fontsize=15
+fontstyle=700
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xFF0000
+id=$sock3XCloseLabel
+text=X
+state=$GUI_HIDE+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=34
+[0x00680154]
+type=label
+handle=453
+locked=0
+resize=
+x=40
+y=243
+width=213
+height=13
+func=
+font=MS Sans Serif
+fontsize=8
+fontstyle=400
+fontattribute=0
+tooltip=
+bgimage=
+textcolour=0xF2EEDC
+id=
+text=Different socket orders also get matched!
+state=$GUI_SHOW+$GUI_ENABLE
+style=
+exstyle=
+bgcolour=-2
+code=
+tabpage=-1
+iconindex=
+iconlarge=0
+textmode=text
+order=35
 #ce
