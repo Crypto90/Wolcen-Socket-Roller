@@ -55,7 +55,7 @@ If your resolution does not work, please create in issue here on github and uplo
 # Powerful socket search options
 <br/>
 
-![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/Screenshots/socket_search_options_1.9.6.png)
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/Screenshots/socket_search_options_v1.9.6.png)
 <br/>
 <br/>
 
