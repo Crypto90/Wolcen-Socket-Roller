@@ -22,7 +22,7 @@
 #include <WinAPIHObj.au3>
 #include <WinAPISysWin.au3>
 ;fix windows coordinate line drawing mess
-;#include <WinAPIConv.au3>
+;#include <WinAPIConv.au3>	
 
 
 ;log scanning areas as screenshot
@@ -52,6 +52,19 @@
 AutoItSetOption("MouseCoordMode",0)
 
 
+
+Local Const $sFilePath = @TempDir & "\Wolcen_Socket_Roller"
+; If the directory exists the don't continue.
+If Not FileExists($sFilePath) Then
+	; Create the directory.
+	DirCreate($sFilePath)
+EndIf
+; Open the temporary directory.
+;ShellExecute(@TempDir)
+
+
+
+
 ;EMBED IMAGES INTO EXE
 ;background image
 ;$MainWindow_BGimage = GUICtrlCreatePic(@TempDir & '\Wolcen_Socket_Roller\background_v3.jpg',0,0,880,430,$WS_CLIPSIBLINGS)
@@ -63,7 +76,6 @@ _background_v3jpg_Shutdown($dynBg)
 ;GUICtrlSetImage($startButton, @TempDir & '\Wolcen_Socket_Roller\button_start.jpg')
 $dynImageStart = _button_startjpg_Startup()
 GUICtrlSetImage($startButton, $dynImageStart)
-FileCopy($dynImageStart, "D:\debug.jpg", $FC_OVERWRITE)
 _button_startjpg_Shutdown($dynImageStart)
 
 
@@ -76,7 +88,7 @@ GUICtrlSetImage($coffee, $dynImageDonate)
 _button_donatejpg_Shutdown($dynImageDonate)
 
 
-
+$rollCounter =  0
 
 $currentver = StringStripWS(GUICtrlRead($currentVersion), $STR_STRIPLEADING + $STR_STRIPTRAILING)
 ;check for update
@@ -92,6 +104,28 @@ EndIf
 
 
 ;additional functions start
+
+
+
+
+Func _GDIPlus_GraphicsGetDPIRatio($iDPIDef = 96)
+    _GDIPlus_Startup()
+    Local $hGfx = _GDIPlus_GraphicsCreateFromHWND(0)
+    If @error Then Return SetError(1, @extended, 0)
+    Local $aResult
+    #forcedef $__g_hGDIPDll, $ghGDIPDll
+
+    $aResult = DllCall($__g_hGDIPDll, "int", "GdipGetDpiX", "handle", $hGfx, "float*", 0)
+
+    If @error Then Return SetError(2, @extended, 0)
+    Local $iDPI = $aResult[2]
+    Local $aresults[2] = [$iDPIDef / $iDPI, $iDPI / $iDPIDef]
+    _GDIPlus_GraphicsDispose($hGfx)
+    _GDIPlus_Shutdown()
+    Return $aresults
+EndFunc   ;==>_GDIPlus_GraphicsGetDPIRatio
+
+
 
 Func _GetURLImage($sURL, $sDirectory = @ScriptDir)
     Local $hDownload, $sFile
@@ -152,6 +186,7 @@ EndFunc   ;==>_GetURLImage
 ;       1 = Error with color
 ;
 Func _GUICtrlRichEdit_AppendTextEx($RichEdit, $text, $font="Arial", $color="000000", $size=12, $bold=0, $italic=0, $strike=0, $underline=0)
+  $size =  $size * _GDIPlus_GraphicsGetDPIRatio()[0]
   Local $command = "{\rtf1\ansi"
   Local $r, $g, $b, $ul[9] = ["8", '\ul', '\uldb', '\ulth', '\ulw', '\ulwave', '\uld', '\uldash', '\uldashd']
 
@@ -198,7 +233,7 @@ Func _GUICtrlRichEdit_InsertBitmap($hWnd, $sFile, $sFormatFunctions = "\", $sBit
     ;_GDIPlus_GraphicsDrawImageRect($hGfx, $hImage, 0, 0, $aDim[0], $aDim[1])
     _GDIPlus_GraphicsDrawImageRect($hGfx, $hImage, 0, 0, ($aDim[0] /  2), ($aDim[1] / 2))
     _GDIPlus_GraphicsDispose($hGfx)
-    Local $binStream = _GDIPlus_StreamImage2BinaryString($hBitmap, "BMP", 100)
+    Local $binStream = _GDIPlus_StreamImage2BinaryString($hBitmap, "BMP", 100,  False,  @TempDir & "\Wolcen_Socket_Roller\Converted_" & $rollCounter & ".jpg")
     If @error Then
         _GDIPlus_ImageDispose($hImage)
         _GDIPlus_ImageDispose($hBitmap)
@@ -409,8 +444,35 @@ Func stopLoop()
 EndFunc   ;==>stops the loop if running
 
 
-
-
+Func updateGuiDPISizes()
+	;resize window
+	;$guiPos =  WinGetPos($MainWindow)
+	;_WinAPI_SetWindowPos($MainWindow, $HWND_TOP, 0, 0, 0, 0)
+	
+	
+	;set font correct dpi sizes if scaling is > 100%
+	GUISetFont(8 * _GDIPlus_GraphicsGetDPIRatio()[0], 400, 0, "MS Sans Serif")
+	GUICtrlSetFont($titleTop, 20 * _GDIPlus_GraphicsGetDPIRatio()[0],  400, 0, "MS Sans Serif")
+	GUICtrlSetFont($socketLogLabel, 20 * _GDIPlus_GraphicsGetDPIRatio()[0],  400, 0, "MS Sans Serif")
+	GUICtrlSetFont($currentVersion, 8 * _GDIPlus_GraphicsGetDPIRatio()[0], 400, 0, "MS Sans Serif")
+	GUICtrlSetFont($copyright, 8 * _GDIPlus_GraphicsGetDPIRatio()[0], 400, 0, "MS Sans Serif")
+	GUICtrlSetFont($socket1Label, 12 * _GDIPlus_GraphicsGetDPIRatio()[0], 700, 0, "MS Sans Serif")
+	GUICtrlSetFont($socket2Label, 12 * _GDIPlus_GraphicsGetDPIRatio()[0], 700, 0, "MS Sans Serif")
+	GUICtrlSetFont($socket3Label, 12 * _GDIPlus_GraphicsGetDPIRatio()[0], 700, 0, "MS Sans Serif")
+	GUICtrlSetFont($maxRollsLabel, 10 * _GDIPlus_GraphicsGetDPIRatio()[0], 700, 0, "MS Sans Serif")
+	GUICtrlSetFont($sleepLabel, 10 * _GDIPlus_GraphicsGetDPIRatio()[0], 700, 0, "MS Sans Serif")
+	GUICtrlSetFont($sleepInfoLabel, 8 * _GDIPlus_GraphicsGetDPIRatio()[0], 400, 0, "MS Sans Serif")
+	GUICtrlSetFont($socketLog2, 8 * _GDIPlus_GraphicsGetDPIRatio()[0], 400, 0, "MS Sans Serif")
+	GUICtrlSetFont($sock1, 8 * _GDIPlus_GraphicsGetDPIRatio()[0], 700, 0, "MS Sans Serif")
+	GUICtrlSetFont($sock2, 8 * _GDIPlus_GraphicsGetDPIRatio()[0], 700, 0, "MS Sans Serif")
+	GUICtrlSetFont($sock3, 8 * _GDIPlus_GraphicsGetDPIRatio()[0], 700, 0, "MS Sans Serif")
+	GUICtrlSetFont($finishSound, 8 * _GDIPlus_GraphicsGetDPIRatio()[0], 700, 0, "MS Sans Serif")
+	GUICtrlSetFont($maxRolls, 8 * _GDIPlus_GraphicsGetDPIRatio()[0], 400, 0, "MS Sans Serif")
+	GUICtrlSetFont($sleepAfterClickRoll, 8 * _GDIPlus_GraphicsGetDPIRatio()[0], 400, 0, "MS Sans Serif")
+	GUICtrlSetFont($finishsoundLabel, 12 * _GDIPlus_GraphicsGetDPIRatio()[0], 700, 0, "MS Sans Serif")
+	GUICtrlSetFont($update, 8 * _GDIPlus_GraphicsGetDPIRatio()[0], 400, 0, "MS Sans Serif")
+EndFunc
+updateGuiDPISizes()
 
 ;welcome text
 _GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC", 12, 1, 0, 0, 0)
@@ -430,6 +492,10 @@ _GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC"
 _GUICtrlRichEdit_AppendTextEx($socketLog2, "" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
 _GUICtrlRichEdit_AppendTextEx($socketLog2, "Please post feature requests and bug reports on github:" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
 _GUICtrlRichEdit_AppendTextEx($socketLog2, "https://github.com/Crypto90/Wolcen-Socket-Roller" & @CRLF, "MS Sans Serif", "F2EEDC", 8, 1, 0, 0, 0)
+
+
+
+
 
 
 ;$sFile = _GetURLImage("http://download1.ts3musicbot.net/BuyMeACoffee_blue.jpg", @TempDir)
@@ -1063,10 +1129,20 @@ Func runMain()
 			
 			$rollCounter =  $rollCounter +  1
 			
+			If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
+				If $finished == False Then
+					;GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+					_GUICtrlRichEdit_AppendTextEx($socketLog2, "Aborted!" & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
+				EndIf
+				$finished =  True
+				ExitLoop
+			EndIf
+			
 			;sleep a random value between 1 and 50 milliseconds to produce some human behavior just for future cases if click ratio get measured.
 			Sleep(Random(1, 50, 1))
 			MouseClick($MOUSE_CLICK_LEFT, ($rerollClickX +  Random(1, 10, 1)), $rerollClickY, 1)
-			Sleep($sleepAfterClickRollValue)
+			;Sleep($sleepAfterClickRollValue)
+			Sleep($sleepAfterClickRollValue + 50);we add a bit more ms in this case because we directly skip all other checks, then we can get too fast and next screenshot shows the old socket because game rendered not fast enough.
 			ContinueLoop
 		EndIf
 		
@@ -1118,6 +1194,16 @@ Func runMain()
 				$previousSocket3 =  $gotSocket3
 				
 				$rollCounter =  $rollCounter +  1
+				
+				If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
+					If $finished == False Then
+						;GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+						_GUICtrlRichEdit_AppendTextEx($socketLog2, "Aborted!" & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
+					EndIf
+					$finished =  True
+					ExitLoop
+				EndIf
+				
 				;sleep a random value between 1 and 50 milliseconds to produce some human behavior just for future cases if click ratio get measured.
 				Sleep(Random(1, 50, 1))
 				MouseClick($MOUSE_CLICK_LEFT, ($rerollClickX +  Random(1, 10, 1)), $rerollClickY, 1)
@@ -1168,6 +1254,16 @@ Func runMain()
 				$previousSocket3 =  $gotSocket3
 				
 				$rollCounter =  $rollCounter +  1
+				
+				If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
+					If $finished == False Then
+						;GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+						_GUICtrlRichEdit_AppendTextEx($socketLog2, "Aborted!" & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
+					EndIf
+					$finished =  True
+					ExitLoop
+				EndIf
+				
 				;sleep a random value between 1 and 50 milliseconds to produce some human behavior just for future cases if click ratio get measured.
 				Sleep(Random(1, 50, 1))
 				MouseClick($MOUSE_CLICK_LEFT, ($rerollClickX +  Random(1, 10, 1)), $rerollClickY, 1)
@@ -1198,6 +1294,8 @@ Func runMain()
 			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
 			_GUICtrlRichEdit_AppendTextEx($socketLog2, $timestamp, "MS Sans Serif", "777777", 8, 0, 0, 0, 0) ;timestamp
 			_GUICtrlRichEdit_AppendTextEx($socketLog2, " | " , "MS Sans Serif", "F2EEDC", 8, 0, 0, 0, 0) ;line
+			
+			
 			
 			;adding screenshots...
 			;socket1
@@ -1274,6 +1372,15 @@ Func runMain()
 			
 			$rollCounter =  $rollCounter +  1
 			
+			If WinGetTitle("[ACTIVE]") <> "Wolcen: Lords of Mayhem" Then
+				If $finished == False Then
+					;GUICtrlSetData($socketLog, "Aborted!" & @CRLF, 1)
+					_GUICtrlRichEdit_AppendTextEx($socketLog2, "Aborted!" & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
+				EndIf
+				$finished =  True
+				ExitLoop
+			EndIf
+			
 			;sleep a random value between 1 and 50 milliseconds to produce some human behavior just for future cases if click ratio get measured.
 			Sleep(Random(1, 50, 1))
 			MouseClick($MOUSE_CLICK_LEFT, ($rerollClickX +  Random(1, 10, 1)), $rerollClickY, 1)
@@ -1329,7 +1436,7 @@ EndFunc
 Func getSocket($socketNumberToCheck)
 	
 	;debug
-	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "Scanning area for socket: " & $socketNumberToCheck & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
+	;_GUICtrlRichEdit_AppendTextEx($socketLog2, "getSocket: " & $socketNumberToCheck & @CRLF, "MS Sans Serif", "FF0000", 8, 0, 0, 0, 0)
 	
 	
    ;recalculate coordinates based on current resolution
@@ -1361,9 +1468,8 @@ Func getSocket($socketNumberToCheck)
    Local $socketTopLeftYSearch = 0
    Local $socketBottomRightXSearch = 0
    Local $socketBottomRightYSearch = 0
-   
-   
-
+   	
+	
    If $socketNumberToCheck == 1 Then
 		;Socket 1 area coordinates
 		$socket1TopLeftX = Round( ($baseSocket1TopLeftX / $baseResolutionWidth) * $gameWidth )
