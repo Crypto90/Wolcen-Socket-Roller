@@ -9,7 +9,7 @@ https://www.reddit.com/r/Wolcen/comments/f7ezh3/wolcen_socket_roller_download_so
 <br/>
 <br/>
 
-![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/Screenshots/screenshot_1.9.2.png)
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/Screenshots/screenshot_1.9.6.png)
 <br/>
 <br/>
 <br/>
@@ -66,7 +66,7 @@ matches the same as
 defense II -- defense I -- defense II
 <br/>
 
-![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/Screenshots/screenshot_ingame_1.9.2_area_scan.jpg)
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/Screenshots/screenshot_ingame_1.9.6_area_scan.jpg)
 
 <br/>
 
