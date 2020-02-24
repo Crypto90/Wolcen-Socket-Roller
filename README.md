@@ -66,7 +66,7 @@ matches the same as
 defense II -- defense I -- defense II
 <br/>
 
-![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/Screenshots/screenshot_ingame_1.9.6_area_scan.jpg)
+![Image of Yaktocat](https://raw.githubusercontent.com/Crypto90/Wolcen-Socket-Roller/master/Screenshots/screenshot_ingame_1.9.6_area_scans.jpg)
 
 <br/>
 
