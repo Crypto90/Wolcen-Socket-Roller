@@ -84,4 +84,4 @@ A: Its a permission issue on your pc, run the tool as administrator.
 <br/>
 
 ###### Q: It rerolls over a matched result.
-A: The game/server needs some time to rerender a new socket combination, so do not reroll too fast. Minimum sleep in milliseconds should not be lower than 200ms to be safe. 100ms can roll over good results (it clicks twice if the game/server is slower). You can try increase it to an higher number if you encounter a high ingame ping/server laggs and double rolls appear.
+A: The game/server needs some time to rerender a new socket combination, so do not reroll too fast. Minimum sleep in milliseconds should not be lower than 200ms to be safe. 100ms can roll over good results (it clicks twice if the game/server is slower). You can try increase it to an higher number if you encounter a high ingame ping, server laggs and double rolls appear.
